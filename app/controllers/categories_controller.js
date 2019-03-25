@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const axios = require('axios')
-
+const { authenticateUser } = require('../middlewares/authenticate')
 const { Category } = require('../models/category')
+const { Product } = require('../models/product')
 
 router.get('/', (req, res) => {
     Category.find()
@@ -27,15 +27,14 @@ router.post('/', (req, res) => {
 
 })
 
-router.get('/:id', (req, res) => {
+router.get('/:id', authenticateUser, (req, res) => {
     const id = req.params.id
     Category.findById(id)
         .then((category) => {
             if (category) {
-                // res.send(category)
-                axios.get(`http://localhost:3000/products/category/${id}`)
-                    .then((response) => {
-                        category, response.data
+                Product.find({ category: id })
+                    .then((product) => {
+                        res.send({ category, product })
                     })
                     .catch((err) => {
                         res.send(err)

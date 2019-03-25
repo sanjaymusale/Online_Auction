@@ -54,7 +54,7 @@ router.get('/:id', authenticateUser, (req, res) => {
 
 router.get('/category/:id', authenticateUser, (req, res) => {
     const id = req.params.id
-    Product.findById({ category: id })
+    Product.find({ category: id })
         .then((product) => {
             if (product) {
                 res.send(product)
