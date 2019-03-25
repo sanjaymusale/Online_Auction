@@ -35,6 +35,11 @@ const userSchema = new Schema({
         minlength: 4,
         maxlength: 80
     },
+    mobile: {
+        type: String,
+        minlength: 10,
+
+    },
     createdAt: {
         type: Date,
         default: Date.now

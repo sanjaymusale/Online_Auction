@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const axios = require('axios')
 
 const { Category } = require('../models/category')
 
@@ -31,7 +32,15 @@ router.get('/:id', (req, res) => {
     Category.findById(id)
         .then((category) => {
             if (category) {
-                res.send(category)
+                // res.send(category)
+                axios.get(`http://localhost:3000/products/category/${id}`)
+                    .then((response) => {
+                        category, response.data
+                    })
+                    .catch((err) => {
+                        res.send(err)
+                    })
+
             }
             else {
                 res.send({})

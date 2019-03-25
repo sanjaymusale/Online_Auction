@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const { Product } = require('../models/product')
-const { authenticateUser } = require('../middleware/authenticate')
+const { authenticateUser } = require('../middlewares/authenticate')
 
 
 
@@ -36,10 +36,25 @@ router.post('/', authenticateUser, (req, res) => {
 })
 
 
-
 router.get('/:id', authenticateUser, (req, res) => {
     const id = req.params.id
     Product.findById(id)
+        .then((product) => {
+            if (product) {
+                res.send(product)
+            }
+            else {
+                res.send({})
+            }
+        })
+        .catch((err) => {
+            res.send(err)
+        })
+})
+
+router.get('/category/:id', authenticateUser, (req, res) => {
+    const id = req.params.id
+    Product.findById({ category: id })
         .then((product) => {
             if (product) {
                 res.send(product)
