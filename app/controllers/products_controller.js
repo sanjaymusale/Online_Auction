@@ -8,7 +8,7 @@ const { authenticateUser } = require('../middlewares/authenticate')
 
 
 router.get('/', authenticateUser, (req, res) => {
-    Product.find({ user: req.user._id })
+    Product.find({ sellerId: req.user._id })
         .then((products) => {
             res.send(products)
         })

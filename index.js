@@ -14,7 +14,7 @@ app.use(cors())
 
 app.use('/users', usersRouter)
 app.use('/products', productsRouter)
-app.use('/categories', categoriesRouter)
+app.use('/category', categoriesRouter)
 
 
 

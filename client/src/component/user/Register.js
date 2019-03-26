@@ -52,7 +52,7 @@ const Register = withFormik({
         firstName: Yup.string().min(4, 'Minimum 4 characters').required('Provide First Name'),
         lastName: Yup.string().min(4, 'Minimum 4 characters').required('Provide Last Name'),
         email: Yup.string().email('Provide Valid Email').required('Provide Email'),
-        password: Yup.string().min(9, 'Password must be 9 characters').required('Provide password'),
+        password: Yup.string().min(6, 'Password must be 6 characters').required('Provide password'),
         confirm: Yup.string().required('Re-Enter Password').test('passwords-match', 'Passwords is not Match', function (value) {
             return this.parent.password === value;
         }),
