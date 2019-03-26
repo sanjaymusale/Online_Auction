@@ -23,7 +23,7 @@ router.post('/', authenticateUser, upload.array('myimage', 2), (req, res) => {
     body.sellerId = req.user._id
     // console.log(req.files)
     const image = []
-    var ouput = "images"
+
     req.files.forEach(file => {
         const imageDest = file.destination
         const imageUrl = link + imageDest.slice(1) + file.filename
@@ -31,6 +31,7 @@ router.post('/', authenticateUser, upload.array('myimage', 2), (req, res) => {
     })
     console.log(image)
     body.imageUrl = image
+    const output = "asads"
     const product = new Product(body)
     product.save()
         .then((product) => {
