@@ -29,12 +29,10 @@ router.post('/', authenticateUser, upload.array('myimage', 2), (req, res) => {
         const imageUrl = link + imageDest.slice(1) + file.filename
         image.push(imageUrl)
     })
-    console.log('hello')
-    console.log(image)
-    console.log('hh')
+
     body.imageUrl = image
     const product = new Product(body)
-    const vard = "10"
+
     product.save()
         .then((product) => {
             res.send(product)
