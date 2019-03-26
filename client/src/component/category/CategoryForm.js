@@ -8,33 +8,25 @@ class FormCategory extends React.Component {
         super(props)
         console.log(props)
         this.state = {
-            categoryName: props.name ? props.name : ''
+            name: props.name ? props.name : ''
         }
     }
     handleChange = (e) => {
-        const categoryName = e.target.value
+        const name = e.target.value
         //console.log(categoryName)
-        this.setState(() => ({ categoryName }))
+        this.setState(() => ({ name }))
 
     }
 
     handleSubmit = (e) => {
         e.preventDefault()
         const formData = {
-            name: this.state.categoryName
+            name: this.state.name
         }
-        console.log(formData)
+        // console.log(formData)
         this.props.handleSubmit(formData)
 
-        axios.post("/category", formData, { headers: { "x-auth": localStorage.getItem("token") } })
-            .then(response => {
-                const data = response.data
-                console.log(data)
-                this.setState(() => ({ categoryName: '' }))
-            })
-            .catch(err => {
-                console.log(err)
-            })
+
     }
     render() {
         return (
@@ -42,11 +34,11 @@ class FormCategory extends React.Component {
                 <form onSubmit={this.handleSubmit}>
                     <label><br />
                         Category : <br />
-                        <input type="text" value={this.state.categoryName} onChange={this.handleChange} />
+                        <input type="text" value={this.state.name} onChange={this.handleChange} />
                     </label><br />
                     <input type="submit" />
                 </form>
-                {/* {this.props.history.push('/category')} */}
+
                 <Link to="/category">back</Link>
             </div>
         )
