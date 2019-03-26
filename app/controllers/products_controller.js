@@ -3,8 +3,9 @@ const router = express.Router()
 
 const { Product } = require('../models/product')
 const { authenticateUser } = require('../middlewares/authenticate')
+const { upload } = require('../middlewares/fileUpload')
 
-
+const link = 'http://localhost:3001'
 
 
 router.get('/', authenticateUser, (req, res) => {
@@ -17,10 +18,18 @@ router.get('/', authenticateUser, (req, res) => {
         })
 })
 
-router.post('/', authenticateUser, (req, res) => {
+router.post('/', authenticateUser, upload.array('myimage', 2), (req, res) => {
     const body = req.body
     body.sellerId = req.user._id
-
+    // console.log(req.files)
+    const image = []
+    req.files.forEach(file => {
+        const imageDest = file.destination
+        const imageUrl = link + imageDest.slice(1) + file.filename
+        image.push(imageUrl)
+    })
+    console.log(image)
+    body.imageUrl = image
     const product = new Product(body)
     product.save()
         .then((product) => {

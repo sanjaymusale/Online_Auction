@@ -70,6 +70,9 @@ export default
                     <label>
                         Description : <textarea name="description" value={this.state.description} onChange={this.handleChange} ></textarea>
                     </label><br />
+                    <label>
+                        file:<input type="file" name="myimage" multiple />
+                    </label><br />
                     <button>Submit</button>
 
                 </form>

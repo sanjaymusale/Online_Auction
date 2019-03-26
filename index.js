@@ -10,6 +10,7 @@ const app = express()
 const port = 3001
 
 app.use(express.json())
+app.use('/public/uploads', express.static('public/uploads'));
 app.use(cors())
 
 app.use('/users', usersRouter)

@@ -27,9 +27,12 @@ const productSchema = new Schema({
     approved: {
         type: Boolean
     },
-    imageUrl: {
-        type: String
-    }
+    imageUrl: [
+        {
+            type: String,
+
+        }
+    ]
 
 
 
