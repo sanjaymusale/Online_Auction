@@ -23,7 +23,6 @@ router.post('/', authenticateUser, upload.array('myimage', 2), (req, res) => {
     body.sellerId = req.user._id
     // console.log(req.files)
     const image = []
-    var ouput = "images"
     req.files.forEach(file => {
         const imageDest = file.destination
         const imageUrl = link + imageDest.slice(1) + file.filename
