@@ -31,7 +31,6 @@ router.post('/', authenticateUser, upload.array('myimage', 2), (req, res) => {
     })
     console.log(image)
     body.imageUrl = image
-
     const product = new Product(body)
     product.save()
         .then((product) => {
