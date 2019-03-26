@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from '../axios/config';
 import FormCategory from './CategoryForm'
+import { Link } from 'react-router-dom'
 
 
 class AddCategory extends React.Component {
@@ -10,6 +11,8 @@ class AddCategory extends React.Component {
             .then(response => {
                 const data = response.data
                 console.log(data)
+                this.props.history.push("/category")
+
             })
             .catch(err => {
                 console.log(err)
@@ -21,6 +24,7 @@ class AddCategory extends React.Component {
             <div>
                 <h2>add</h2>
                 <FormCategory handleSubmit={this.handleSubmit} />
+                <Link to="/category">back</Link>
 
             </div>
         )

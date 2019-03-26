@@ -39,7 +39,7 @@ class FormCategory extends React.Component {
                     <input type="submit" />
                 </form>
 
-                <Link to="/category">back</Link>
+                {/* <Link to="/category">back</Link> */}
             </div>
         )
     }
