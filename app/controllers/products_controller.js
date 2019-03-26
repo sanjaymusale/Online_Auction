@@ -18,10 +18,10 @@ router.get('/', authenticateUser, (req, res) => {
         })
 })
 
-router.post('/', authenticateUser, upload.array('myimage', 2), (req, res) => {
+router.post('/', authenticateUser, upload.array('image', 3), (req, res) => {
     const body = req.body
     body.sellerId = req.user._id
-    // console.log(req.files)
+    console.log(req)
     const image = []
 
     req.files.forEach(file => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Link, Route } from 'react-router-dom'
+import { BrowserRouter, Link, Route, Switch } from 'react-router-dom'
 import './App.css';
 
 import Register from './component/user/Register'
@@ -13,6 +13,7 @@ import ShowCategory from './component/category/CategoryShow'
 import AddCategory from './component/category/CategoryAdd'
 // import AddCategory from './component/category/CategoryForm'
 import EditCategory from './component/category/CategoryEdit'
+import ProductDetail from './component/product/ProductDetail';
 
 
 class App extends React.Component {
@@ -26,17 +27,22 @@ class App extends React.Component {
           <Link to="/product/list">Products</Link>||
           <Link to="/category">Category</Link>
 
-          <Route exact path="/user/register" component={Register} />
-          <Route exact path="/user/login" component={Login} />
-          <Route exact path="/product" component={ProductNew} />
-          <Route exact path="/product/list" component={ProductShow} />
-          <Route exact path="/product/edit/:id" component={ProductEdit} />
+          <Switch>
+            <Route exact path="/user/register" component={Register} />
+            <Route exact path="/user/login" component={Login} />
+            <Route exact path="/product" component={ProductNew} />
+
+            <Route exact path="/product/list" component={ProductShow} />
+            <Route exact path='/product/:id' component={ProductDetail} />
+            <Route exact path="/product/edit/:id" component={ProductEdit} />
 
 
-          <Route exact path="/category" component={ShowCategory} />
-          <Route exact path="/category/add" component={AddCategory} />
 
-          <Route exact path="/category/edit/:id" component={EditCategory} />
+            <Route exact path="/category" component={ShowCategory} />
+            <Route exact path="/category/add" component={AddCategory} />
+
+            <Route exact path="/category/edit/:id" component={EditCategory} />
+          </Switch>
         </div>
       </BrowserRouter>
     );

@@ -5,14 +5,14 @@ export default
     class ProductForm extends React.Component {
     constructor(props) {
         super(props)
-        console.log('form props', props)
+
         this.state = {
             name: props.name ? props.name : '',
             minPrice: props.minPrice ? props.minPrice : '',
             categoryData: [],
             category: props.category ? props.category : '',
-            description: props.description ? props.description : ''
-
+            description: props.description ? props.description : '',
+            file: ''
         }
     }
 
@@ -33,14 +33,26 @@ export default
             })
     }
 
+    fileHandle = (e) => {
+        // const file1 = e.target.files[0]
+        // const file2 = e.target.files[1]
+        // const file = []
+        // file.push(file1, file2)
+        // console.log('file', file)
+        const file = e.target.files
+        console.log(file)
+        this.setState(() => ({ file }))
+    }
     handleSubmit = (e) => {
         e.preventDefault()
-        const formData = {
-            name: this.state.name,
-            category: this.state.category,
-            description: this.state.description,
-            minPrice: this.state.minPrice,
-
+        const { name, category, description, minPrice } = this.state
+        const formData = new FormData()
+        formData.append('name', name)
+        formData.append('category', category)
+        formData.append('description', description)
+        formData.append('minPrice', minPrice)
+        for (const file of this.state.file) {
+            formData.append('image', file)
         }
         this.props.handleSubmit(formData)
     }
@@ -71,7 +83,7 @@ export default
                         Description : <textarea name="description" value={this.state.description} onChange={this.handleChange} ></textarea>
                     </label><br />
                     <label>
-                        file:<input type="file" name="myimage" multiple />
+                        file:<input type="file" name="image" onChange={this.fileHandle} multiple />
                     </label><br />
                     <button>Submit</button>
 

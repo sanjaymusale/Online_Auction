@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from '../axios/config'
 import ProductForm from './ProductForm';
+import { Link } from 'react-router-dom'
 
 class ProductEdit extends React.Component {
     constructor() {
@@ -39,12 +40,15 @@ class ProductEdit extends React.Component {
         return (
             <div>
                 {this.state.isLoaded &&
-                    <ProductForm
-                        name={name}
-                        category={category}
-                        description={description}
-                        minPrice={minPrice}
-                        handleSubmit={this.handleSubmit} />
+                    <>
+                        <ProductForm
+                            name={name}
+                            category={category}
+                            description={description}
+                            minPrice={minPrice}
+                            handleSubmit={this.handleSubmit} />
+                        <Link to='/product/list'>Back</Link>
+                    </>
                 }
             </div >
         )

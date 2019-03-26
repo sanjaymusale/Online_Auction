@@ -27,7 +27,7 @@ class ProductShow extends React.Component {
                 Products
                 <ul>
                     {this.state.products.map(product => {
-                        return <li key={product._id}><Link to={`/product/edit/${product._id}`}>{product.name}</Link></li>
+                        return <li key={product._id}><Link to={`/product/${product._id}`}>{product.name}</Link></li>
                     })}
                 </ul>
             </div>
