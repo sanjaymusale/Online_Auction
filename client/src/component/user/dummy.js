@@ -1,2 +1,5 @@
 var x = 10
-// console.log('number', x)
+
+
+console.log("value of x", x)
+
