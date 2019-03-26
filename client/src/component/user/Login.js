@@ -1,6 +1,7 @@
 import React from 'react'
 import { withFormik, Form, Field } from 'formik'
 import * as Yup from 'yup'
+import axios from '../axios/config'
 
 const LoginPage = ({
     values,
@@ -36,8 +37,20 @@ const Login = withFormik({
         password: Yup.string().required('Provide password'),
 
     }),
-    handleSubmit(values) {
+    handleSubmit(values, { resetForm }) {
         console.log(values)
+        axios.post('/users/login', values)
+            .then((response) => {
+                console.log(response)
+                resetForm({
+                    email: '',
+                    password: ''
+                })
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+
     }
 })(LoginPage)
 
