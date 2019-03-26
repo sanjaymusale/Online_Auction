@@ -29,6 +29,7 @@ router.post('/', authenticateUser, upload.array('myimage', 2), (req, res) => {
         const imageUrl = link + imageDest.slice(1) + file.filename
         image.push(imageUrl)
     })
+    console.log('hello')
     console.log(image)
     body.imageUrl = image
     const product = new Product(body)
