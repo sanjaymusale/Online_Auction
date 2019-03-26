@@ -32,11 +32,7 @@ router.post('/', authenticateUser, upload.array('myimage', 2), (req, res) => {
     console.log(image)
     body.imageUrl = image
     const output = "hello"
-<<<<<<< HEAD
     const value = "hi"
-=======
-    const hsgd = "sdas"
->>>>>>> 1bb54f1b423ad930f53a5aebc00defbcdf1c02e8
     const product = new Product(body)
     product.save()
         .then((product) => {
