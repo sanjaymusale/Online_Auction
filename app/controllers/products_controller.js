@@ -8,7 +8,7 @@ const { authenticateUser } = require('../middlewares/authenticate')
 
 
 router.get('/', authenticateUser, (req, res) => {
-    Product.find({ user: req.user._id })
+    Product.find({ sellerId: req.user._id })
         .then((products) => {
             res.send(products)
         })
@@ -22,8 +22,6 @@ router.post('/', authenticateUser, (req, res) => {
     body.sellerId = req.user._id
 
     const product = new Product(body)
-
-
     product.save()
         .then((product) => {
             res.send(product)
@@ -52,21 +50,7 @@ router.get('/:id', authenticateUser, (req, res) => {
         })
 })
 
-router.get('/category/:id', authenticateUser, (req, res) => {
-    const id = req.params.id
-    Product.find({ category: id })
-        .then((product) => {
-            if (product) {
-                res.send(product)
-            }
-            else {
-                res.send({})
-            }
-        })
-        .catch((err) => {
-            res.send(err)
-        })
-})
+
 
 router.delete('/:id', authenticateUser, (req, res) => {
     const id = req.params.id

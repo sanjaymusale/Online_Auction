@@ -41,7 +41,8 @@ const Login = withFormik({
         console.log(values)
         axios.post('/users/login', values)
             .then((response) => {
-                console.log(response)
+                console.log(response.data)
+                localStorage.setItem('token', response.data.token)
                 resetForm({
                     email: '',
                     password: ''

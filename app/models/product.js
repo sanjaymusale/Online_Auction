@@ -9,6 +9,7 @@ const productSchema = new Schema({
     category: {
         type: Schema.Types.ObjectId,
         ref: 'Category',
+        required: true
     },
     sellerId: {
         type: Schema.Types.ObjectId,
@@ -17,6 +18,11 @@ const productSchema = new Schema({
     minPrice: {
         type: Number,
         required: true
+    },
+    description: {
+        type: String,
+        required: true,
+
     },
     approved: {
         type: Boolean
