@@ -31,7 +31,7 @@ class ShowCategory extends React.Component {
                     {this.state.category.map(cat => {
                         return (
                             <li key={cat._id}>
-                                <Link to={`/category/${cat._id}`}>{cat.name}</Link>
+                                <Link to={`/category/edit/${cat._id}`}>{cat.name}</Link>
                             </li>
 
 

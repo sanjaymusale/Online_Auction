@@ -4,10 +4,11 @@ import axios from '../axios/config';
 import { Link } from 'react-router-dom'
 
 class FormCategory extends React.Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
+        console.log(props)
         this.state = {
-            categoryName: ''
+            categoryName: props.name ? props.name : ''
         }
     }
     handleChange = (e) => {
@@ -23,6 +24,7 @@ class FormCategory extends React.Component {
             name: this.state.categoryName
         }
         console.log(formData)
+        this.props.handleSubmit(formData)
 
         axios.post("/category", formData, { headers: { "x-auth": localStorage.getItem("token") } })
             .then(response => {

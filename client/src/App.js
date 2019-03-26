@@ -12,7 +12,7 @@ import ProductShow from './component/product/ProductShow';
 import ShowCategory from './component/category/CategoryShow'
 import AddCategory from './component/category/CategoryAdd'
 // import AddCategory from './component/category/CategoryForm'
-// import EditCategory from './component/category/CategoryEdit'
+import EditCategory from './component/category/CategoryEdit'
 
 
 class App extends React.Component {
@@ -35,8 +35,8 @@ class App extends React.Component {
 
           <Route exact path="/category" component={ShowCategory} />
           <Route exact path="/category/add" component={AddCategory} />
-          {/* <Route exact path="/add_category" component={AddCategory} />
-          <Route exact path="/edit_category" component={EditCategory} /> */}
+
+          <Route exact path="/category/edit/:id" component={EditCategory} />
         </div>
       </BrowserRouter>
     );
