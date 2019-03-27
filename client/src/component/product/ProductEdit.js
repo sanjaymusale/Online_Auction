@@ -25,8 +25,11 @@ class ProductEdit extends React.Component {
 
     handleSubmit = (data) => {
         const id = this.state.product._id
-
-        axios.put(`/products/${id}`, data, { headers: { 'x-auth': localStorage.getItem('token') } })
+        var formData = {}
+        for (var pair of data.entries()) {
+            formData[pair[0]] = pair[1]
+        }
+        axios.put(`/products/${id}`, formData, { headers: { 'x-auth': localStorage.getItem('token') } })
             .then((response) => {
                 console.log(response.data)
             })

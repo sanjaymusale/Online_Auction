@@ -72,7 +72,7 @@ export default
             formData.append('image', file)
         }
         this.props.handleSubmit(formData)
-        // console.log(this.state)
+        // console.log()
     }
 
     dateHandle = (e) => {
