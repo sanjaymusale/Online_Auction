@@ -25,12 +25,13 @@ const productSchema = new Schema({
 
     },
     approved: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     imageUrl: [
         {
             type: String,
-            required:true
+            required: true
 
         }
     ]

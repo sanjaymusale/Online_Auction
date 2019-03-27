@@ -5,6 +5,7 @@ import ProductForm from './ProductForm';
 const ProductNew = () => {
 
     const handleSubmit = (data) => {
+        console.log(data)
         axios.post('/products', data, { headers: { 'x-auth': localStorage.getItem('token') } })
             .then((response) => {
                 console.log(response.data)

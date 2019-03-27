@@ -10,9 +10,13 @@ export default
             name: props.name ? props.name : '',
             minPrice: props.minPrice ? props.minPrice : '',
             categoryData: [],
+            SessionsData: [],
             category: props.category ? props.category : '',
             description: props.description ? props.description : '',
-            file: ''
+            file: '',
+            filterSession: [],
+            start: '',
+            date: ''
         }
     }
 
@@ -22,11 +26,21 @@ export default
         this.setState(() => ({ [name]: value }))
 
     }
+    handleStart = (e) => {
+        const start = e.target.value
+        this.setState(() => ({ start }))
+        // console.log('latest', EndTime)
+
+    }
 
     componentDidMount() {
-        axios.get('/category')
+        Promise.all([axios.get('/category'), axios.get('/sessions')])
             .then((response) => {
-                this.setState(() => ({ categoryData: response.data }))
+                console.log(response)
+                this.setState(() => ({
+                    categoryData: response[0].data,
+                    SessionsData: response[1].data
+                }))
             })
             .catch((err) => {
                 console.log(err)
@@ -45,20 +59,35 @@ export default
     }
     handleSubmit = (e) => {
         e.preventDefault()
-        const { name, category, description, minPrice } = this.state
+        const { name, category, description, minPrice, date, start } = this.state
         const formData = new FormData()
         formData.append('name', name)
         formData.append('category', category)
         formData.append('description', description)
         formData.append('minPrice', minPrice)
+        formData.append('isAlloted', true)
+        formData.append('date', date)
+        formData.append('startSession', start)
         for (const file of this.state.file) {
             formData.append('image', file)
         }
         this.props.handleSubmit(formData)
+        // console.log(this.state)
+    }
+
+    dateHandle = (e) => {
+        const date = e.target.value
+        const filterSession = this.state.SessionsData.filter(session => {
+            return (session.date === date && session.isAlloted === false)
+        })
+        console.log(filterSession)
+        this.setState(() => ({ filterSession, date }))
+
     }
 
     render() {
-
+        const uniqueSessions = [...new Set(this.state.SessionsData.map(item => item.date))];
+        // console.log(uniqueSessions)
         return (
             <div>
                 <h2>FORM</h2>
@@ -85,6 +114,43 @@ export default
                     <label>
                         file:<input type="file" name="image" onChange={this.fileHandle} multiple />
                     </label><br />
+
+
+                    <label>
+                        Date :<select onChange={this.dateHandle}>
+                            <option value="">Select Date</option>
+                            {uniqueSessions.map((session, index) => {
+                                return <option key={session} value={session} >{session}</option>
+                            })}
+                        </select>
+                    </label><br />
+                    <label>
+                        Start Time :
+                        <select onChange={this.handleStart}>
+                            <option value="" >Select Start Time</option>
+                            {
+                                this.state.filterSession.map((t, i) => {
+                                    // if (i !== this.state.filterSession.length - 1) {
+                                    return <option key={t._id} value={t.startSession}>{t.startSession}</option>
+                                    // }
+
+                                })
+                            }
+                        </select>
+                    </label><br />
+                    {/* <label>
+                        End Time :
+                        <select onChange={this.handleEnd} >
+                            <option value="">Select End Time</option>
+                            {
+                                this.state.EndTime.map((t, i) => {
+                                    return <option key={i + 1} value={t}>{t}</option>
+                                })
+                            }
+                        </select>
+                    </label><br /> */}
+
+
                     <button>Submit</button>
 
                 </form>

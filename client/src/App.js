@@ -14,6 +14,7 @@ import AddCategory from './component/category/CategoryAdd'
 // import AddCategory from './component/category/CategoryForm'
 import EditCategory from './component/category/CategoryEdit'
 import ProductDetail from './component/product/ProductDetail';
+import SessionAdd from './component/session/SessionAdd';
 
 
 class App extends React.Component {
@@ -25,13 +26,14 @@ class App extends React.Component {
           <Link to="/user/login" >Login</Link> ||
           <Link to="/product" >Add Product</Link>||
           <Link to="/product/list">Products</Link>||
-          <Link to="/category">Category</Link>
+          <Link to="/category">Category</Link> ||
+          <Link to='/session/add'>Add Session</Link>
 
           <Switch>
             <Route exact path="/user/register" component={Register} />
             <Route exact path="/user/login" component={Login} />
             <Route exact path="/product" component={ProductNew} />
-
+            <Route exact path='/session/add' component={SessionAdd} />
             <Route exact path="/product/list" component={ProductShow} />
             <Route exact path='/product/:id' component={ProductDetail} />
             <Route exact path="/product/edit/:id" component={ProductEdit} />

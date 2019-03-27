@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const { Product } = require('../models/product')
+const { Session } = require('../models/session')
 const { authenticateUser } = require('../middlewares/authenticate')
 const { upload } = require('../middlewares/fileUpload')
 
@@ -20,6 +21,7 @@ router.get('/', authenticateUser, (req, res) => {
 
 router.post('/', authenticateUser, upload.array('image', 3), (req, res) => {
     const body = req.body
+    console.log(body)
     body.sellerId = req.user._id
     console.log(req)
     const image = []
@@ -35,7 +37,15 @@ router.post('/', authenticateUser, upload.array('image', 3), (req, res) => {
 
     product.save()
         .then((product) => {
-            res.send(product)
+            body.productId = product._id
+            Session.findOneAndUpdate({ date: body.date, startSession: body.startSession }, { $set: body })
+                .then((session) => {
+                    res.send({ product, session })
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+            // res.send(product)
 
         })
         .catch((err) => {
@@ -68,7 +78,13 @@ router.delete('/:id', authenticateUser, (req, res) => {
     Product.findByIdAndDelete(id)
         .then((product) => {
             if (product) {
-                res.send(product)
+                Session.findOneAndUpdate({ productId: product._id }, { $set: { isAlloted: false } })
+                    .then((response) => {
+                        res.send({ product, response })
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
             }
             else {
                 res.send({})
@@ -80,10 +96,10 @@ router.delete('/:id', authenticateUser, (req, res) => {
         })
 })
 
-router.put('/:id', authenticateUser, (req, res) => {
+router.patch('/:id', authenticateUser, (req, res) => {
     const _id = req.params.id
     const data = req.body
-    Product.findByIdAndUpdate({ _id }, { $set: data })
+    Product.findByIdAndUpdate({ _id }, { $set: data }, { new: true })
         .then((product) => {
             if (product) {
                 res.send(product)
