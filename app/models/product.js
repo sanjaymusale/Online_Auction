@@ -9,6 +9,7 @@ const productSchema = new Schema({
     category: {
         type: Schema.Types.ObjectId,
         ref: 'Category',
+        required: true
     },
     sellerId: {
         type: Schema.Types.ObjectId,
@@ -18,12 +19,22 @@ const productSchema = new Schema({
         type: Number,
         required: true
     },
-    approved: {
-        type: Boolean
+    description: {
+        type: String,
+        required: true,
+
     },
-    imageUrl: {
-        type: String
-    }
+    approved: {
+        type: Boolean,
+        default: false
+    },
+    imageUrl: [
+        {
+            type: String,
+            required: true
+
+        }
+    ]
 
 
 

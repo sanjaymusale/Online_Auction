@@ -3,17 +3,24 @@ const { Schema } = mongoose
 
 const sessionSchema = new Schema({
     startSession: {
-        type: Date
+        type: String,
+        required: true
     },
     endSession: {
-        type: Date
+        type: String,
+        required: true
     },
     productId: {
-        type: Schema.Type.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'Product'
     },
     date: {
-        type: Date
+        type: String,
+        required: true
+    },
+    isAlloted: {
+        type: Boolean,
+        default: false
     }
 })
 
