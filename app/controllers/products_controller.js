@@ -96,7 +96,7 @@ router.delete('/:id', authenticateUser, (req, res) => {
         })
 })
 
-router.patch('/:id', authenticateUser, (req, res) => {
+router.put('/:id', authenticateUser, (req, res) => {
     const _id = req.params.id
     const data = req.body
     Product.findByIdAndUpdate({ _id }, { $set: data }, { new: true })

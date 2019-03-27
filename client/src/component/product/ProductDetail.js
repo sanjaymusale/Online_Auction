@@ -43,7 +43,7 @@ class ProductDetail extends React.Component {
         const data = {
             approved: true
         }
-        axios.patch(`/products/${id}`, data, { headers: { 'x-auth': localStorage.getItem('token') } })
+        axios.put(`/products/${id}`, data, { headers: { 'x-auth': localStorage.getItem('token') } })
             .then((response) => {
                 console.log(response.data)
                 this.setState(() => ({ isApproved: response.data.approved }))
