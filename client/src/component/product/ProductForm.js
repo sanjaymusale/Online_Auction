@@ -12,7 +12,10 @@ export default
             categoryData: [],
             category: props.category ? props.category : '',
             description: props.description ? props.description : '',
-            file: ''
+            file: '',
+            nameError: '',
+            minPriceError: '',
+            descriptionError: ''
         }
     }
 
@@ -34,27 +37,58 @@ export default
     }
 
     fileHandle = (e) => {
-        // const file1 = e.target.files[0]
-        // const file2 = e.target.files[1]
-        // const file = []
-        // file.push(file1, file2)
-        // console.log('file', file)
+
         const file = e.target.files
         console.log(file)
         this.setState(() => ({ file }))
     }
-    handleSubmit = (e) => {
-        e.preventDefault()
-        const { name, category, description, minPrice } = this.state
-        const formData = new FormData()
-        formData.append('name', name)
-        formData.append('category', category)
-        formData.append('description', description)
-        formData.append('minPrice', minPrice)
-        for (const file of this.state.file) {
-            formData.append('image', file)
+    validate = () => {
+        let isError = false;
+        const errors = {
+            nameError: '',
+            minPriceError: '',
+            descriptionError: ''
+
         }
-        this.props.handleSubmit(formData)
+
+        if (this.state.name.length < 4) {
+            isError = true;
+            errors.nameError = "name at least 4 character long";
+        }
+        if (this.state.minPrice < 50) {
+            isError = true;
+            errors.minPriceError = "price should be more than 50"
+        }
+        if (this.state.description.length < 10) {
+            errors.descriptionError = "description should be more than 10 long"
+        }
+        this.setState({
+            ...this.state,
+            ...errors
+        })
+        return isError
+    }
+
+    handleSubmit = (e) => {
+
+        e.preventDefault()
+        const err = this.validate()
+        if (!err) {
+            const { name, category, description, minPrice } = this.state
+            const formData = new FormData()
+            formData.append('name', name)
+            formData.append('category', category)
+            formData.append('description', description)
+            formData.append('minPrice', minPrice)
+            for (const file of this.state.file) {
+                formData.append('image', file)
+            }
+            this.props.handleSubmit(formData)
+            this.setState(() => ({ name: "", category: "", description: "", minPrice: "" }))
+
+        }
+
+
     }
 
     render() {
@@ -66,6 +100,7 @@ export default
                     <label>
                         Name : <input type="text" name="name" value={this.state.name} onChange={this.handleChange} />
                     </label><br />
+                    <p>{this.state.nameError}</p>
                     <label>
                         category :
                         <select name="category" onChange={this.handleChange} >
@@ -76,12 +111,15 @@ export default
 
                         </select>
                     </label><br />
+
                     <label>
                         Minimum Price : <input type="number" name="minPrice" value={this.state.minPrice} onChange={this.handleChange} />
                     </label><br />
+                    <p>{this.state.minPriceError}</p>
                     <label>
                         Description : <textarea name="description" value={this.state.description} onChange={this.handleChange} ></textarea>
                     </label><br />
+                    <p>{this.state.descriptionError}</p>
                     <label>
                         file:<input type="file" name="image" onChange={this.fileHandle} multiple />
                     </label><br />

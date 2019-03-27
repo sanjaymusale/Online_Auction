@@ -8,7 +8,8 @@ class FormCategory extends React.Component {
         super(props)
         console.log(props)
         this.state = {
-            name: props.name ? props.name : ''
+            name: props.name ? props.name : '',
+            nameError: ''
         }
     }
     handleChange = (e) => {
@@ -17,17 +18,40 @@ class FormCategory extends React.Component {
         this.setState(() => ({ name }))
 
     }
+    validate = () => {
+        let isError = false;
+        const errors = {
+            nameError: '',
+
+        }
+
+        if (this.state.name.length < 4) {
+            isError = true;
+            errors.nameError = "name at least 4 character long";
+        }
+        this.setState({
+            ...this.state,
+            ...errors
+        })
+        return isError
+    }
 
     handleSubmit = (e) => {
         e.preventDefault()
-        const formData = {
-            name: this.state.name
+        const err = this.validate()
+        if (!err) {
+            const formData = {
+                name: this.state.name
+            }
+            // console.log(formData)
+            this.props.handleSubmit(formData)
+
         }
-        // console.log(formData)
-        this.props.handleSubmit(formData)
+
 
 
     }
+
     render() {
         return (
             <div>
@@ -36,6 +60,8 @@ class FormCategory extends React.Component {
                         Category : <br />
                         <input type="text" value={this.state.name} onChange={this.handleChange} />
                     </label><br />
+                    <p>{this.state.nameError}</p>
+
                     <input type="submit" />
                 </form>
 

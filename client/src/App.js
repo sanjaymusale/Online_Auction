@@ -4,6 +4,9 @@ import './App.css';
 
 import Register from './component/user/Register'
 import Login from './component/user/Login'
+import Dashboard from './component/user/Dashboard'
+import SelectCategory from './component/user/SelectCategory'
+
 
 import ProductNew from './component/product/ProductNew'
 import ProductEdit from './component/product/ProductEdit'
@@ -23,6 +26,7 @@ class App extends React.Component {
         <div>
           <Link to="/user/register" >Register</Link> ||
           <Link to="/user/login" >Login</Link> ||
+          <Link to="/user/dashboard">Dashboard</Link>||
           <Link to="/product" >Add Product</Link>||
           <Link to="/product/list">Products</Link>||
           <Link to="/category">Category</Link>
@@ -30,7 +34,9 @@ class App extends React.Component {
           <Switch>
             <Route exact path="/user/register" component={Register} />
             <Route exact path="/user/login" component={Login} />
+            <Route exact path="/user/dashboard" component={Dashboard} />
             <Route exact path="/product" component={ProductNew} />
+            <Route exact path="/user/selectCategory" component={SelectCategory} />
 
             <Route exact path="/product/list" component={ProductShow} />
             <Route exact path='/product/:id' component={ProductDetail} />
