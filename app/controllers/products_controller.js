@@ -10,6 +10,16 @@ const link = 'http://localhost:3001'
 
 
 router.get('/', authenticateUser, (req, res) => {
+    Product.find()
+        .then((products) => {
+            res.send(products)
+        })
+        .catch((err) => {
+            res.send(err)
+        })
+})
+
+router.get('/myproduct', authenticateUser, (req, res) => {
     Product.find({ sellerId: req.user._id })
         .then((products) => {
             res.send(products)
@@ -99,6 +109,7 @@ router.delete('/:id', authenticateUser, (req, res) => {
 router.put('/:id', authenticateUser, (req, res) => {
     const _id = req.params.id
     const data = req.body
+    console.log(data)
     Product.findByIdAndUpdate({ _id }, { $set: data }, { new: true })
         .then((product) => {
             if (product) {

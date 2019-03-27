@@ -109,6 +109,10 @@ export default
             // console.log(this.state)
 
         }
+
+        this.props.handleSubmit(formData)
+        // console.log()
+
     }
 
     dateHandle = (e) => {
