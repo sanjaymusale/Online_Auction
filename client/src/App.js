@@ -17,6 +17,7 @@ import AddCategory from './component/category/CategoryAdd'
 // import AddCategory from './component/category/CategoryForm'
 import EditCategory from './component/category/CategoryEdit'
 import ProductDetail from './component/product/ProductDetail';
+import SessionAdd from './component/session/SessionAdd';
 
 
 class App extends React.Component {
@@ -29,7 +30,8 @@ class App extends React.Component {
           <Link to="/user/dashboard">Dashboard</Link>||
           <Link to="/product" >Add Product</Link>||
           <Link to="/product/list">Products</Link>||
-          <Link to="/category">Category</Link>
+          <Link to="/category">Category</Link> ||
+          <Link to='/session/add'>Add Session</Link>
 
           <Switch>
             <Route exact path="/user/register" component={Register} />
@@ -37,6 +39,9 @@ class App extends React.Component {
             <Route exact path="/user/dashboard" component={Dashboard} />
             <Route exact path="/product" component={ProductNew} />
             <Route exact path="/user/selectCategory" component={SelectCategory} />
+
+
+            <Route exact path='/session/add' component={SessionAdd} />
 
             <Route exact path="/product/list" component={ProductShow} />
             <Route exact path='/product/:id' component={ProductDetail} />
