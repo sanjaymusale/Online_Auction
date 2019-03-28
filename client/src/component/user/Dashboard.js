@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from '../axios/config'
 import { Link } from 'react-router-dom'
-import SelectCategory from './SelectCategory'
+// import SelectCategory from './SelectCategory'
 
 export default class Dashboard extends React.Component {
     constructor() {
@@ -49,7 +49,7 @@ export default class Dashboard extends React.Component {
         // this.setState(() => ({ category }))
 
         // const id = this.state.category
-        const result = this.state.product.filter(output => output.category == id)
+        const result = this.state.product.filter(output => output.category === id)
         console.log('Myrsult', result)
         this.setState(() => ({ productData: result }))
 

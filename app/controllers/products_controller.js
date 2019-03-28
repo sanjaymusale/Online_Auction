@@ -48,6 +48,7 @@ router.post('/', authenticateUser, upload.array('image', 3), (req, res) => {
     product.save()
         .then((product) => {
             body.productId = product._id
+            // console.log('post product', body)
             Session.findOneAndUpdate({ date: body.date, startSession: body.startSession }, { $set: body })
                 .then((session) => {
                     res.send({ product, session })
@@ -112,8 +113,14 @@ router.put('/:id', authenticateUser, (req, res) => {
     console.log(data)
     Product.findByIdAndUpdate({ _id }, { $set: data }, { new: true })
         .then((product) => {
-            if (product) {
-                res.send(product)
+            if (product.status === 'Rejected') {
+                Session.findOneAndUpdate({ productId: product._id }, { $set: { isAlloted: false } })
+                    .then((response) => {
+                        res.send({ product, response })
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
             }
             else {
                 res.send(product)

@@ -26,7 +26,7 @@ class ProductShow extends React.Component {
             <div>
                 Products
                 <ul>
-                    {this.state.products.filter(p => p.approved === true).map(product => {
+                    {this.state.products.filter(p => p.status === 'Approved').map(product => {
                         return <li key={product._id}><Link to={`/product/${product._id}`}>{product.name}</Link></li>
                     })}
                 </ul>
