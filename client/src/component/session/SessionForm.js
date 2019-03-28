@@ -46,6 +46,8 @@ export default
 
     render() {
         // console.log('state', this.state)
+        console.log('time', time)
+
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>

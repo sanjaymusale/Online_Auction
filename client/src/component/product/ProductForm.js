@@ -110,8 +110,7 @@ export default
 
         }
 
-        this.props.handleSubmit(formData)
-        // console.log()
+
 
     }
 
@@ -127,7 +126,7 @@ export default
 
     render() {
         const uniqueSessions = [...new Set(this.state.SessionsData.map(item => item.date))];
-        // console.log(uniqueSessions)
+        console.log('uniqueSession', uniqueSessions)
         return (
             <div>
                 <h2>FORM</h2>
