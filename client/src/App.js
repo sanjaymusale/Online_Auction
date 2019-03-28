@@ -19,6 +19,7 @@ import EditCategory from './component/category/CategoryEdit'
 import ProductDetail from './component/product/ProductDetail';
 import SessionAdd from './component/session/SessionAdd';
 import MyProduct from './component/product/MyProduct';
+import CurrentProduct from './component/bidding/CurrentProduct';
 
 
 class App extends React.Component {
@@ -33,7 +34,8 @@ class App extends React.Component {
           <Link to="/product/list">Products</Link>||
           <Link to="/category">Category</Link> ||
           <Link to='/session/add'>Add Session</Link> ||
-          <Link to='/myproduct'>My Product</Link>
+          <Link to='/myproduct'>My Product</Link> ||
+          <Link to='/currentBid'>Current Bid</Link>
 
           <Switch>
             <Route exact path="/user/register" component={Register} />
@@ -55,6 +57,8 @@ class App extends React.Component {
             <Route exact path="/category/add" component={AddCategory} />
 
             <Route exact path="/category/edit/:id" component={EditCategory} />
+
+            <Route exact path="/currentBid" component={CurrentProduct} />
           </Switch>
         </div>
       </BrowserRouter>

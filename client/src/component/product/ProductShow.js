@@ -1,13 +1,14 @@
 import React from 'react'
 import axios from '../axios/config';
 import { Link } from 'react-router-dom'
-
+import moment from 'moment'
 class ProductShow extends React.Component {
     constructor() {
         super()
         this.state = {
             products: []
         }
+        console.log('moment', moment().format('YYYY-MM-DD hh A'))
     }
 
     componentDidMount() {

@@ -7,6 +7,7 @@ const SessionAdd = () => {
         axios.post('/sessions', data)
             .then((response) => {
                 console.log(response.data)
+
             })
             .catch((err) => {
                 console.log(err)

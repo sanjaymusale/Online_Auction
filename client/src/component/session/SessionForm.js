@@ -1,35 +1,54 @@
 import React from 'react'
 import { time } from './Time'
-const end = [].concat(time)
+import axios from '../axios/config';
+// const end = [].concat(time)
 
 export default
     class SessionForm extends React.Component {
     constructor() {
         super()
         this.state = {
+            sessionData: [],
             start: '',
+            time: time,
             end: '',
             date: '',
             EndTime: []
         }
     }
+    componentDidMount() {
+        axios.get('/sessions')
+            .then((response) => {
+                console.log('componentdid', response.data)
+                this.setState(() => ({ sessionData: response.data }))
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
     handleStart = (e) => {
         const start = e.target.value
         var EndTime
-        var index = time.indexOf(start)
-        EndTime = end.filter(e => e === time[index + 1])
+        var index = this.state.time.indexOf(start)
+        EndTime = this.state.end.filter(e => e === this.state.time[index + 1])
         this.setState(() => ({ start, EndTime }))
         // console.log('latest', EndTime)
 
     }
     handleDate = (e) => {
         const date = e.target.value
-        this.setState(() => ({ date }))
+        const sessionDate = this.state.sessionData.filter(session => session.date === date)
+
+        const uniqueSessions = [...new Set(sessionDate.map(item => item.startSession))];
+
+        const startTime = time.filter(t => !uniqueSessions.includes(t))
+
+        this.setState(() => ({ date, time: startTime, end: startTime }))
     }
 
     handleEnd = (e) => {
         const end = e.target.value
-        console.log('end', end)
+        //console.log('end', end)
         this.setState(() => ({ end }))
     }
 
@@ -42,6 +61,11 @@ export default
         }
         // console.log(formData)
         this.props.handleSubmit(formData)
+        this.setState(() => ({
+            start: '',
+            date: '',
+            end: ''
+        }))
     }
 
     render() {
@@ -54,10 +78,10 @@ export default
                     </label><br />
                     <label>
                         Start Time :
-                        <select onChange={this.handleStart}>
+                        <select onChange={this.handleStart} value={this.state.start}>
                             <option value="" >Select Start Time</option>
                             {
-                                time.map((t, i) => {
+                                this.state.time.map((t, i) => {
                                     if (i !== time.length - 1) {
                                         return <option key={t} value={t}>{t}</option>
                                     }
@@ -68,7 +92,7 @@ export default
                     </label><br />
                     <label>
                         End Time :
-                        <select onChange={this.handleEnd}>
+                        <select onChange={this.handleEnd} value={this.state.end}>
                             <option value="">Select End Time</option>
                             {
                                 this.state.EndTime.map((t, i) => {
