@@ -18,6 +18,9 @@ import AddCategory from './component/category/CategoryAdd'
 import EditCategory from './component/category/CategoryEdit'
 import ProductDetail from './component/product/ProductDetail';
 import SessionAdd from './component/session/SessionAdd';
+import SessionShow from './component/session/SessionShow'
+import SessionEdit from './component/session/SessionEdit'
+
 import MyProduct from './component/product/MyProduct';
 import CurrentProduct from './component/bidding/CurrentProduct';
 
@@ -34,8 +37,13 @@ class App extends React.Component {
           <Link to="/product/list">Products</Link>||
           <Link to="/category">Category</Link> ||
           <Link to='/session/add'>Add Session</Link> ||
+
           <Link to='/myproduct'>My Product</Link> ||
           <Link to='/currentBid'>Current Bid</Link>
+
+          <Link to='/session/list'>View Session</Link>||
+
+
 
           <Switch>
             <Route exact path="/user/register" component={Register} />
@@ -46,6 +54,8 @@ class App extends React.Component {
 
 
             <Route exact path='/session/add' component={SessionAdd} />
+            <Route exact path='/session/list' component={SessionShow} />
+            <Route exact path='/session_edit/:id' component={SessionEdit} />
 
             <Route exact path="/product/list" component={ProductShow} />
             <Route exact path='/product/:id' component={ProductDetail} />

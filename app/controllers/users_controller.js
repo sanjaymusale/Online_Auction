@@ -4,6 +4,8 @@ const router = express.Router()
 const { User } = require('../models/user')
 const { authenticateUser } = require('../middlewares/authenticate')
 
+const { authorization } = require('../middlewares/autherization')
+
 
 
 router.post('/register', (req, res) => {
