@@ -24,9 +24,9 @@ const productSchema = new Schema({
         required: true,
 
     },
-    approved: {
-        type: Boolean,
-        default: false
+    status: {
+        type: String,
+        default: 'Pending'
     },
     imageUrl: [
         {

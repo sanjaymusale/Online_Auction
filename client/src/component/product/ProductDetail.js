@@ -8,17 +8,17 @@ class ProductDetail extends React.Component {
         this.state = {
             product: {},
             session: {},
-            isApproved: false
+            status: ''
         }
     }
 
     componentDidMount() {
         const id = this.props.match.params.id
-        console.log('id', id)
+        // console.log('id', id)
         Promise.all([axios.get(`/products/${id}`, { headers: { 'x-auth': localStorage.getItem('token') } }),
         axios.get(`/sessions/product/${id}`)])
             .then((response) => {
-                this.setState(() => ({ product: response[0].data, session: response[1].data, isApproved: response[0].data.approved }))
+                this.setState(() => ({ product: response[0].data, session: response[1].data, status: response[0].data.status }))
             })
             .catch((err) => {
                 console.log(err)
@@ -41,12 +41,26 @@ class ProductDetail extends React.Component {
     handleApprove = () => {
         const id = this.props.match.params.id
         const data = {
-            approved: true
+            status: 'Approved'
         }
         axios.put(`/products/${id}`, data, { headers: { 'x-auth': localStorage.getItem('token') } })
             .then((response) => {
                 console.log(response.data)
-                this.setState(() => ({ isApproved: response.data.approved }))
+                this.setState(() => ({ status: response.data.status }))
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+    handleReject = () => {
+        const id = this.props.match.params.id
+        const data = {
+            status: 'Rejected'
+        }
+        axios.put(`/products/${id}`, data, { headers: { 'x-auth': localStorage.getItem('token') } })
+            .then((response) => {
+                console.log(response.data)
+                this.setState(() => ({ status: response.data.product.status }))
             })
             .catch((err) => {
                 console.log(err)
@@ -54,7 +68,7 @@ class ProductDetail extends React.Component {
     }
 
     render() {
-        const { name, minPrice, description, _id, approved } = this.state.product
+        const { name, minPrice, description, _id } = this.state.product
         const { startSession, date, endSession } = this.state.session
         return (
             <div>
@@ -65,11 +79,12 @@ class ProductDetail extends React.Component {
                     <li>Session Date : {date}</li>
                     <li>Session Start Time : {startSession}</li>
                     <li>Session End Time : {endSession}</li>
-                    <li>Approved : {this.state.isApproved ? 'Approved' : 'Pending'}</li>
+                    <li>Approved : {this.state.status}</li>
                 </ul>
                 <Link to={`/product/edit/${_id}`}>Edit</Link> | <Link to='/product/list'>Back</Link>
                 <button onClick={this.handleDelete}>Delete</button>
-                <button onClick={this.handleApprove} disabled={this.state.isApproved}>Approve</button>
+                <button onClick={this.handleApprove} disabled={this.state.status === "Pending" ? false : true}>Approve</button>
+                <button onClick={this.handleReject} disabled={this.state.status === "Pending" ? false : true}>Reject</button>
             </div>
         )
     }

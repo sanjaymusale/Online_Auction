@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from '../axios/config'
 import { Link } from 'react-router-dom'
-import SelectCategory from './SelectCategory'
+// import SelectCategory from './SelectCategory'
 
 export default class Dashboard extends React.Component {
     constructor() {
@@ -10,7 +10,8 @@ export default class Dashboard extends React.Component {
             categoryData: [],
             category: '',
             product: [],
-            productData: []
+            productData: [],
+            filterUser: []
         }
     }
     // componentDidMount() {
@@ -49,20 +50,18 @@ export default class Dashboard extends React.Component {
         // this.setState(() => ({ category }))
 
         // const id = this.state.category
-        const result = this.state.product.filter(output => output.category == id)
+        const result = this.state.product.filter(output => output.category === id)
         console.log('Myrsult', result)
         this.setState(() => ({ productData: result }))
 
-        // axios.get(`/category/${id}`, { headers: { 'x-auth': localStorage.getItem('token') } })
-        //     .then((response) => {
-        //         console.log(response.data.product)
-        //         this.setState(() => ({ product: response.data.product }))
-        //         // this.props.history.push("/category")
-        //     })
-        //     .catch((err) => {
-        //         console.log(err)
-        //     })
+    }
 
+    filterHandle = (e) => {
+        const value = e.target.value
+        const product = this.state.product
+        const result = this.state.product.filter(output => output.name.toLowerCase().includes(value.toLowerCase()))
+        //console.log(result)
+        this.setState(() => ({ productData: result }))
     }
 
 
@@ -91,7 +90,8 @@ export default class Dashboard extends React.Component {
 
 
                 </label>
-                <h2> {this.state.productData.map(pro => {
+                <input type="text" onChange={this.filterHandle} placeholder="search" />
+                <h2> {this.state.productData.filter(p => p.status === 'Approved').map(pro => {
                     return <li key={pro._id}> {pro.name} {pro.minPrice}<Link to={`/product/${pro._id}`}>details</Link></li>
 
                 })}</h2>
