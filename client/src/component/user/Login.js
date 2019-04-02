@@ -2,13 +2,17 @@ import React from 'react'
 import { withFormik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import axios from '../axios/config'
+import { connect } from 'react-redux'
+
+
 
 const LoginPage = ({
     values,
     errors,
     touched
 }) => (
-        <Form>
+
+        < Form >
 
             <div>{touched.email && errors.email && <p>{errors.email}</p>}
                 <Field type="email" name="email" placeholder="email" />
@@ -20,11 +24,12 @@ const LoginPage = ({
 
             <button>Submit</button>
 
-        </Form>
+        </Form >
     )
 
 const Login = withFormik({
     mapPropsToValues({ email, password }) {
+        
         return {
 
             email: email || '',
@@ -42,6 +47,7 @@ const Login = withFormik({
         axios.post('/users/login', values)
             .then((response) => {
                 console.log(response.data)
+                
                 localStorage.setItem('token', response.data.token)
                 resetForm({
                     email: '',
@@ -56,4 +62,4 @@ const Login = withFormik({
 })(LoginPage)
 
 
-export default Login
+export default connect()(Login)
