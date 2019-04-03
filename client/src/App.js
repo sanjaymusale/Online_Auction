@@ -1,11 +1,10 @@
 import React from 'react';
-import { BrowserRouter, Link, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import './App.css';
 
 import Register from './component/user/Register'
 import Login from './component/user/Login'
 import Dashboard from './component/user/Dashboard'
-import SelectCategory from './component/user/SelectCategory'
 
 
 import ProductNew from './component/product/ProductNew'
@@ -23,6 +22,8 @@ import SessionEdit from './component/session/SessionEdit'
 
 import MyProduct from './component/product/MyProduct';
 import CurrentProduct from './component/bidding/CurrentProduct';
+import NavBar from './component/dashboard/NavBar';
+
 
 
 class App extends React.Component {
@@ -30,27 +31,15 @@ class App extends React.Component {
     return (
       <BrowserRouter>
         <div>
-          <Link to="/user/register" >Register</Link> ||
-          <Link to="/user/login" >Login</Link> ||
-          <Link to="/user/dashboard">Dashboard</Link>||
-          <Link to="/product" >Add Product</Link>||
-          <Link to="/product/list">Products</Link>||
-          <Link to="/category">Category</Link> ||
-          <Link to='/session/add'>Add Session</Link> ||
 
-          <Link to='/myproduct'>My Product</Link> ||
-          <Link to='/currentBid'>Current Bid</Link>
-
-          <Link to='/session/list'>View Session</Link>||
-
-
+          <NavBar />
 
           <Switch>
             <Route exact path="/user/register" component={Register} />
             <Route exact path="/user/login" component={Login} />
+
             <Route exact path="/user/dashboard" component={Dashboard} />
             <Route exact path="/product" component={ProductNew} />
-            <Route exact path="/user/selectCategory" component={SelectCategory} />
 
 
             <Route exact path='/session/add' component={SessionAdd} />

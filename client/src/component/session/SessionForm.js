@@ -16,8 +16,9 @@ export default
             EndTime: []
         }
     }
+
     componentDidMount() {
-        axios.get('/sessions')
+        axios.get('/sessions', { headers: { 'x-auth': localStorage.getItem('token') } })
             .then((response) => {
                 console.log('componentdid', response.data)
                 this.setState(() => ({ sessionData: response.data }))
@@ -26,29 +27,33 @@ export default
                 console.log(err)
             })
     }
+
+    handleDate = (e) => {
+        const date = e.target.value
+
+        const sessionDate = this.state.sessionData.filter(session => session.date === date)
+
+        const uniqueSessions = [...new Set(sessionDate.map(item => item.startSession))];
+        console.log('unique Session', uniqueSessions)
+
+        const startTime = time.filter(t => !uniqueSessions.includes(t))
+        console.log("startTime", startTime)
+        this.setState(() => ({ date, time: startTime, end: startTime }))
+    }
     handleStart = (e) => {
         const start = e.target.value
         var EndTime
         var index = this.state.time.indexOf(start)
         EndTime = this.state.end.filter(e => e === this.state.time[index + 1])
         this.setState(() => ({ start, EndTime }))
-        // console.log('latest', EndTime)
+        console.log('latest', EndTime)
 
     }
-    handleDate = (e) => {
-        const date = e.target.value
-        const sessionDate = this.state.sessionData.filter(session => session.date === date)
 
-        const uniqueSessions = [...new Set(sessionDate.map(item => item.startSession))];
-
-        const startTime = time.filter(t => !uniqueSessions.includes(t))
-
-        this.setState(() => ({ date, time: startTime, end: startTime }))
-    }
 
     handleEnd = (e) => {
         const end = e.target.value
-        //console.log('end', end)
+        console.log('end', end)
         this.setState(() => ({ end }))
     }
 
@@ -69,8 +74,8 @@ export default
     }
 
     render() {
-        // console.log('state', this.state)
-        console.log('time', time)
+        console.log('state', this.state)
+        console.log('time', this.state.time)
 
         return (
             <div>

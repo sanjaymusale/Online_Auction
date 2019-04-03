@@ -16,6 +16,7 @@ export default
         axios.get('/products/myproduct', { headers: { 'x-auth': localStorage.getItem('token') } })
             .then((response) => {
                 const { data } = response
+                console.log(data)
                 this.setState(() => ({ myProduct: data }))
             })
             .catch((err) => {

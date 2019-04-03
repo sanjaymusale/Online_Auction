@@ -1,6 +1,7 @@
 import React from "react"
 import axios from "../axios/config";
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 class ProductDetail extends React.Component {
     constructor() {
@@ -83,11 +84,19 @@ class ProductDetail extends React.Component {
                 </ul>
                 <Link to={`/product/edit/${_id}`}>Edit</Link> | <Link to='/product/list'>Back</Link>
                 <button onClick={this.handleDelete}>Delete</button>
-                <button onClick={this.handleApprove} disabled={this.state.status === "Pending" ? false : true}>Approve</button>
-                <button onClick={this.handleReject} disabled={this.state.status === "Pending" ? false : true}>Reject</button>
+                {this.props.user.user.role === 'admin' &&
+                    <>
+                        <button onClick={this.handleApprove} disabled={this.state.status === "Approved" ? true : false}>Approve</button>
+                        <button onClick={this.handleReject} disabled={this.state.status === "Rejected" ? true : false}>Reject</button>
+                    </>
+                }
             </div>
         )
     }
 }
-
-export default ProductDetail
+const mapStateToProps = (state) => {
+    return {
+        user: state.users
+    }
+}
+export default connect(mapStateToProps)(ProductDetail)

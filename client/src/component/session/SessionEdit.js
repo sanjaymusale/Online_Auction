@@ -28,7 +28,7 @@ export default class SessionEdit extends React.Component {
 
 
     render() {
-        const { date, startSession, endSession } = this.state.session
+        //const { date, startSession, endSession } = this.state.session
         //console.log(date, startSession)
         return (
             <div>

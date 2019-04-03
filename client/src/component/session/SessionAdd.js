@@ -4,7 +4,7 @@ import axios from '../axios/config';
 
 const SessionAdd = () => {
     function handleSubmit(data) {
-        axios.post('/sessions', data)
+        axios.post('/sessions', data, { headers: { "x-auth": localStorage.getItem("token") } })
             .then((response) => {
                 console.log(response.data)
 
