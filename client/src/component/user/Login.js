@@ -1,6 +1,8 @@
 import React from 'react'
 import axios from '../axios/config';
 import { Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { setUser } from '../../redux/actions/users'
 import { Button, Form, Label, Input, FormText } from 'reactstrap'
 class Login extends React.Component {
     constructor() {
@@ -9,8 +11,8 @@ class Login extends React.Component {
             email: '',
             password: '',
             redirectList: false,
-            emialError: '',
-            password: ''
+            emailError: '',
+            passwordError: ''
 
         }
         this.handleChange = this.handleChange.bind(this)
@@ -68,8 +70,9 @@ class Login extends React.Component {
                 .then((response) => {
                     console.log(response.data)
                     const { token } = response.data
-                    //console.log('users/login456')
+
                     localStorage.setItem('token', token)
+                    this.props.dispatch(setUser(token))
                     this.setState(() => ({
                         email: '',
                         password: '',
@@ -86,6 +89,7 @@ class Login extends React.Component {
 
     }
     render() {
+        console.log(this.props)
         if (this.state.redirectList) {
             return <Redirect to="/products" />
         }
@@ -121,67 +125,5 @@ class Login extends React.Component {
     }
 
 }
-export default Login
+export default connect()(Login)
 
-
-// import React from 'react'
-// import { withFormik, Form, Field } from 'formik'
-// import { FormGroup, Label, Input, FormFeedback, FormText } from 'reactstrap'
-// import * as Yup from 'yup'
-// import axios from '../axios/config'
-
-// const LoginPage = ({
-//     values,
-//     errors,
-//     touched
-// }) => (
-//         <Form>
-
-//             <div>{touched.email && errors.email && <p>{errors.email}</p>}
-//                 <Field type="email" name="email" placeholder="email" />
-//             </div>
-
-//             <div>
-//                 {touched.password && errors.password && <p>{errors.password}</p>}
-//                 <Field type="password" name="password" placeholder="password" />
-//             </div>
-
-//             <button>Submit</button>
-
-//         </Form>
-//     )
-
-// const Login = withFormik({
-//     mapPropsToValues({ email, password }) {
-//         return {
-
-//             email: email || '',
-//             password: password || ''
-//         }
-//     },
-//     validationSchema: Yup.object().shape({
-
-//         email: Yup.string().email('Provide Valid Email').required('Provide Email'),
-//         password: Yup.string().required('Provide password'),
-
-//     }),
-//     handleSubmit(values, { resetForm }) {
-//         console.log(values)
-//         axios.post('/users/login', values)
-//             .then((response) => {
-//                 console.log(response.data)
-//                 localStorage.setItem('token', response.data.token)
-//                 resetForm({
-//                     email: '',
-//                     password: ''
-//                 })
-//             })
-//             .catch((err) => {
-//                 console.log(err)
-//             })
-
-//     }
-// })(LoginPage)
-
-
-// export default Login

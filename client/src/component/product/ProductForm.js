@@ -42,10 +42,8 @@ export default
     }
 
     componentDidMount() {
-        Promise.all([
-            axios.get('/category', { headers: { 'x-auth': localStorage.getItem('token') } }),
-            axios.get('/sessions', { headers: { 'x-auth': localStorage.getItem('token') } })
-        ])
+        Promise.all([axios.get('/category', { headers: { "x-auth": localStorage.getItem("token") } }),
+        axios.get('/sessions', { headers: { "x-auth": localStorage.getItem("token") } })])
             .then((response) => {
                 console.log(response)
                 this.setState(() => ({

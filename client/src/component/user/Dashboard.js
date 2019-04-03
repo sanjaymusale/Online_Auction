@@ -49,7 +49,7 @@ export default class Dashboard extends React.Component {
 
     filterHandle = (e) => {
         const value = e.target.value
-        const product = this.state.product
+
         const result = this.state.product.filter(output => output.name.toLowerCase().includes(value.toLowerCase()))
         //console.log(result)
         this.setState(() => ({ productData: result }))

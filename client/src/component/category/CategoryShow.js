@@ -40,7 +40,7 @@ class ShowCategory extends React.Component {
 
                     })}
                 </ul>
-                <Link to="/category/add">add</Link>
+
             </div>
         )
     }

@@ -129,7 +129,8 @@ userSchema.methods.generateToken = function () {
     const tokenData = {
         userId: user._id,
         firstName: user.firstName,
-        email: user.email
+        email: user.email,
+        role: user.role
     }
     const token = jwt.sign(tokenData, 'onlinebidding19')
     user.tokens.push({
