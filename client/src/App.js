@@ -1,9 +1,14 @@
+//add some line public/index.html
+
+
 import React from 'react';
 import { BrowserRouter, Link, Route, Switch } from 'react-router-dom'
 import './App.css';
+import { Navbar, NavbarBrand, Col, Row,Breadcrumb } from 'reactstrap'
 
 import Register from './component/user/Register'
 import Login from './component/user/Login'
+import HomePage from './component/user/HomePage'
 import Dashboard from './component/user/Dashboard'
 import SelectCategory from './component/user/SelectCategory'
 
@@ -30,22 +35,43 @@ class App extends React.Component {
     return (
       <BrowserRouter>
         <div>
+
+          <div className stripped>
+            <div className="row">
+              <div className="col-md-12">
+                <Navbar color="primary" background="success">
+                  <NavbarBrand>Online Auction</NavbarBrand>
+
+                </Navbar>
+              </div>
+            </div>
+          </div>
+
+          <Breadcrumb tag="nav" listTag="div" >
+
+          <Col sm={{ size: 9, order: 2, offset: 1 }}>
           <Link to="/user/register" >Register</Link> ||
+          {/* <Link to="/">Welcome </Link> */}
           <Link to="/user/login" >Login</Link> ||
           <Link to="/user/dashboard">Dashboard</Link>||
           <Link to="/product" >Add Product</Link>||
           <Link to="/product/list">Products</Link>||
           <Link to="/category">Category</Link> ||
           <Link to='/session/add'>Add Session</Link> ||
-
+  
           <Link to='/myproduct'>My Product</Link> ||
           <Link to='/currentBid'>Current Bid</Link>
 
-          <Link to='/session/list'>View Session</Link>||
+            <Link to='/session/list'>View Session</Link>||</Col>
+
+          </Breadcrumb>
+
+          
 
 
 
           <Switch>
+            <Route exact path="/" component={HomePage}/> 
             <Route exact path="/user/register" component={Register} />
             <Route exact path="/user/login" component={Login} />
             <Route exact path="/user/dashboard" component={Dashboard} />

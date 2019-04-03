@@ -83,8 +83,8 @@ class ProductDetail extends React.Component {
                 </ul>
                 <Link to={`/product/edit/${_id}`}>Edit</Link> | <Link to='/product/list'>Back</Link>
                 <button onClick={this.handleDelete}>Delete</button>
-                <button onClick={this.handleApprove} disabled={this.state.status === "Pending" ? false : true}>Approve</button>
-                <button onClick={this.handleReject} disabled={this.state.status === "Pending" ? false : true}>Reject</button>
+                <button onClick={this.handleApprove} disabled={this.state.status === "Approved" ? true : false}>Approve</button>
+                <button onClick={this.handleReject} disabled={this.state.status === "Rejected" ? true : false}>Reject</button>
             </div>
         )
     }

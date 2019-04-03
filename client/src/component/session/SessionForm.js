@@ -2,6 +2,7 @@ import React from 'react'
 import { time } from './Time'
 import axios from '../axios/config';
 // const end = [].concat(time)
+import { Button, Form, Label, Input, FormText } from 'reactstrap'
 
 export default
     class SessionForm extends React.Component {
@@ -17,7 +18,7 @@ export default
         }
     }
     componentDidMount() {
-        axios.get('/sessions')
+        axios.get('/sessions', { headers: { 'x-auth': localStorage.getItem('token') } })
             .then((response) => {
                 console.log('componentdid', response.data)
                 this.setState(() => ({ sessionData: response.data }))
@@ -59,7 +60,7 @@ export default
             endSession: this.state.end,
             date: this.state.date
         }
-        // console.log(formData)
+        console.log(formData)
         this.props.handleSubmit(formData)
         this.setState(() => ({
             start: '',
@@ -74,37 +75,44 @@ export default
 
         return (
             <div>
-                <form onSubmit={this.handleSubmit}>
-                    <label>
-                        Date :<input type="date" value={this.state.date} onChange={this.handleDate} />
-                    </label><br />
-                    <label>
-                        Start Time :
-                        <select onChange={this.handleStart} value={this.state.start}>
-                            <option value="" >Select Start Time</option>
-                            {
-                                this.state.time.map((t, i) => {
-                                    if (i !== time.length - 1) {
-                                        return <option key={t} value={t}>{t}</option>
-                                    }
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-5"></div>
+                        <Form onSubmit={this.handleSubmit}>
+                            <Label>
+                                Date :<br /><Input type="date" value={this.state.date} onChange={this.handleDate} />
+                            </Label><br />
+                            <Label>
+                                Start Time :<br />
+                                <select onChange={this.handleStart} value={this.state.start}>
+                                    <option value="" >Select Start Time</option>
+                                    {
+                                        this.state.time.map((t, i) => {
+                                            if (i !== time.length - 1) {
+                                                return <option key={t} value={t}>{t}</option>
+                                            }
 
-                                })
-                            }
-                        </select>
-                    </label><br />
-                    <label>
-                        End Time :
-                        <select onChange={this.handleEnd} value={this.state.end}>
-                            <option value="">Select End Time</option>
-                            {
-                                this.state.EndTime.map((t, i) => {
-                                    return <option key={t} value={t}>{t}</option>
-                                })
-                            }
-                        </select>
-                    </label><br />
-                    <button>Submit</button>
-                </form>
+                                        })
+                                    }
+                                </select>
+                            </Label><br />
+                            <Label>
+                                End Time :<br />
+                                <select onChange={this.handleEnd} value={this.state.end}>
+                                    <option value="">Select End Time</option>
+                                    {
+                                        this.state.EndTime.map((t, i) => {
+                                            return <option key={t} value={t}>{t}</option>
+                                        })
+                                    }
+                                </select>
+                            </Label><br />
+                            <Button type='submit' color="primary">submit</Button>
+                            {/* <button>Submit</button> */}
+                        </Form>
+                    </div>
+                </div>
+
             </div>
         )
     }

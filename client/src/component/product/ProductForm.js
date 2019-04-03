@@ -1,10 +1,12 @@
 import React from 'react'
 import axios from '../axios/config';
+import { Button, Form, Label, Input, FormText } from 'reactstrap'
 
 export default
     class ProductForm extends React.Component {
     constructor(props) {
         super(props)
+        //console.log(props.imageUrl)
 
         this.state = {
             name: props.name ? props.name : '',
@@ -40,7 +42,10 @@ export default
     }
 
     componentDidMount() {
-        Promise.all([axios.get('/category'), axios.get('/sessions')])
+        Promise.all([
+            axios.get('/category', { headers: { 'x-auth': localStorage.getItem('token') } }),
+            axios.get('/sessions', { headers: { 'x-auth': localStorage.getItem('token') } })
+        ])
             .then((response) => {
                 console.log(response)
                 this.setState(() => ({
@@ -105,6 +110,7 @@ export default
             for (const file of this.state.file) {
                 formData.append('image', file)
             }
+            console.log(formData)
             this.props.handleSubmit(formData)
             // console.log(this.state)
 
@@ -123,63 +129,73 @@ export default
     }
 
     render() {
+        console.log(this.props.imageUrl)
         const uniqueSessions = [...new Set(this.state.SessionsData.map(item => item.date))];
-        console.log('uniqueSession', uniqueSessions)
+        //console.log('uniqueSession', uniqueSessions)
         return (
             <div>
-                <h2>FORM</h2>
-                <form onSubmit={this.handleSubmit}>
-                    <label>
-                        Name : <input type="text" name="name" value={this.state.name} onChange={this.handleChange} />
-                    </label><br />
-                    <p>{this.state.nameError}</p>
-                    <label>
-                        category :
-                        <select name="category" onChange={this.handleChange} >
-                            <option value="">Select Category</option>
-                            {this.state.categoryData.map(category => {
-                                return <option key={category._id} value={category._id} >{category.name}</option>
-                            })}
 
-                        </select>
-                    </label><br />
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-5"></div>
 
-                    <label>
-                        Minimum Price : <input type="number" name="minPrice" value={this.state.minPrice} onChange={this.handleChange} />
-                    </label><br />
-                    <p>{this.state.minPriceError}</p>
-                    <label>
-                        Description : <textarea name="description" value={this.state.description} onChange={this.handleChange} ></textarea>
-                    </label><br />
-                    <p>{this.state.descriptionError}</p>
-                    <label>
-                        file:<input type="file" name="image" onChange={this.fileHandle} multiple />
-                    </label><br />
+                        <Form onSubmit={this.handleSubmit}>
+                            <Label>
+                                Name :<br />
+                                <Input type="text" name="name" value={this.state.name} onChange={this.handleChange} />
+                            </Label><br />
+                            <p>{this.state.nameError}</p>
 
 
-                    <label>
-                        Date :<select onChange={this.dateHandle}>
-                            <option value="">Select Date</option>
-                            {uniqueSessions.map((session, index) => {
-                                return <option key={session} value={session} >{session}</option>
-                            })}
-                        </select>
-                    </label><br />
-                    <label>
-                        Start Time :
-                        <select onChange={this.handleStart}>
-                            <option value="" >Select Start Time</option>
-                            {
-                                this.state.filterSession.map((t, i) => {
-                                    // if (i !== this.state.filterSession.length - 1) {
-                                    return <option key={t._id} value={t.startSession}>{t.startSession}</option>
-                                    // }
+                            <select name="category" onChange={this.handleChange} >
+                                <option value="">Select Category</option>
+                                {this.state.categoryData.map(category => {
+                                    return <option key={category._id} value={category._id} >{category.name}</option>
+                                })}
 
-                                })
-                            }
-                        </select>
-                    </label><br />
-                    {/* <label>
+                            </select><br />
+
+
+                            <Label>
+                                Minimum Price :<br />
+                                <Input type="number" name="minPrice" value={this.state.minPrice} onChange={this.handleChange} />
+                            </Label><br />
+                            <p>{this.state.minPriceError}</p>
+                            <Label>
+                                Description :<br />
+                                <textarea name="description" value={this.state.description} onChange={this.handleChange} ></textarea>
+                            </Label><br />
+                            <p>{this.state.descriptionError}</p>
+                            <Label>
+                                file:<br />
+                                <Input type="file" name="image" onChange={this.fileHandle} multiple />
+                            </Label><br />
+
+
+                            <Label>
+                                Date :<br />
+                                <select onChange={this.dateHandle}>
+                                    <option value="">Select Date</option>
+                                    {uniqueSessions.map((session, index) => {
+                                        return <option key={session} value={session} >{session}</option>
+                                    })}
+                                </select>
+                            </Label><br />
+                            <Label>
+                                Start Time :<br />
+                                <select onChange={this.handleStart}>
+                                    <option value="" >Select Start Time</option>
+                                    {
+                                        this.state.filterSession.map((t, i) => {
+                                            // if (i !== this.state.filterSession.length - 1) {
+                                            return <option key={t._id} value={t.startSession}>{t.startSession}</option>
+                                            // }
+
+                                        })
+                                    }
+                                </select>
+                            </Label><br />
+                            {/* <label>
                         End Time :
                         <select onChange={this.handleEnd} >
                             <option value="">Select End Time</option>
@@ -192,9 +208,14 @@ export default
                     </label><br /> */}
 
 
-                    <button>Submit</button>
+                            <Button color="primary">Submit</Button>
 
-                </form>
+                        </Form>
+
+
+                    </div>
+                </div>
+
             </div>
         )
     }
