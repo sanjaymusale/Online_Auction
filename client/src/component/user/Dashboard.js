@@ -1,8 +1,7 @@
 import React from 'react'
 import axios from '../axios/config'
 import { Link } from 'react-router-dom'
-// import SelectCategory from './SelectCategory'
-
+import { isEmpty } from 'lodash'
 export default class Dashboard extends React.Component {
     constructor() {
         super()
@@ -46,7 +45,7 @@ export default class Dashboard extends React.Component {
 
     handleChange = (e) => {
         const id = e.target.value
-        console.log('nischal', id)
+        //console.log('nischal', id)
         // this.setState(() => ({ category }))
 
         // const id = this.state.category
@@ -91,8 +90,8 @@ export default class Dashboard extends React.Component {
 
                 </label>
                 <input type="text" onChange={this.filterHandle} placeholder="search" />
-                <h2> {this.state.productData.filter(p => p.status === 'Approved').map(pro => {
-                    return <li key={pro._id}> {pro.name} {pro.minPrice}<Link to={`/product/${pro._id}`}>details</Link></li>
+                <h2> {this.state.productData.filter(p => p.status === 'Approved' && !isEmpty(p.session)).map(pro => {
+                    return <li key={pro._id}> {pro.name} {pro.minPrice}<Link to={`/productdetail/${pro._id}`}>details</Link></li>
 
                 })}</h2>
 

@@ -11,11 +11,11 @@ const Admin = () => {
                         <span className="text-white">Actions</span>
                     </Link>
                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-
+                        <Link to="/product/list" className="dropdown-item">Products</Link>
                         <Link to="/category/add" className="dropdown-item">Add Category</Link>
+
                         <Link to="/category" className="dropdown-item">Category</Link>
-                        <Link to='/session/add' className="dropdown-item">Add Session</Link>
-                        <Link to='/session/list' className="dropdown-item">View Session</Link>
+
 
                     </div>
                 </li>

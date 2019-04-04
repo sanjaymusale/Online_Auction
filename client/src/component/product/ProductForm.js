@@ -100,9 +100,9 @@ export default
             formData.append('category', category)
             formData.append('description', description)
             formData.append('minPrice', minPrice)
-            formData.append('isAlloted', true)
-            formData.append('date', date)
-            formData.append('startSession', start)
+            // formData.append('isAlloted', true)
+            // formData.append('date', date)
+            // formData.append('startSession', start)
             for (const file of this.state.file) {
                 formData.append('image', file)
             }
@@ -124,8 +124,8 @@ export default
     }
 
     render() {
-        const uniqueSessions = [...new Set(this.state.SessionsData.map(item => item.date))];
-        console.log('uniqueSession', uniqueSessions)
+        // const uniqueSessions = [...new Set(this.state.SessionsData.map(item => item.date))];
+        // console.log('uniqueSession', uniqueSessions)
         return (
             <div>
                 <h2>FORM</h2>
@@ -158,7 +158,7 @@ export default
                     </label><br />
 
 
-                    <label>
+                    {/* <label>
                         Date :<select onChange={this.dateHandle}>
                             <option value="">Select Date</option>
                             {uniqueSessions.map((session, index) => {
@@ -179,7 +179,7 @@ export default
                                 })
                             }
                         </select>
-                    </label><br />
+                    </label><br /> */}
                     {/* <label>
                         End Time :
                         <select onChange={this.handleEnd} >

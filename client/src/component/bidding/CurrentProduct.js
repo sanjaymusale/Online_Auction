@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from '../axios/config'
 import moment from 'moment'
+import { Link } from 'react-router-dom'
 
 export default
     class CurrentProduct extends React.Component {
@@ -62,6 +63,7 @@ export default
                             <div>
                                 Name : {currentProduct.name}
                                 Min Price : {currentProduct.minPrice}
+                                <Link to='/biddingroom' className="btn btn-primary" target="_blank">Enter Bidding Room</Link>
                             </div>
 
 

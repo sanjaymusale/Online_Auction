@@ -11,7 +11,7 @@ const productSchema = new Schema({
         ref: 'Category',
         required: true
     },
-    sellerId: {
+    seller: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
@@ -23,6 +23,10 @@ const productSchema = new Schema({
         type: String,
         required: true,
 
+    },
+    session: {
+        type: String,
+        ref: 'Session'
     },
     status: {
         type: String,

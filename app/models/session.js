@@ -2,25 +2,26 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const sessionSchema = new Schema({
-    startSession: {
-        type: String,
-        required: true
-    },
-    endSession: {
-        type: String,
-        required: true
-    },
-    productId: {
+
+    product: {
         type: Schema.Types.ObjectId,
         ref: 'Product'
     },
+    startTime: {
+        type: Date,
+        required: true
+    },
+    endTime: {
+        type: Date,
+        required: true
+    },
     date: {
-        type: String,
+        type: Date,
         required: true
     },
     isAlloted: {
         type: Boolean,
-        default: false
+        default: true
     }
 })
 

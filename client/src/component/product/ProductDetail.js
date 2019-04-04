@@ -2,6 +2,8 @@ import React from "react"
 import axios from "../axios/config";
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import moment from 'moment'
+import { isEmpty } from 'lodash'
 
 class ProductDetail extends React.Component {
     constructor() {
@@ -9,35 +11,94 @@ class ProductDetail extends React.Component {
         this.state = {
             product: {},
             session: {},
-            status: ''
+            category: {},
+            status: '',
+            time: ''
         }
     }
 
+    getTime = () => {
+        axios.get('http://worldclockapi.com/api/json/utc/now')
+            .then((response) => {
+                return response.data
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
     componentDidMount() {
         const id = this.props.match.params.id
         // console.log('id', id)
-        Promise.all([axios.get(`/products/${id}`, { headers: { 'x-auth': localStorage.getItem('token') } }),
-        axios.get(`/sessions/product/${id}`)])
+        axios.get(`/products/${id}`, { headers: { 'x-auth': localStorage.getItem('token') } })
             .then((response) => {
-                this.setState(() => ({ product: response[0].data, session: response[1].data, status: response[0].data.status }))
+                this.setState(() => ({
+                    product: response.data,
+                    status: response.data.status,
+                    category: response.data.category,
+                    session: response.data.session,
+
+                }))
             })
             .catch((err) => {
                 console.log(err)
             })
     }
     handleDelete = () => {
-        const confirm = window.confirm('Are you Sure ??')
-        if (confirm) {
-            const id = this.props.match.params.id
-            axios.delete(`/products/${id}`, { headers: { 'x-auth': localStorage.getItem('token') } })
+        if (!isEmpty(this.state.session)) {
+            axios.get('http://worldclockapi.com/api/json/utc/now')
                 .then((response) => {
-                    // console.log(response.data)
-                    this.props.history.push('/product/list')
+                    const currentDateTime = response.data.currentDateTime
+                    console.log('current', currentDateTime)
+                    const { startTime, endTime, date } = this.state.session
+                    const currentDate = moment(currentDateTime).format('DD-MM-YYYY')
+                    const currentTime = moment(currentDateTime).format('HH:mm a')
+                    console.log(currentDate, currentTime)
+                    const biddingStartDate = moment(date).format('DD-MM-YYYY')
+                    const biddingStartTime = moment(startTime).format('HH:mm a')
+                    const biddingEndTime = moment(endTime).format('HH:mm a')
+
+
+
+
+                    console.log(biddingStartDate, biddingStartTime, biddingEndTime)
+
+                    if (biddingStartTime.hour() >= 12 && biddingEndTime.hour() <= 12) {
+                        biddingEndTime.add(1, "days");       // handle spanning days
+                    }
+
+                    var isBetween = moment(currentDateTime, 'HH:mm a').isBetween(startTime, endTime);
+                    //const stat = moment(currentDateTime, 'hh:mm a').isBetween(biddingStartTime, biddingEndTime)
+                    console.log(isBetween)
+                    // if (currentDate === biddingStartDate && moment(currentTime).isBetween(biddingStartTime, biddingEndTime)) {
+                    //     console.log('yes')
+                    // } else {
+                    //     console.log('No')
+                    // }
+
+
+
                 })
                 .catch((err) => {
                     console.log(err)
                 })
+
+
+
+
         }
+        // const confirm = window.confirm('Are you Sure ??')
+
+        // if (confirm) {
+        //     const id = this.props.match.params.id
+        //     axios.delete(`/products/${id}`, { headers: { 'x-auth': localStorage.getItem('token') } })
+        //         .then((response) => {
+        //             // console.log(response.data)
+        //             this.props.history.push('/product/list')
+        //         })
+        //         .catch((err) => {
+        //             console.log(err)
+        //         })
+        // }
     }
     handleApprove = () => {
         const id = this.props.match.params.id
@@ -70,20 +131,35 @@ class ProductDetail extends React.Component {
 
     render() {
         const { name, minPrice, description, _id } = this.state.product
-        const { startSession, date, endSession } = this.state.session
+        // const { startTime, date, endTime } = this.state.session
+        const { name: categoryName } = this.state.category
+
+        console.log(this.state)
         return (
             <div>
                 <ul>
                     <li> Name : {name}</li>
                     <li> minPrice : {minPrice}</li>
                     <li>description : {description} </li>
-                    <li>Session Date : {date}</li>
-                    <li>Session Start Time : {startSession}</li>
-                    <li>Session End Time : {endSession}</li>
+                    <li>Category : {categoryName}</li>
+                    {!isEmpty(this.state.session) &&
+                        <>
+                            <li>Session Date : {moment(this.state.session.date).format('DD-MM-YYYY')}</li>
+                            <li>Session Start Time : {moment(this.state.session.startTime).format('hh:mm A')}</li>
+                            <li>Session End Time : {moment(this.state.session.endTime).format('hh:mm A')}</li>
+                        </>
+                    }
                     <li>Approved : {this.state.status}</li>
                 </ul>
-                <Link to={`/product/edit/${_id}`}>Edit</Link> | <Link to='/product/list'>Back</Link>
-                <button onClick={this.handleDelete}>Delete</button>
+                {this.props.user.user.role !== 'admin' &&
+                    <>
+                        <Link to={`/product/edit/${_id}`}>Edit</Link> | <Link to='/product/list'>Back</Link>
+                        <button onClick={this.handleDelete}>Delete</button>
+                    </>
+                }
+                {
+                    (this.state.status === 'Approved' && this.props.user.user.role === 'user' && isEmpty(this.state.session)) && <Link to={`/session/add/${_id}`} className="btn btn-primary">Add Time Slot</Link>
+                }
                 {this.props.user.user.role === 'admin' &&
                     <>
                         <button onClick={this.handleApprove} disabled={this.state.status === "Approved" ? true : false}>Approve</button>

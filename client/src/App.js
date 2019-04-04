@@ -23,8 +23,7 @@ import SessionEdit from './component/session/SessionEdit'
 import MyProduct from './component/product/MyProduct';
 import CurrentProduct from './component/bidding/CurrentProduct';
 import NavBar from './component/dashboard/NavBar';
-
-
+import CurrentBidding from './component/bidding/CurrentBidding';
 
 class App extends React.Component {
   render() {
@@ -42,7 +41,7 @@ class App extends React.Component {
             <Route exact path="/product" component={ProductNew} />
 
 
-            <Route exact path='/session/add' component={SessionAdd} />
+            <Route exact path='/session/add/:id' component={SessionAdd} />
             <Route exact path='/session/list' component={SessionShow} />
             <Route exact path='/session_edit/:id' component={SessionEdit} />
 
@@ -58,6 +57,7 @@ class App extends React.Component {
             <Route exact path="/category/edit/:id" component={EditCategory} />
 
             <Route exact path="/currentBid" component={CurrentProduct} />
+            <Route exact path='/biddingroom' component={CurrentBidding} />
           </Switch>
         </div>
       </BrowserRouter>

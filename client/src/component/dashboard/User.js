@@ -13,7 +13,7 @@ const User = () => {
                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                         <Link to="/user/dashboard" className="dropdown-item">Dashboard</Link>
                         <Link to="/product" className="dropdown-item">Add Product</Link>
-                        <Link to="/product/list" className="dropdown-item">Products</Link>
+
                         <Link to='/currentBid' className="dropdown-item">Current Bid</Link>
                         <Link to='/myproduct' className="dropdown-item">My Product</Link>
 
