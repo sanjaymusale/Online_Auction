@@ -126,6 +126,7 @@ class Register extends React.Component {
             }
             alert("form submitted")
             console.log(formData)
+            console.log(formData)
 
             // }
 
