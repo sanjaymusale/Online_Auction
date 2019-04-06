@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
+const { Bidding } = require('./bidding')
 
 const sessionSchema = new Schema({
 
@@ -25,8 +26,32 @@ const sessionSchema = new Schema({
     }
 })
 
+
+
+sessionSchema.post('save', async function (next) {
+    const self = this
+    console.log('self', self)
+    const data = {
+        session: self._id,
+        product: self.product
+    }
+    console.log('post save bidding', data)
+    const bidding = new Bidding(data)
+    bidding.save()
+        .then((res) => {
+            console.log('post save bidding', res)
+            next()
+        })
+        .catch((err) => {
+            console.log(err)
+            next()
+        })
+})
+
 const Session = mongoose.model('Session', sessionSchema)
 
 module.exports = {
     Session
 }
+
+

@@ -20,7 +20,7 @@ const SessionAdd = (props) => {
                 axios.put(`/products/${id}`, data, { headers: { "x-auth": localStorage.getItem("token") } })
                     .then((response) => {
                         console.log(response)
-                        // props.history.push(`/product/${id}`)
+                        props.history.push(`/product/${id}`)
 
                     })
                     .catch((err) => {

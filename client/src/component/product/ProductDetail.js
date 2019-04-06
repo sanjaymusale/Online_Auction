@@ -17,15 +17,7 @@ class ProductDetail extends React.Component {
         }
     }
 
-    getTime = () => {
-        axios.get('http://worldclockapi.com/api/json/utc/now')
-            .then((response) => {
-                return response.data
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }
+
     componentDidMount() {
         const id = this.props.match.params.id
         // console.log('id', id)
@@ -48,57 +40,60 @@ class ProductDetail extends React.Component {
             axios.get('http://worldclockapi.com/api/json/utc/now')
                 .then((response) => {
                     const currentDateTime = response.data.currentDateTime
-                    console.log('current', currentDateTime)
+                    //console.log('current', currentDateTime)
                     const { startTime, endTime, date } = this.state.session
-                    const currentDate = moment(currentDateTime).format('DD-MM-YYYY')
-                    const currentTime = moment(currentDateTime).format('HH:mm a')
-                    console.log(currentDate, currentTime)
-                    const biddingStartDate = moment(date).format('DD-MM-YYYY')
-                    const biddingStartTime = moment(startTime).format('HH:mm a')
-                    const biddingEndTime = moment(endTime).format('HH:mm a')
+                    const currentDate = moment(currentDateTime, 'DD-MM-YYYY')
+                    const currentTime = moment(currentDateTime)
+                    // console.log('currentDate', currentDate, 'currentTime', currentTime)
 
+                    const biddingStartDate = moment(date, 'DD-MM-YYYY')
+                    const biddingStartTime = moment(startTime)
+                    const biddingEndTime = moment(endTime)
+                    //console.log(biddingStartDate, biddingStartTime, biddingEndTime)
 
+                    const datestatus = currentDate.isSame(biddingStartDate)
+                    const timestatus = currentTime.isBetween(biddingStartTime, biddingEndTime)
 
+                    if (datestatus && timestatus) {
+                        alert('Product Cannot be Deleted as it is in Bidding Process')
 
-                    console.log(biddingStartDate, biddingStartTime, biddingEndTime)
+                    } else {
+                        const confirm = window.confirm('Are you Sure ??')
 
-                    if (biddingStartTime.hour() >= 12 && biddingEndTime.hour() <= 12) {
-                        biddingEndTime.add(1, "days");       // handle spanning days
+                        if (confirm) {
+                            const id = this.props.match.params.id
+                            axios.delete(`/products/${id}`, { headers: { 'x-auth': localStorage.getItem('token') } })
+                                .then((response) => {
+                                    // console.log(response.data)
+                                    this.props.history.push('/product/list')
+                                })
+                                .catch((err) => {
+                                    console.log(err)
+                                })
+                        }
                     }
-
-                    var isBetween = moment(currentDateTime, 'HH:mm a').isBetween(startTime, endTime);
-                    //const stat = moment(currentDateTime, 'hh:mm a').isBetween(biddingStartTime, biddingEndTime)
-                    console.log(isBetween)
-                    // if (currentDate === biddingStartDate && moment(currentTime).isBetween(biddingStartTime, biddingEndTime)) {
-                    //     console.log('yes')
-                    // } else {
-                    //     console.log('No')
-                    // }
-
-
-
                 })
                 .catch((err) => {
                     console.log(err)
                 })
+        }
+        else {
+            const confirm = window.confirm('Are you Sure ??')
 
-
-
+            if (confirm) {
+                const id = this.props.match.params.id
+                axios.delete(`/products/${id}`, { headers: { 'x-auth': localStorage.getItem('token') } })
+                    .then((response) => {
+                        // console.log(response.data)
+                        this.props.history.push('/product/list')
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            }
 
         }
-        // const confirm = window.confirm('Are you Sure ??')
 
-        // if (confirm) {
-        //     const id = this.props.match.params.id
-        //     axios.delete(`/products/${id}`, { headers: { 'x-auth': localStorage.getItem('token') } })
-        //         .then((response) => {
-        //             // console.log(response.data)
-        //             this.props.history.push('/product/list')
-        //         })
-        //         .catch((err) => {
-        //             console.log(err)
-        //         })
-        // }
     }
     handleApprove = () => {
         const id = this.props.match.params.id
@@ -134,7 +129,7 @@ class ProductDetail extends React.Component {
         // const { startTime, date, endTime } = this.state.session
         const { name: categoryName } = this.state.category
 
-        console.log(this.state)
+        //console.log(this.state)
         return (
             <div>
                 <ul>

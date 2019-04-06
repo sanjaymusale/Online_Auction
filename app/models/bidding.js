@@ -2,21 +2,21 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const biddingSchema = new Schema({
-    sessionId: {
+    session: {
         type: Schema.Types.ObjectId,
         ref: 'Session'
     },
     participant: [{
-        userId: {
+        user: {
             type: Schema.Types.ObjectId,
-
+            ref: 'User'
         },
         amount: {
             type: Number
         },
-        ref: 'User'
+
     }],
-    productId: {
+    product: {
         type: Schema.Types.ObjectId,
         ref: 'Product'
     }

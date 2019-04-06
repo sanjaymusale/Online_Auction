@@ -35,7 +35,7 @@ router.get('/product/:id', (req, res) => {
     const id = req.params.id
     Session.findOne({ product: id }).populate('product')
         .then((sessions) => {
-            console.log(sessions)
+            //console.log(sessions)
             res.send(sessions)
         })
         .catch((err) => {

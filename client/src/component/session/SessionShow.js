@@ -1,6 +1,8 @@
 import React from 'react'
 import axios from '../axios/config';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import { Table } from 'reactstrap'
+
 
 
 export default class SessionShow extends React.Component {
@@ -35,15 +37,15 @@ export default class SessionShow extends React.Component {
         return (
             <div>
                 <br />
-                <table border="2">
+                <Table striped >
                     <thead >
                         <tr>
-                            <td>#</td>
-                            <td>Date</td>
-                            <td>StartSession</td>
-                            <td>EndSession</td>
-                            <td>edit</td>
-                            <td>delete</td>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>StartSession</th>
+                            <th>EndSession</th>
+                            <th>edit</th>
+                            <th>delete</th>
 
 
                         </tr>
@@ -67,7 +69,7 @@ export default class SessionShow extends React.Component {
 
                     </tbody>
 
-                </table>
+                </Table>
                 {/* <ul>
                     {session.map(sess => { return <li key={sess._id}> Start : {sess.startSession}  End : {sess.endSession} </li> })}
                 </ul> */}

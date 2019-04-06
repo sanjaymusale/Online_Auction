@@ -31,7 +31,8 @@ router.get('/myproduct', authenticateUser, (req, res) => {
 
 router.post('/', authenticateUser, upload.array('image', 3), (req, res) => {
     const body = req.body
-    console.log(body)
+    //console.log(req)
+    //console.log(body)
     body.seller = req.user._id
     //console.log(req)
     const image = []
@@ -62,11 +63,11 @@ router.post('/', authenticateUser, upload.array('image', 3), (req, res) => {
 
 router.get('/:id', authenticateUser, (req, res) => {
     const _id = req.params.id
-    console.log('product get')
+    //console.log('product get')
     Product.findOne({ _id }).populate('category').populate('session')
         .then((product) => {
             if (product) {
-                console.log(product)
+                // console.log(product)
                 res.send(product)
             }
             else {
@@ -82,20 +83,10 @@ router.get('/:id', authenticateUser, (req, res) => {
 
 router.delete('/:id', authenticateUser, (req, res) => {
     const id = req.params.id
-    Product.findByIdAndDelete(id)
-        .then((product) => {
-            if (product) {
-                Session.findOneAndUpdate({ productId: product._id }, { $set: { isAlloted: false } })
-                    .then((response) => {
-                        res.send({ product, response })
-                    })
-                    .catch((err) => {
-                        console.log(err)
-                    })
-            }
-            else {
-                res.send({})
-            }
+    Promise.all([Product.findByIdAndDelete(id), Session.findOneAndDelete({ product: id })])
+        .then((response) => {
+            //console.log(response)
+            res.send(response)
 
         })
         .catch((err) => {
@@ -106,7 +97,7 @@ router.delete('/:id', authenticateUser, (req, res) => {
 router.put('/:id', authenticateUser, (req, res) => {
     const _id = req.params.id
     const data = req.body
-    console.log(data)
+    //console.log(data)
     Product.findByIdAndUpdate({ _id }, { $set: data }, { new: true })
         .then((product) => {
             if (product.status === 'Rejected') {

@@ -1,9 +1,14 @@
+//add some line public/index.html<24-35>
+
+
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import './App.css';
 
+
 import Register from './component/user/Register'
 import Login from './component/user/Login'
+import HomePage from './component/user/HomePage'
 import Dashboard from './component/user/Dashboard'
 
 
@@ -24,6 +29,7 @@ import MyProduct from './component/product/MyProduct';
 import CurrentProduct from './component/bidding/CurrentProduct';
 import NavBar from './component/dashboard/NavBar';
 import CurrentBidding from './component/bidding/CurrentBidding';
+import LightboxExample from './component/product/lightbox';
 
 class App extends React.Component {
   render() {
@@ -34,6 +40,7 @@ class App extends React.Component {
           <NavBar />
 
           <Switch>
+            <Route exact path="/" component={HomePage} />
             <Route exact path="/user/register" component={Register} />
             <Route exact path="/user/login" component={Login} />
 
@@ -49,6 +56,7 @@ class App extends React.Component {
             <Route exact path='/product/:id' component={ProductDetail} />
             <Route exact path="/product/edit/:id" component={ProductEdit} />
             <Route exact path="/myproduct" component={MyProduct} />
+            <Route exact path="/lighbox" component={LightboxExample} />
 
 
             <Route exact path="/category" component={ShowCategory} />
@@ -57,7 +65,7 @@ class App extends React.Component {
             <Route exact path="/category/edit/:id" component={EditCategory} />
 
             <Route exact path="/currentBid" component={CurrentProduct} />
-            <Route exact path='/biddingroom' component={CurrentBidding} />
+            <Route exact path='/biddingroom/:id' component={CurrentBidding} />
           </Switch>
         </div>
       </BrowserRouter>

@@ -34,6 +34,7 @@ const Navbar = (props) => {
                                     {user.role === 'admin' ?
 
                                         <Admin />
+
                                         :
                                         <User />
                                     }
