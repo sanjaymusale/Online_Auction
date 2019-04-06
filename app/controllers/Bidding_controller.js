@@ -14,12 +14,18 @@ router.get('/session/:id', (req, res) => {
         })
 })
 
-router.put('/session/:id', (req, res) => {
-    const id = req.param.id
+router.post('/session/:id', authenticateUser, (req, res) => {
+    const id = req.params.id
     const data = req.body
-    Bidding.findOneAndUpdate({ session: id }, { $set: data }, { new: true })
-        .then((response) => {
-            res.send(response)
+    console.log('before put data', data)
+    Bidding.findOne({ session: id })
+        .then((bidding) => {
+            //console.log('1st then', bidding)
+            return bidding.addParticipant(data)
+        })
+        .then((bidding) => {
+            //console.log('2nd then ', bidding)
+            res.send(bidding)
         })
         .catch((err) => {
             res.send(err)
