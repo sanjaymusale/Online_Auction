@@ -5,9 +5,9 @@ export const setUser = (user) => {
     }
 }
 
-export const removeUser = (token) => {
+export const removeUser = (user) => {
     return {
         type: 'REMOVE_USER',
-        token
+        user
     }
 } 

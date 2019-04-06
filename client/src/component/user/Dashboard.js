@@ -2,7 +2,9 @@ import React from 'react'
 import axios from '../axios/config'
 import { Link } from 'react-router-dom'
 // import { isEmpty } from 'lodash'
+
 import { Input } from 'reactstrap'
+import '../../App.css'
 // import SelectCategory from './SelectCategory'
 
 export default class Dashboard extends React.Component {
@@ -40,9 +42,10 @@ export default class Dashboard extends React.Component {
         const id = e.target.value
         //console.log('nischal', id)
         // this.setState(() => ({ category }))
+        console.log(this.state.product)
 
         // const id = this.state.category
-        const result = this.state.product.filter(output => output.category === id)
+        const result = this.state.product.filter(output => output.category._id === id)
         console.log('Myrsult', result)
         this.setState(() => ({ productData: result }))
 
@@ -67,18 +70,56 @@ export default class Dashboard extends React.Component {
         return (
             <div className="container">
                 <div className="row">
-                    <div className="col-md-5">
+                    <div className="col-md-8" >
                         <Input type="text" bsSize="sm" onChange={this.filterHandle} placeholder="search" />
                         <br />
-                        <h5> {this.state.productData.filter(p => p.status === 'Approved').map(pro => {
-                            return <li key={pro._id}> {pro.name} {pro.minPrice}<Link to={`/product/${pro._id}`}>  details</Link></li>
 
-                        })}</h5>
+                        {/* <CardDeck  >
+
+                            {this.state.productData.filter(p => p.status === 'Approved').map(pro => {
+
+                                return (
+
+
+                                    <Card key={pro._id}  >
+
+
+                                        <CardBody >
+
+                                            <CardText>{pro.name}</CardText>
+                                            <CardImg src={pro.imageUrl[0]} />
+                                            <div>
+                                                <CardText>{pro.minPrice}</CardText>
+                                                <Link to={`/product/${pro._id}`}>  details</Link>
+
+                                            </div>
+
+
+                                        </CardBody>
+
+                                    </Card>
+
+
+
+
+                                )
+
+
+
+
+
+                            })}
+
+                        </CardDeck> */}
+
+
+
+
 
 
                     </div>
 
-                    <div className="col-md-7">
+                    <div className="col-md-4">
 
 
                         < select name="category" onChange={this.handleChange} >
@@ -97,6 +138,54 @@ export default class Dashboard extends React.Component {
 
 
                     </div>
+
+
+                    <div className="container">
+                        <div className="row">
+                            {this.state.productData.filter(p => p.status === 'Approved').map(pro => {
+                                // return <li key={pro._id}> {pro.name} {pro.minPrice}<Link to={`/product/${pro._id}`}>  details</Link></li>
+                                return (
+
+                                    <div key={pro.name} className="col-md-4" style={{ marginBottom: "3rem" }}>
+
+                                        <div className="product__text">
+                                            <b>{pro.name}</b>
+
+                                            <div className="product__boxx">
+                                                <img src={pro.imageUrl[0]} style={{ width: "200px", height: "200px" }} />
+                                            </div>
+
+
+                                            <div className="product__text">
+
+                                                <b>price :</b>  {pro.minPrice}
+
+                                                <div className="product__text">
+
+                                                    <Link to={`/products/${pro._id}`}>  details</Link>
+                                                </div>
+
+
+
+
+
+                                            </div>
+
+                                        </div>
+
+
+
+                                    </div>
+                                )
+
+                            })}
+
+                        </div>
+                    </div>
+
+
+
+
 
 
 
