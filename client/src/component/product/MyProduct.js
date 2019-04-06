@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from '../axios/config';
 import { Link } from 'react-router-dom'
-import ProductStatus from './ProductStatus'
+//import ProductStatus from './ProductStatus'
 
 
 export default
@@ -39,7 +39,7 @@ export default
 
     render() {
         const { myProduct } = this.state
-        const { product } = this.state
+        //const { product } = this.state
         // //console.log(myProduct)
         // console.log(product)
         return (
@@ -56,23 +56,23 @@ export default
                     })}
                 </select> */}
 
-                <select name="" onChange={this.handleChange}>
+                {/* <select name="" onChange={this.handleChange}>
                     <option selected value="default">select</option>
                     <option value="Rejected">Rejected</option>
                     <option value="Approved">Approved</option>
                     <option value="Pending">Pending</option>
-                    {/* <option value="All">All</option> */}
-
-
-                </select>
+                    
+                </select> */}
 
 
 
-                <ul>
+                <h2>My Product {myProduct.length}</h2>
+
+                <ol>
                     {myProduct.map(product => {
-                        return <li key={product._id}><Link to={`/product/${product._id}`}>{product.name}</Link></li>
+                        return <li key={product._id}><Link to={`/product/${product._id}`}><b>{product.name}</b></Link></li>
                     })}
-                </ul>
+                </ol>
 
                 {/* {this.state.isLoaded &&
                     <ProductStatus status={myProduct} />

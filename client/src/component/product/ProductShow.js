@@ -26,11 +26,11 @@ class ProductShow extends React.Component {
         return (
             <div>
                 Products
-                <ul>
-                    {this.state.products.filter(p => p.status === 'Approved').map(product => {
-                        return <li key={product._id}><Link to={`/product/${product._id}`}>{product.name}</Link></li>
+                <ol>
+                    {this.state.products.map(product => {
+                        return <li key={product._id}><Link to={`/product/${product._id}`}><b>{product.name}</b></Link></li>
                     })}
-                </ul>
+                </ol>
             </div>
         )
     }

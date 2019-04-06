@@ -69,19 +69,23 @@ class ProductDetail extends React.Component {
     }
 
     render() {
-        const { name, minPrice, description, _id } = this.state.product
+        const { name, minPrice, description, _id, imageUrl } = this.state.product
         const { startSession, date, endSession } = this.state.session
         return (
             <div>
-                <ul>
-                    <li> Name : {name}</li>
-                    <li> minPrice : {minPrice}</li>
-                    <li>description : {description} </li>
-                    <li>Session Date : {date}</li>
-                    <li>Session Start Time : {startSession}</li>
-                    <li>Session End Time : {endSession}</li>
-                    <li>Approved : {this.state.status}</li>
-                </ul>
+                <br />
+
+                <b> Name : {name}</b><br />
+                <  img src={imageUrl} style={{ width: "200px", height: "200px" }} />
+                <br />
+
+                <b> minPrice : {minPrice}</b><br />
+                <b>description : {description} </b><br />
+                <b>Session Date : {date}</b><br />
+                <b>Session Start Time : {startSession}</b><br />
+                <b>Session End Time : {endSession}</b><br />
+                <b>Approved : {this.state.status}</b><br />
+
                 <Link to={`/product/edit/${_id}`}>Edit</Link> | <Link to='/product/list'>Back</Link>
                 <button onClick={this.handleDelete}>Delete</button>
                 {this.props.user.user.role === 'admin' &&

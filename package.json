@@ -17,6 +17,7 @@
     "moment": "^2.24.0",
     "mongoose": "^5.4.19",
     "multer": "^1.4.1",
+    "react-image-lightbox": "^5.1.0",
     "validator": "^10.11.0"
   }
 }

@@ -40,6 +40,8 @@ router.post('/login', (req, res) => {
             console.log(err)
         })
 })
+
+
 router.get('/', authenticateUser, (req, res) => {
     User.find({ _id: req.user._id })
         .then((users) => {
@@ -52,12 +54,14 @@ router.get('/', authenticateUser, (req, res) => {
 
 router.delete('/logout', authenticateUser, (req, res) => {
     const token = req.token
+    // console.log(token)
     const user = req.user
-    const tokenData = user.tokens.filter(x => x.token !== token)
+    const tokenData = user.tokens.filter(x => x.token != token)
     user.tokens = tokenData
-
+    //console.log(tokenData)
     user.save()
         .then((user) => {
+            console.log(user)
             res.send(user)
         })
         .catch((err) => {

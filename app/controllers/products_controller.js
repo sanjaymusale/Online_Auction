@@ -11,7 +11,9 @@ const link = 'http://localhost:3001'
 
 router.get('/', authenticateUser, (req, res) => {
     Product.find()
+        .populate('category')
         .then((products) => {
+            console.log('nischal', products)
             res.send(products)
         })
         .catch((err) => {
@@ -28,6 +30,8 @@ router.get('/myproduct', authenticateUser, (req, res) => {
             res.send(err)
         })
 })
+
+
 
 router.post('/', authenticateUser, upload.array('image', 3), (req, res) => {
     const body = req.body
@@ -70,6 +74,7 @@ router.post('/', authenticateUser, upload.array('image', 3), (req, res) => {
 router.get('/:id', authenticateUser, (req, res) => {
     const id = req.params.id
     Product.findById(id)
+        .populate('category').populate('sellerId')
         .then((product) => {
             if (product) {
                 res.send(product)

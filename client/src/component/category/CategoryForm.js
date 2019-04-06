@@ -2,7 +2,7 @@ import React from 'react'
 // import axios from '../axios/config';
 //import axios from "../axios/config"
 // import { Link } from 'react-router-dom'
-import { Button, Form, Label, Input, FormText } from 'reactstrap'
+import { Button, Form, Label } from 'reactstrap'
 
 class FormCategory extends React.Component {
     constructor(props) {

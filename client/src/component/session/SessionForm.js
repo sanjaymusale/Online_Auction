@@ -2,7 +2,7 @@ import React from 'react'
 import { time } from './Time'
 import axios from '../axios/config';
 // const end = [].concat(time)
-import { Button, Form, Label, Input, FormText } from 'reactstrap'
+import { Button, Form, Label, Input } from 'reactstrap'
 
 export default
     class SessionForm extends React.Component {

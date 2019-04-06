@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from '../axios/config';
-import { Button, Form, Label, Input, FormText } from 'reactstrap'
+import { Button, Form, Label, Input } from 'reactstrap'
 
 export default
     class ProductForm extends React.Component {
