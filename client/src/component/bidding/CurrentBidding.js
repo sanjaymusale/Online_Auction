@@ -1,5 +1,4 @@
 import React from 'react'
-import jwtDecode from 'jwt-decode'
 import { connect } from 'react-redux'
 import axios from '../axios/config';
 import BidInput from './BidInput';
@@ -116,14 +115,14 @@ class CurrentBidding extends React.Component {
                 .then((response) => {
                     console.log('set user response', response.data)
                     self.setState({ bidHistory: response.data.participant, fullData: response.data, isLoaded: true })
-                    socket.emit('join_room', { id: self.state.roomid })
+                    socket.emit('join_room', { id: self.state.roomid, name: self.state.user })
                 })
                 .catch((err) => {
                     console.log('get historyerror', err)
                     // window.location.reload()
                 })
         } else {
-            socket.emit('join_room', { id: self.state.roomid })
+            socket.emit('join_room', { id: self.state.roomid, name: self.state.user })
             self.setState({ isLoaded: true })
         }
     }
@@ -146,14 +145,18 @@ class CurrentBidding extends React.Component {
         console.log('current bidding state', this.state)
         return (
             <>{this.state.isLoaded &&
-                <BidInput
-                    bidHistory={this.state.bidHistory}
-                    roomid={this.state.roomid}
-                    fullData={this.state.fullData}
-                    socket={socket}
-                    saveBid={this.saveBid}
-                    user={this.state.user}
-                />
+                <div>
+                    <p>{this.state.fullData.product.name}</p>
+                    <BidInput
+                        bidHistory={this.state.bidHistory}
+                        roomid={this.state.roomid}
+                        fullData={this.state.fullData}
+
+                        socket={socket}
+                        saveBid={this.saveBid}
+                        user={this.state.user}
+                    />
+                </div>
             }
             </>
         )

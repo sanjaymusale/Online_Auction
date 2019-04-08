@@ -72,7 +72,7 @@ export default
             })
     }
     render() {
-        const { currentProduct } = this.state
+        // const { currentProduct } = this.state
         //console.log(this.state)
 
         return (

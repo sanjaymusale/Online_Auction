@@ -12,19 +12,29 @@ export default
         }
     }
 
+    minPriceCheck = () => {
+        const { minPrice } = this.props.fullData.product
+        if (this.state.bidPrice <= minPrice) {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+
     BidChange = (e) => {
         const bidPrice = e.target.value
         this.setState({ bidPrice })
-        if (this.props.bidHistory) {
-            //console.log('inside bidchange if', this.props.bidHistory)
-            const highBid = this.highestBid()
-            //console.log('highBid', highBid)
-            if (bidPrice <= highBid.amount) {
-                this.setState({ bidPriceError: true, buttonDisable: true, bidPriceEmpty: '' })
-            } else {
-                this.setState({ bidPriceError: false, buttonDisable: false, bidPriceEmpty: '' })
-            }
-        }
+        // if (this.props.bidHistory) {
+        //     //console.log('inside bidchange if', this.props.bidHistory)
+        //     const highBid = this.highestBid()
+        //     //console.log('highBid', highBid)
+        //     if (bidPrice <= highBid.amount) {
+        //         this.setState({ bidPriceError: true, buttonDisable: true, bidPriceEmpty: '' })
+        //     } else {
+        //         this.setState({ bidPriceError: false, buttonDisable: false, bidPriceEmpty: '' })
+        //     }
+        // }
     }
 
     highestBid = () => {
@@ -56,6 +66,8 @@ export default
         const err = this.validate()
 
         if (!err) {
+
+
             const data = {
                 amount: this.state.bidPrice
             }
@@ -71,8 +83,9 @@ export default
             console.log('bid', updateBids)
 
             this.props.saveBid(updateBids)
-            this.setState({ bidPrice: '', buttonDisable: false })
+            this.setState({ bidPrice: '', buttonDisable: false, bidPriceEmpty: '' })
         }
+
     }
 
     render() {

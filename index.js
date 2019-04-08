@@ -53,10 +53,11 @@ io.on('connection', (socket) => {
     //     });
     // });
 
-    socket.on("join_room", room => {
+    socket.on("join_room", data => {
         //console.log('room', room.id)
-        socket.join(room.id);
-        console.log('connected to room', room.id)
+        socket.join(data.id);
+        socket.broadcast.in(data.id).emit("new user", + data.name + " new user has joined");
+        console.log('connected to room', data.id)
     });
 });
 

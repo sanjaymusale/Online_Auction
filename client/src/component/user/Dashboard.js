@@ -152,7 +152,7 @@ export default class Dashboard extends React.Component {
                                             <b>{pro.name}</b>
 
                                             <div className="product__boxx">
-                                                <img src={pro.imageUrl[0]} style={{ width: "200px", height: "200px" }} />
+                                                <img src={pro.imageUrl[0]} alt='' style={{ width: "200px", height: "200px" }} />
                                             </div>
 
 
