@@ -8,6 +8,7 @@ class ProductShow extends React.Component {
         this.state = {
             products: []
         }
+        //console.log('moment', moment().format('YYYY-MM-DD hh A'))
     }
 
     componentDidMount() {
@@ -26,7 +27,7 @@ class ProductShow extends React.Component {
             <div>
                 Products
                 <ul>
-                    {this.state.products.filter(p => p.approved === true).map(product => {
+                    {this.state.products.map(product => {
                         return <li key={product._id}><Link to={`/product/${product._id}`}>{product.name}</Link></li>
                     })}
                 </ul>

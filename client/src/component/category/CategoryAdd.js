@@ -22,7 +22,7 @@ class AddCategory extends React.Component {
     render() {
         return (
             <div>
-                <h2>add</h2>
+                {/* <h2>add</h2> */}
                 <FormCategory handleSubmit={this.handleSubmit} />
                 <Link to="/category">back</Link>
 

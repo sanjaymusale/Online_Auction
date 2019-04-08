@@ -1,7 +1,8 @@
 import React from 'react'
 // import axios from '../axios/config';
 //import axios from "../axios/config"
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
+import { Button, Form, Label } from 'reactstrap'
 
 class FormCategory extends React.Component {
     constructor(props) {
@@ -55,15 +56,21 @@ class FormCategory extends React.Component {
     render() {
         return (
             <div>
-                <form onSubmit={this.handleSubmit}>
-                    <label><br />
-                        Category : <br />
-                        <input type="text" value={this.state.name} onChange={this.handleChange} />
-                    </label><br />
-                    <p>{this.state.nameError}</p>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-5"></div>
+                        <Form onSubmit={this.handleSubmit}>
+                            <Label><br />
+                                Category : <br />
+                                <input type="text" value={this.state.name} onChange={this.handleChange} />
+                            </Label><br />
+                            <p>{this.state.nameError}</p>
 
-                    <input type="submit" />
-                </form>
+                            <Button type='submit' color="primary">submit</Button>
+                        </Form>
+                    </div>
+                </div>
+
 
                 {/* <Link to="/category">back</Link> */}
             </div>

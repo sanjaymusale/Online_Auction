@@ -1,4 +1,4 @@
 export const time = [
-    '9 Am', '10 Am', '11 Am', '12 Pm', '1 Pm', '2 Pm', '3 Pm', '4 Pm', '5 Pm', '6 Pm', '7 Pm', '8 Pm',
-    '9 Pm'
+    '9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM', '5 PM', '6 PM', '7 PM', '8 PM',
+    '9 PM'
 ]

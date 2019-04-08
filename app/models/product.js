@@ -11,7 +11,7 @@ const productSchema = new Schema({
         ref: 'Category',
         required: true
     },
-    sellerId: {
+    seller: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
@@ -24,9 +24,13 @@ const productSchema = new Schema({
         required: true,
 
     },
-    approved: {
-        type: Boolean,
-        default: false
+    session: {
+        type: String,
+        ref: 'Session'
+    },
+    status: {
+        type: String,
+        default: 'Pending'
     },
     imageUrl: [
         {

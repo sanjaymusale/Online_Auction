@@ -38,7 +38,7 @@ class ProductEdit extends React.Component {
             })
     }
     render() {
-        const { name, category, minPrice, description } = this.state.product
+        const { name, category, minPrice, description, imageUrl } = this.state.product
         console.log('state', this.state.product)
         return (
             <div>
@@ -49,6 +49,8 @@ class ProductEdit extends React.Component {
                             category={category}
                             description={description}
                             minPrice={minPrice}
+                            imageUrl={imageUrl}
+
                             handleSubmit={this.handleSubmit} />
                         <Link to='/product/list'>Back</Link>
                     </>
