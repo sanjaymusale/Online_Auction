@@ -39,19 +39,19 @@ app.get('/', (req, res) => {
 io = socket(server);
 io.origins('http://localhost:3000/')
 io.on('connection', (socket) => {
-    console.log('socket id', socket.id);
+    //console.log('socket id', socket.id);
 
     // socket.on('SEND_MESSAGE', function (data) {
     //     io.emit('RECEIVE_MESSAGE', data);
-    // })
-    socket.on("SEND_MESSAGE", ({ room, message, user, firstName }) => {
+    // // })
+    // socket.on("SEND_MESSAGE", ({ room, message, user, firstName }) => {
 
-        io.in(room).emit("RECEIVE_MESSAGE", {
-            message,
-            user,
-            firstName,
-        });
-    });
+    //     io.in(room).emit("RECEIVE_MESSAGE", {
+    //         message,
+    //         user,
+    //         firstName,
+    //     });
+    // });
 
     socket.on("join_room", room => {
         //console.log('room', room.id)

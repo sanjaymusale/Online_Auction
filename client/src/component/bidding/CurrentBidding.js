@@ -2,6 +2,7 @@ import React from 'react'
 import jwtDecode from 'jwt-decode'
 import { connect } from 'react-redux'
 import axios from '../axios/config';
+import BidInput from './BidInput';
 
 // import io from 'socket.io-client'
 
@@ -18,20 +19,18 @@ class CurrentBidding extends React.Component {
             roomid: this.props.match.params.id,
             user: props.person.user.userId,
             name: props.person.user.firstName,
-            message: '',
-            messages: [],
-            joinedUsers: [],
-            isLoaded: false
+            bidHistory: [],
+            isLoaded: false,
+            fullData: {}
         };
 
-        // console.log(this.state)
-        const roomid = this.props.match.params.id
-        // this.socket = io(SocketURL);
         socket.on('connect', () => {
             console.log('connected react')
         })
+        // var room = socket.rooms[this.state.roomid]
 
-        socket.emit('join_room', { id: roomid })
+        // console.log(room)
+
 
         //     socket.on('RECEIVE_MESSAGE', function (data) {
         //         console.log('receive msg', data)
@@ -71,22 +70,26 @@ class CurrentBidding extends React.Component {
 
         var self = this;
         //handle to listen updateBid from server socket
-        // socket.on('updateBid', function (bidObj) {
-        //     self.setState({ bidHistory: bidObj });
+        socket.on('updateBid', function (bidObj) {
+            console.log('socket updatebid', bidObj)
+            self.setState({ bidHistory: bidObj });
 
-        // });
-        // //Emits 'getTime' to server socket
+        });
+        //Emits 'getTime' to server socket
         // socket.emit('getTime', 'test');
         // //handle to listen 'remaining time' from server socket
         // socket.on('remainingTime', function (timeFromServer) {
         //     self.setState({ timeRemain: timeFromServer });
         // });
     }
+    getTime = () => {
+
+    }
     getUsers = () => {
         axios.get(`/bidding/session/${this.state.roomid}`)
             .then((response) => {
-                console.log('set user', response.data)
-
+                console.log('get user', response.data)
+                this.setState({ bidHistory: response.data.participant, fullData: response.data })
                 this.setUser(response.data.participant)
             })
             .catch((err) => {
@@ -97,38 +100,60 @@ class CurrentBidding extends React.Component {
     setUser = (data) => {
         // Get the bidhistory and store them in state
         var currentUserID = this.props.person.user.userId
-
+        const self = this
+        //console.log('set user first', data)
         const uniqueUser = data.some(p => p.user === currentUserID)
-        //console.log('unique', uniqueUser)
+        console.log('unique', uniqueUser)
         if (!uniqueUser) {
-            const participant = { user: currentUserID }
-            //console.log('inside if unique', participant)
-            axios.post(`/bidding/session/${this.state.roomid}`, participant, { headers: { 'x-auth': localStorage.getItem('token') } })
+            const user = { user: currentUserID }
+            // const update = [].concat(this.state.bidHistory).concat(user)
+            // const data = {
+            //     participant: update
+            // }
+            console.log('inside if unique', data)
+
+            axios.post(`/bidding/session/${self.state.roomid}`, user, { headers: { 'x-auth': localStorage.getItem('token') } })
                 .then((response) => {
-                    //console.log('set user', response.data)
-                    this.setState({ joinedUsers: response.data.participant })
+                    console.log('set user response', response.data)
+                    self.setState({ bidHistory: response.data.participant, fullData: response.data, isLoaded: true })
+                    //socket.emit('join_room', { id: self.state.roomid })
                 })
                 .catch((err) => {
-                    console.log('getHistoryerror', err)
-
+                    console.log('get historyerror', err)
+                    // window.location.reload()
                 })
+        } else {
+            socket.emit('join_room', { id: self.state.roomid })
+            self.setState({ isLoaded: true })
         }
     }
-    render() {
 
+    saveBid = (bids) => {
+        const data = {
+            participant: bids
+        }
+        console.log('save bid', data)
+        axios.put(`/bidding/session/${this.state.roomid}`, data, { headers: { 'x-auth': localStorage.getItem('token') } })
+            .then((response) => {
+                console.log(response)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+
+    }
+    render() {
+        console.log('current bidding state', this.state)
         return (
-            <>{this.state.isLoaded && <>
-                <h2>bidding Room</h2>
-                <form onSubmit={this.sendMessage}>
-                    <input type="text" value={this.state.message} onChange={ev => this.setState({ message: ev.target.value })} />
-                    <button>Submit</button>
-                </form>
-                {this.state.messages.map((message, i) => {
-                    return (
-                        <div key={i}>{message.firstName}: {message.message}</div>
-                    )
-                })}
-            </>
+            <>{this.state.isLoaded &&
+                <BidInput
+                    bidHistory={this.state.bidHistory}
+                    roomid={this.state.roomid}
+                    fullData={this.state.fullData}
+                    socket={socket}
+                    saveBid={this.saveBid}
+                    user={this.state.user}
+                />
             }
             </>
         )

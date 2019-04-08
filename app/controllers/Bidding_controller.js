@@ -5,8 +5,9 @@ const { Bidding } = require('../models/bidding')
 
 router.get('/session/:id', (req, res) => {
     const id = req.params.id
-    Bidding.findOne({ session: id }).populate('product').populate('user').populate('session')
+    Bidding.findOne({ session: id }).populate('participant.user', 'firstName')
         .then((response) => {
+            //console.log('bid get', response)
             res.send(response)
         })
         .catch((err) => {
@@ -20,11 +21,12 @@ router.post('/session/:id', authenticateUser, (req, res) => {
     console.log('before put data', data)
     Bidding.findOne({ session: id })
         .then((bidding) => {
-            //console.log('1st then', bidding)
+            console.log('1st then', bidding)
             return bidding.addParticipant(data)
         })
         .then((bidding) => {
-            //console.log('2nd then ', bidding)
+
+            console.log('2nd then ', bidding)
             res.send(bidding)
         })
         .catch((err) => {
@@ -32,6 +34,20 @@ router.post('/session/:id', authenticateUser, (req, res) => {
         })
 })
 
+router.put('/session/:id', authenticateUser, (req, res) => {
+    const id = req.params.id
+    const body = req.body
+    console.log('put body', body)
+    Bidding.findOneAndUpdate({ session: id }, { $set: body }, { new: true }).populate('participant.user', 'firstName')
+        .then((bids) => {
+            //io.emit('updateBid', bids.participant);
+            console.log('post', bids)
+            res.send(bids)
+        })
+        .catch((err) => {
+            res.send(err)
+        })
+})
 
 module.exports = {
     biddingRouter: router
