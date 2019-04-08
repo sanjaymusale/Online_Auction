@@ -16,7 +16,9 @@ export default
         const bidPrice = e.target.value
         this.setState({ bidPrice })
         if (this.props.bidHistory) {
+            //console.log('inside bidchange if', this.props.bidHistory)
             const highBid = this.highestBid()
+            //console.log('highBid', highBid)
             if (bidPrice <= highBid.amount) {
                 this.setState({ bidPriceError: true, buttonDisable: true, bidPriceEmpty: '' })
             } else {
@@ -66,6 +68,7 @@ export default
                 }
             })
 
+            console.log('bid', updateBids)
 
             this.props.saveBid(updateBids)
             this.setState({ bidPrice: '', buttonDisable: false })

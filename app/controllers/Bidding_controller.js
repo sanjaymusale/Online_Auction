@@ -19,7 +19,7 @@ router.post('/session/:id', authenticateUser, (req, res) => {
     const id = req.params.id
     const data = req.body
     console.log('before put data', data)
-    Bidding.findOne({ session: id })
+    Bidding.findOne({ session: id }).populate('participant.user', 'firstName')
         .then((bidding) => {
             console.log('1st then', bidding)
             return bidding.addParticipant(data)
@@ -40,7 +40,7 @@ router.put('/session/:id', authenticateUser, (req, res) => {
     console.log('put body', body)
     Bidding.findOneAndUpdate({ session: id }, { $set: body }, { new: true }).populate('participant.user', 'firstName')
         .then((bids) => {
-            //io.emit('updateBid', bids.participant);
+            io.emit('updateBid', bids.participant);
             console.log('post', bids)
             res.send(bids)
         })

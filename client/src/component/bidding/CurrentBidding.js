@@ -102,7 +102,7 @@ class CurrentBidding extends React.Component {
         var currentUserID = this.props.person.user.userId
         const self = this
         //console.log('set user first', data)
-        const uniqueUser = data.some(p => p.user === currentUserID)
+        const uniqueUser = data.some(p => p.user._id === currentUserID)
         console.log('unique', uniqueUser)
         if (!uniqueUser) {
             const user = { user: currentUserID }
@@ -116,7 +116,7 @@ class CurrentBidding extends React.Component {
                 .then((response) => {
                     console.log('set user response', response.data)
                     self.setState({ bidHistory: response.data.participant, fullData: response.data, isLoaded: true })
-                    //socket.emit('join_room', { id: self.state.roomid })
+                    socket.emit('join_room', { id: self.state.roomid })
                 })
                 .catch((err) => {
                     console.log('get historyerror', err)

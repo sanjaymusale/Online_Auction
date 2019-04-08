@@ -39,7 +39,7 @@ app.get('/', (req, res) => {
 io = socket(server);
 io.origins('http://localhost:3000/')
 io.on('connection', (socket) => {
-    //console.log('socket id', socket.id);
+    console.log('socket id', socket.id);
 
     // socket.on('SEND_MESSAGE', function (data) {
     //     io.emit('RECEIVE_MESSAGE', data);
