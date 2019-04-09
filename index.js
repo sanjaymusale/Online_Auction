@@ -56,9 +56,18 @@ io.on('connection', (socket) => {
     socket.on("join_room", data => {
         //console.log('room', room.id)
         socket.join(data.id);
-        socket.broadcast.in(data.id).emit("new user", + data.name + " new user has joined");
+        socket.broadcast.in(data.id).emit("new_user", data.name + " has joined");
         console.log('connected to room', data.id)
     });
+
+    socket.on('SET_TIME', (data) => {
+        io.sockets.in(data.roomid).emit('GET_TIME', { time: data.time })
+    })
+
+    socket.on('CURRENT_TIME', (data) => {
+        io.sockets.in(data.roomid).emit('CURRENT_TIME', { time: data.time })
+    })
+
 });
 
 

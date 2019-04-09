@@ -15,24 +15,24 @@ router.get('/session/:id', (req, res) => {
         })
 })
 
-router.post('/session/:id', authenticateUser, (req, res) => {
-    const id = req.params.id
-    const data = req.body
-    // console.log('before put data', data)
-    Bidding.findOne({ session: id }).populate('participant.user', 'firstName').populate('product')
-        .then((bidding) => {
-            // console.log('1st then', bidding)
-            return bidding.addParticipant(data)
-        })
-        .then((bidding) => {
+// router.post('/session/:id', authenticateUser, (req, res) => {
+//     const id = req.params.id
+//     const data = req.body
+//     // console.log('before put data', data)
+//     Bidding.findOne({ session: id }).populate('participant.user', 'firstName').populate('product')
+//         .then((bidding) => {
+//             // console.log('1st then', bidding)
+//             return bidding.addParticipant(data)
+//         })
+//         .then((bidding) => {
 
-            // console.log('2nd then ', bidding)
-            res.send(bidding)
-        })
-        .catch((err) => {
-            res.send(err)
-        })
-})
+//             // console.log('2nd then ', bidding)
+//             res.send(bidding)
+//         })
+//         .catch((err) => {
+//             res.send(err)
+//         })
+// })
 
 router.put('/session/:id', authenticateUser, (req, res) => {
     const id = req.params.id

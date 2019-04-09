@@ -1,14 +1,16 @@
 import React from 'react'
-
+import validator from 'validator'
+import CountDown from './ProgressBarTimer'
 export default
     class BidInput extends React.Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
             bidPrice: '',
             buttonDisable: false,
             bidPriceError: false,
-            bidPriceEmpty: ''
+            bidPriceEmpty: '',
+            time: props.time
         }
     }
 
@@ -52,6 +54,15 @@ export default
             isError = true;
             errors.bidPriceEmpty = "Insert Your Bid";
         }
+        if (this.state.bidPrice.length > 0 && !validator.isNumeric(this.state.bidPrice)) {
+            isError = true;
+            errors.bidPriceEmpty = "Enter Only Number";
+        }
+        if (this.state.bidPrice.length > 0 && validator.isFloat(this.state.bidPrice)) {
+            isError = true;
+            errors.bidPriceEmpty = "Enter Only Integer Number";
+        }
+
 
         this.setState({
             ...this.state,
@@ -60,6 +71,22 @@ export default
         return isError
     }
 
+    componentWillReceiveProps(nextProp) {
+
+        const time = nextProp.time
+        //console.log('will receive prop time', time)
+        this.setState({ time: time }, () => {
+            if (time > 0) {
+                //console.log('after bid input setstate', this.state.time)
+                setTimeout(() => {
+                    nextProp.socket.emit('SET_TIME', { roomid: nextProp.roomid, time: time })
+                    //nextProp.socket.emit('CURRENT_TIME', { roomid: nextProp.roomid, time: time })
+                }, 1000);
+            }
+        })
+
+
+    }
 
     handleSubmit = (e) => {
         e.preventDefault()
@@ -89,9 +116,11 @@ export default
     }
 
     render() {
+        console.log('bid input props', this.props)
         return (
             <>
                 <h2>bidding Room</h2>
+                <CountDown time={this.state.time} />
                 <form onSubmit={this.handleSubmit}>
                     <input type="text" value={this.state.bidPrice} onChange={this.BidChange} />
 

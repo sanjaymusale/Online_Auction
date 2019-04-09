@@ -20,7 +20,9 @@ class CurrentBidding extends React.Component {
             name: props.person.user.firstName,
             bidHistory: [],
             isLoaded: false,
-            fullData: {}
+            joinedUsers: [],
+            fullData: {},
+            time: 100
         };
 
         socket.on('connect', () => {
@@ -70,10 +72,37 @@ class CurrentBidding extends React.Component {
         var self = this;
         //handle to listen updateBid from server socket
         socket.on('updateBid', function (bidObj) {
-            console.log('socket updatebid', bidObj)
+            //console.log('socket updatebid', bidObj)
             self.setState({ bidHistory: bidObj });
 
         });
+
+        socket.on("new_user", function (data) {
+            // console.log('usr joine', data)
+
+            self.setState((prevState) => ({
+                joinedUsers: [].concat(prevState.joinedUsers).concat(data)
+            }))
+        });
+
+        socket.on("GET_TIME", (data) => {
+            //console.log('current bidding state', this.state.time)
+            //console.log('get time', data)
+            const time = --data.time
+            //console.log('before set state', time)
+            self.setState({ time: time })
+
+        })
+
+        socket.on('CURRENT_TIME', (data) => {
+            const time = --data.time
+            //console.log('before set state', time)
+            self.setState({ time: time })
+        })
+
+
+
+        // })
         //Emits 'getTime' to server socket
         // socket.emit('getTime', 'test');
         // //handle to listen 'remaining time' from server socket
@@ -102,27 +131,35 @@ class CurrentBidding extends React.Component {
         const self = this
         //console.log('set user first', data)
         const uniqueUser = data.some(p => p.user._id === currentUserID)
-        console.log('unique', uniqueUser)
+        // console.log('unique', uniqueUser)
         if (!uniqueUser) {
             const user = { user: currentUserID }
-            // const update = [].concat(this.state.bidHistory).concat(user)
-            // const data = {
-            //     participant: update
-            // }
-            console.log('inside if unique', data)
+            const update = [].concat(this.state.bidHistory).concat(user)
+            const data = {
+                participant: update
+            }
+            //console.log('inside if unique', data)
 
-            axios.post(`/bidding/session/${self.state.roomid}`, user, { headers: { 'x-auth': localStorage.getItem('token') } })
+            axios.put(`/bidding/session/${self.state.roomid}`, data, { headers: { 'x-auth': localStorage.getItem('token') } })
                 .then((response) => {
-                    console.log('set user response', response.data)
+                    // console.log('set user response', response.data)
                     self.setState({ bidHistory: response.data.participant, fullData: response.data, isLoaded: true })
-                    socket.emit('join_room', { id: self.state.roomid, name: self.state.user })
+                    socket.emit('join_room', { id: self.state.roomid, name: self.state.name })
+                    if (response.data.participant.length === 1) {
+                        socket.emit('SET_TIME', { roomid: self.state.roomid, time: self.state.time })
+                    } else {
+                        socket.on('CURRENT_TIME', (data) => {
+                            this.setState({ time: data.time })
+                        })
+                    }
                 })
                 .catch((err) => {
                     console.log('get historyerror', err)
                     // window.location.reload()
                 })
         } else {
-            socket.emit('join_room', { id: self.state.roomid, name: self.state.user })
+            socket.emit('join_room', { id: self.state.roomid, name: self.state.name })
+            //socket.emit('SET_TIME', { roomid: self.state.roomid, time: self.state.time })
             self.setState({ isLoaded: true })
         }
     }
@@ -131,7 +168,7 @@ class CurrentBidding extends React.Component {
         const data = {
             participant: bids
         }
-        console.log('save bid', data)
+        // console.log('save bid', data)
         axios.put(`/bidding/session/${this.state.roomid}`, data, { headers: { 'x-auth': localStorage.getItem('token') } })
             .then((response) => {
                 console.log(response)
@@ -142,19 +179,23 @@ class CurrentBidding extends React.Component {
 
     }
     render() {
-        console.log('current bidding state', this.state)
+
         return (
             <>{this.state.isLoaded &&
                 <div>
                     <p>{this.state.fullData.product.name}</p>
+                    {this.state.joinedUsers.map((user, i) => {
+                        return <p key={i + 1}>{user}</p>
+                    })}
                     <BidInput
                         bidHistory={this.state.bidHistory}
                         roomid={this.state.roomid}
                         fullData={this.state.fullData}
-
+                        time={this.state.time}
                         socket={socket}
                         saveBid={this.saveBid}
                         user={this.state.user}
+                        socket={socket}
                     />
                 </div>
             }
