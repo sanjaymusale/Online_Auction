@@ -61,7 +61,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('SET_TIME', (data) => {
-        io.sockets.in(data.roomid).emit('GET_TIME', { time: data.time })
+        io.sockets.in(data.roomid).emit('CURRENT_TIME', { time: data.time })
     })
 
     socket.on('CURRENT_TIME', (data) => {

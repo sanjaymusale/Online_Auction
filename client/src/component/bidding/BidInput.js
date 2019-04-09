@@ -1,6 +1,11 @@
 import React from 'react'
 import validator from 'validator'
 import CountDown from './ProgressBarTimer'
+
+const SocketURL = 'http://localhost:3001/'
+
+const io = require('socket.io-client');
+const socket = io(SocketURL);
 export default
     class BidInput extends React.Component {
     constructor(props) {
@@ -72,19 +77,58 @@ export default
     }
 
     componentWillReceiveProps(nextProp) {
-
-        const time = nextProp.time
-        //console.log('will receive prop time', time)
-        this.setState({ time: time }, () => {
-            if (time > 0) {
-                //console.log('after bid input setstate', this.state.time)
-                setTimeout(() => {
-                    nextProp.socket.emit('SET_TIME', { roomid: nextProp.roomid, time: time })
-                    //nextProp.socket.emit('CURRENT_TIME', { roomid: nextProp.roomid, time: time })
-                }, 1000);
-            }
+        var self = this
+        //     const time = nextProp.time
+        //     //console.log('will receive prop time', time)
+        //     this.setState({ time: time }, () => {
+        //         if (time > 0) {
+        //             //console.log('after bid input setstate', this.state.time)
+        //             setTimeout(() => {
+        //                 //nextProp.socket.emit('SET_TIME', { roomid: nextProp.roomid, time: time })
+        //                 nextProp.socket.emit('CURRENT_TIME', { roomid: nextProp.roomid, time: time })
+        //             }, 1000);
+        //         }
+        //     })
+        socket.on('CURRENT_TIME', (data) => {
+            const time = --data.time
+            //console.log('before set state', time)
+            self.setState({ time: time }, () => {
+                if (time > 0) {
+                    //console.log('after bid input setstate', this.state.time)
+                    setTimeout(() => {
+                        //nextProp.socket.emit('SET_TIME', { roomid: nextProp.roomid, time: time })
+                        io.sockets.in(self.props.roomid).emit('CURRENT_TIME', { roomid: self.props.roomid, time: time })
+                    }, 1000);
+                }
+            })
         })
 
+    }
+    componentDidMount() {
+        var self = this
+
+        // socket.on("GET_TIME", (data) => {
+        //     //console.log('current bidding state', this.state.time)
+        //     //console.log('get time', data)
+        //     const time = --data.time
+        //     //console.log('before set state', time)
+        //     self.setState({ time: time })
+
+        // })
+
+        // socket.on('CURRENT_TIME', (data) => {
+        //     const time = --data.time
+        //     //console.log('before set state', time)
+        //     self.setState({ time: time }, () => {
+        //         if (time > 0) {
+        //             //console.log('after bid input setstate', this.state.time)
+        //             setTimeout(() => {
+        //                 //nextProp.socket.emit('SET_TIME', { roomid: nextProp.roomid, time: time })
+        //                 io.sockets.in(self.props.roomid).emit('CURRENT_TIME', { roomid: self.props.roomid, time: time })
+        //             }, 1000);
+        //         }
+        //     })
+        // })
 
     }
 

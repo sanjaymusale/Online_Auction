@@ -85,20 +85,7 @@ class CurrentBidding extends React.Component {
             }))
         });
 
-        socket.on("GET_TIME", (data) => {
-            //console.log('current bidding state', this.state.time)
-            //console.log('get time', data)
-            const time = --data.time
-            //console.log('before set state', time)
-            self.setState({ time: time })
 
-        })
-
-        socket.on('CURRENT_TIME', (data) => {
-            const time = --data.time
-            //console.log('before set state', time)
-            self.setState({ time: time })
-        })
 
 
 
@@ -147,10 +134,6 @@ class CurrentBidding extends React.Component {
                     socket.emit('join_room', { id: self.state.roomid, name: self.state.name })
                     if (response.data.participant.length === 1) {
                         socket.emit('SET_TIME', { roomid: self.state.roomid, time: self.state.time })
-                    } else {
-                        socket.on('CURRENT_TIME', (data) => {
-                            this.setState({ time: data.time })
-                        })
                     }
                 })
                 .catch((err) => {
@@ -160,6 +143,7 @@ class CurrentBidding extends React.Component {
         } else {
             socket.emit('join_room', { id: self.state.roomid, name: self.state.name })
             //socket.emit('SET_TIME', { roomid: self.state.roomid, time: self.state.time })
+            socket.emit('SET_TIME', { roomid: self.state.roomid, time: self.state.time })
             self.setState({ isLoaded: true })
         }
     }
