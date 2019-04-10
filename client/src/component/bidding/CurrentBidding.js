@@ -2,6 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import axios from '../axios/config';
 import BidInput from './BidInput';
+import EndTime from './EndTime';
+import DisplayBid from './DisplayBid';
+import { isEmpty } from 'lodash'
 
 // import io from 'socket.io-client'
 
@@ -22,7 +25,11 @@ class CurrentBidding extends React.Component {
             isLoaded: false,
             joinedUsers: [],
             fullData: {},
-            time: 100
+            time: 100,
+            timeLeft: '0:0:0',
+            winner: {},
+            Declaredwinner: false
+
         };
 
         socket.on('connect', () => {
@@ -86,25 +93,54 @@ class CurrentBidding extends React.Component {
         });
 
 
+    }
+    timeLeft = (data) => {
+        const timeLeft = data
+        this.setState({ timeLeft })
+        if (timeLeft === '0:0:0') {
+            const { bidHistory } = this.state
+            if (bidHistory.length !== 0) {
+                this.filterBidhistory(this.state.bidHistory)
+
+            }
+        }
+    }
+
+    filterBidhistory = (bidHistory) => {
+        const filteredUsers = bidHistory.filter(user => {
+            return user.hasOwnProperty('amount')
+        })
+        //console.log('filtered users', filteredUsers)
+        const highBid = filteredUsers.sort(function (a, b) {
+            return b.amount - a.amount
+        })
+
+        if (highBid.length > 0) {
+            const winner = highBid[0]
+            this.setState({ winner, Declaredwinner: true })
+        }
 
 
 
-        // })
-        //Emits 'getTime' to server socket
-        // socket.emit('getTime', 'test');
-        // //handle to listen 'remaining time' from server socket
-        // socket.on('remainingTime', function (timeFromServer) {
-        //     self.setState({ timeRemain: timeFromServer });
-        // });
     }
     getTime = () => {
-
+        console.log('inside getTime function')
+        socket.on('CURRENT_TIME', (data) => {
+            console.log('inside socket currentTime')
+            const time = --data.time
+            //console.log('before set state', time)
+            this.setState({ time: time })
+        })
     }
+
+
     getUsers = () => {
         axios.get(`/bidding/session/${this.state.roomid}`)
             .then((response) => {
                 console.log('get user', response.data)
-                this.setState({ bidHistory: response.data.participant, fullData: response.data })
+                if (response.data.participant)
+
+                    this.setState({ bidHistory: response.data.participant, fullData: response.data })
                 this.setUser(response.data.participant)
             })
             .catch((err) => {
@@ -132,9 +168,14 @@ class CurrentBidding extends React.Component {
                     // console.log('set user response', response.data)
                     self.setState({ bidHistory: response.data.participant, fullData: response.data, isLoaded: true })
                     socket.emit('join_room', { id: self.state.roomid, name: self.state.name })
-                    if (response.data.participant.length === 1) {
-                        socket.emit('SET_TIME', { roomid: self.state.roomid, time: self.state.time })
-                    }
+                    // if (response.data.participant.length === 1) {
+                    //     socket.emit('SET_TIME', { roomid: self.state.roomid, time: self.state.time })
+                    // } else {
+                    //     // socket.on('CURRENT_TIME', (data) => {
+                    //     //     this.setState({ time: data.time })
+                    //     // })
+                    //     this.getTime()
+                    // }
                 })
                 .catch((err) => {
                     console.log('get historyerror', err)
@@ -142,10 +183,15 @@ class CurrentBidding extends React.Component {
                 })
         } else {
             socket.emit('join_room', { id: self.state.roomid, name: self.state.name })
-            //socket.emit('SET_TIME', { roomid: self.state.roomid, time: self.state.time })
-            socket.emit('SET_TIME', { roomid: self.state.roomid, time: self.state.time })
+            // socket.emit('GET_TIME', { roomid: self.state.roomid })
+            // socket.emit('SET_TIME', { roomid: self.state.roomid, time: self.state.time })
             self.setState({ isLoaded: true })
         }
+    }
+
+    calculateHighestBid = () => {
+        const timeLeft = this.state.timeLeft
+        //if (timeLeft === )
     }
 
     saveBid = (bids) => {
@@ -163,6 +209,7 @@ class CurrentBidding extends React.Component {
 
     }
     render() {
+        console.log('current Bid', this.state)
 
         return (
             <>{this.state.isLoaded &&
@@ -171,16 +218,23 @@ class CurrentBidding extends React.Component {
                     {this.state.joinedUsers.map((user, i) => {
                         return <p key={i + 1}>{user}</p>
                     })}
-                    <BidInput
-                        bidHistory={this.state.bidHistory}
-                        roomid={this.state.roomid}
-                        fullData={this.state.fullData}
-                        time={this.state.time}
-                        socket={socket}
-                        saveBid={this.saveBid}
-                        user={this.state.user}
-                        socket={socket}
-                    />
+                    <EndTime fullData={this.state.fullData} timeLeft={this.timeLeft} />
+                    {!this.state.Declaredwinner ?
+                        <BidInput
+                            bidHistory={this.state.bidHistory}
+                            roomid={this.state.roomid}
+                            winner={this.state.winner}
+                            fullData={this.state.fullData}
+                            time={this.state.time}
+                            socket={socket}
+                            saveBid={this.saveBid}
+                            user={this.state.user}
+                            socket={socket}
+                        />
+                        :
+                        <p>The Item Is Sold to {this.state.winner.user.firstName} At the Price of {this.state.winner.amount}</p>
+                    }
+                    <DisplayBid bidHistory={this.state.bidHistory} />
                 </div>
             }
             </>

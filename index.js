@@ -53,20 +53,31 @@ io.on('connection', (socket) => {
     //     });
     // });
 
-    socket.on("join_room", data => {
+    socket.on("join_room", (data) => {
         //console.log('room', room.id)
         socket.join(data.id);
         socket.broadcast.in(data.id).emit("new_user", data.name + " has joined");
         console.log('connected to room', data.id)
     });
 
-    socket.on('SET_TIME', (data) => {
-        io.sockets.in(data.roomid).emit('CURRENT_TIME', { time: data.time })
-    })
+    // socket.on('SET_TIME', (data) => {
 
-    socket.on('CURRENT_TIME', (data) => {
-        io.sockets.in(data.roomid).emit('CURRENT_TIME', { time: data.time })
-    })
+    //     io.sockets.in(data.roomid).emit('UPDATED_TIME', { time: data.time })
+
+
+    // })
+
+    // socket.on('GET_TIME', (data) => {
+    //     console.log('GETTIME', data)
+    //     const otherRoom = data
+    //     socket.on('CURRENT_TIME', (data) => {
+    //         console.log('GET TIME CURRENT TIME', data)
+    //     })
+    // })
+
+    // socket.on('UPDATED_TIME', (data) => {
+    //     io.sockets.in(data.roomid).emit('UPDATED_TIME', { time: data.time })
+    // })
 
 });
 

@@ -25,7 +25,7 @@ const biddingSchema = new Schema({
 
 biddingSchema.methods.addParticipant = function (data) {
     const bidding = this
-    // console.log('inside add participant', this)
+    //console.log('inside add participant', this)
     bidding.participant.push(data)
 
     return bidding.save()

@@ -5,7 +5,7 @@ const { Bidding } = require('../models/bidding')
 
 router.get('/session/:id', (req, res) => {
     const id = req.params.id
-    Bidding.findOne({ session: id }).populate('participant.user', 'firstName').populate('product')
+    Bidding.findOne({ session: id }).populate('participant.user', 'firstName').populate('product').populate('session')
         .then((response) => {
             //console.log('bid get', response)
             res.send(response)
@@ -38,7 +38,7 @@ router.put('/session/:id', authenticateUser, (req, res) => {
     const id = req.params.id
     const body = req.body
     // console.log('put body', body)
-    Bidding.findOneAndUpdate({ session: id }, { $set: body }, { new: true }).populate('participant.user', 'firstName').populate('product')
+    Bidding.findOneAndUpdate({ session: id }, { $set: body }, { new: true }).populate('participant.user', 'firstName').populate('product').populate('session')
         .then((bids) => {
             io.sockets.in(id).emit('updateBid', bids.participant);
             // console.log('post', bids)

@@ -22,7 +22,7 @@ import AddCategory from './component/category/CategoryAdd'
 import EditCategory from './component/category/CategoryEdit'
 import ProductDetail from './component/product/ProductDetail';
 
-// import ProductInfo from './component/product/ProductInfo'
+import ProductInfo from './component/product/ProductInfo'
 
 
 import SessionAdd from './component/session/SessionAdd';
