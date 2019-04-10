@@ -1,6 +1,8 @@
 import React from 'react'
 import axios from '../axios/config';
 import { Button, Form, Label, Input } from 'reactstrap'
+// import MyComponent from './SelectTag';
+import Select from 'react-select'
 
 export default
     class ProductForm extends React.Component {
@@ -128,9 +130,9 @@ export default
     }
 
     render() {
-        // const uniqueSessions = [...new Set(this.state.SessionsData.map(item => item.date))];
-        // console.log('uniqueSession', uniqueSessions)
-        //console.log(this.state)
+        let options = this.state.categoryData.map(function (category) {
+            return { value: category._id, label: category.name };
+        })
         return (
             <div>
 
@@ -145,7 +147,12 @@ export default
                             </Label><br />
                             <p>{this.state.nameError}</p>
 
-
+                            <Select
+                                name="category"
+                                value={this.state.category}
+                                onChange={this.handleChange}
+                                options={options}
+                            />
                             <select name="category" onChange={this.handleChange} >
                                 <option value="">Select Category</option>
                                 {this.state.categoryData.map(category => {
@@ -171,40 +178,6 @@ export default
                             </Label><br />
 
 
-                            {/* <Label>
-                                Date :<br />
-                                <select onChange={this.dateHandle}>
-                                    <option value="">Select Date</option>
-                                    {uniqueSessions.map((session, index) => {
-                                        return <option key={session} value={session} >{session}</option>
-                                    })}
-                                </select>
-                            </Label><br />
-                            <Label>
-                                Start Time :<br />
-                                <select onChange={this.handleStart}>
-                                    <option value="" >Select Start Time</option>
-                                    {
-                                        this.state.filterSession.map((t, i) => {
-                                            // if (i !== this.state.filterSession.length - 1) {
-                                            return <option key={t._id} value={t.startSession}>{t.startSession}</option>
-                                            // }
-
-                                        })
-                                    }
-                                </select>
-                            </Label><br /> */}
-                            {/* <label>
-                        End Time :
-                        <select onChange={this.handleEnd} >
-                            <option value="">Select End Time</option>
-                            {
-                                this.state.EndTime.map((t, i) => {
-                                    return <option key={i + 1} value={t}>{t}</option>
-                                })
-                            }
-                        </select>
-                    </label><br /> */}
 
 
                             <Button color="primary">Submit</Button>

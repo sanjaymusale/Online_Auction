@@ -8,14 +8,14 @@ export default
         super(props)
         this.state = {
             currentTime: props.currentTime,
-            isLoaded: false,
-            timeLeft: "0:0:0"
+
+            timeLeft: "00:00:00"
         }
     }
     componentDidMount() {
         axios.get('http://worldclockapi.com/api/json/utc/now')
             .then((response) => {
-                this.setState({ currentTime: response.data.currentDateTime, isLoaded: true }, () => {
+                this.setState({ currentTime: response.data.currentDateTime }, () => {
                     this.Counter()
                 })
             })
@@ -53,19 +53,23 @@ export default
         if (status) {
             clear = setInterval(function () {
 
-                if (self.state.timeLeft === '0:0:1') {
+                if (self.state.timeLeft === '00:00:01') {
                     clearInterval(clear)
                     //self.props.timeLeft('0:0:0')
                 }
                 console.log('inside setinterval', clear)
                 const t = d.subtract(interval, "milliseconds"); //using momentjs substract function
-                const timeLeft = (t.hours() + ':' + t.minutes() + ':' + t.seconds())
+                const Hour = t.hours() < 10 ? '0' + t.hours() : t.hours()
+                const Minute = t.minutes() < 10 ? '0' + t.minutes() : t.minutes()
+                const Second = t.seconds() < 10 ? '0' + t.seconds() : t.seconds()
+
+                const timeLeft = Hour + ':' + Minute + ':' + Second
                 self.setState({ timeLeft })
                 self.props.timeLeft(timeLeft)
             }, interval);
         }
         else {
-            self.props.timeLeft('0:0:0')
+            self.props.timeLeft('00:00:00')
         }
     }
 

@@ -18,7 +18,7 @@ class Login extends React.Component {
         this.handleChange = this.handleChange.bind(this)
 
     }
-    handleChange(e) {
+    handleChange = (e) => {
         //console.log(e.target.name, e.target.value)
         e.persist()
 

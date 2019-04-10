@@ -22,7 +22,7 @@ import AddCategory from './component/category/CategoryAdd'
 import EditCategory from './component/category/CategoryEdit'
 import ProductDetail from './component/product/ProductDetail';
 
-import ProductInfo from './component/product/ProductInfo'
+import SignIn from './component/user/SignIn'
 
 
 import SessionAdd from './component/session/SessionAdd';
@@ -44,9 +44,9 @@ class App extends React.Component {
           <NavBar />
 
           <Switch>
-            <Route exact path="/" component={HomePage} />
+            {/* <Route exact path="/" component={HomePage} /> */}
             <Route exact path="/user/register" component={Register} />
-            <Route exact path="/user/login" component={Login} />
+            <Route exact path="/user/login" component={SignIn} />
             <Route exact path="/logout" component={LogOut} />
 
             <Route exact path="/user/dashboard" component={Dashboard} />
@@ -69,7 +69,7 @@ class App extends React.Component {
             <Route exact path="/product/edit/:id" component={ProductEdit} />
             <Route exact path="/myproduct" component={MyProduct} />
             <Route exact path="/lighbox" component={LightboxExample} />
-
+            <Route exact path="/sign" component={SignIn} />
 
             <Route exact path="/category" component={ShowCategory} />
             <Route exact path="/category/add" component={AddCategory} />
