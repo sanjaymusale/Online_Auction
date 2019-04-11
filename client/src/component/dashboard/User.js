@@ -48,7 +48,7 @@ const User = (props) => {
                 </li>
             </ul>
 
-            <Link className="btn btn-primary" to='/logout' role="button">LogOut</Link>
+            <Link className="btn" to='/logout' role="button" style={{ background: "#000066", color:'#f3f3f3' }}>LogOut</Link>
         </>
     )
 }

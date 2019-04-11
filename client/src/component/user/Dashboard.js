@@ -73,55 +73,9 @@ export default class Dashboard extends React.Component {
                     <div className="col-md-8" >
                         <Input type="text" bsSize="sm" onChange={this.filterHandle} placeholder="search" />
                         <br />
-
-                        {/* <CardDeck  >
-
-                            {this.state.productData.filter(p => p.status === 'Approved').map(pro => {
-
-                                return (
-
-
-                                    <Card key={pro._id}  >
-
-
-                                        <CardBody >
-
-                                            <CardText>{pro.name}</CardText>
-                                            <CardImg src={pro.imageUrl[0]} />
-                                            <div>
-                                                <CardText>{pro.minPrice}</CardText>
-                                                <Link to={`/product/${pro._id}`}>  details</Link>
-
-                                            </div>
-
-
-                                        </CardBody>
-
-                                    </Card>
-
-
-
-
-                                )
-
-
-
-
-
-                            })}
-
-                        </CardDeck> */}
-
-
-
-
-
-
                     </div>
 
                     <div className="col-md-4">
-
-
                         < select name="category" onChange={this.handleChange} >
                             <option value="">category</option>
                             {this.state.categoryData.map(category => {
@@ -131,12 +85,6 @@ export default class Dashboard extends React.Component {
                             })}
                         </select>
                         {/* <h2>{this.state.category}</h2> */}
-
-
-
-
-
-
                     </div>
 
 

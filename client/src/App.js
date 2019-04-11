@@ -34,6 +34,8 @@ import CurrentProduct from './component/bidding/CurrentProduct';
 import NavBar from './component/dashboard/NavBar';
 import CurrentBidding from './component/bidding/CurrentBidding';
 import LightboxExample from './component/product/lightbox';
+import Album from './component/user/DashboardMt'
+import PaperSheet from './component/product/ProductDetailmt'
 
 class App extends React.Component {
   render() {
@@ -52,7 +54,7 @@ class App extends React.Component {
             <Route exact path="/user/dashboard" component={Dashboard} />
             <Route exact path="/product" component={ProductNew} />
 
-
+            <Route exact path='/productmt' component={PaperSheet} />
             <Route exact path='/session/add/:id' component={SessionAdd} />
             <Route exact path='/session/list' component={SessionShow} />
             <Route exact path='/session_edit/:id' component={SessionEdit} />
@@ -60,7 +62,7 @@ class App extends React.Component {
             <Route exact path="/product/list" component={ProductShow} />
             <Route exact path='/product/:id' component={ProductDetail} />
 
-            {/* <Route exact path='/products/:id' component={ProductInfo} /> */}
+            <Route exact path='/dashboard' component={Album} />
 
 
             <Route exact path='/lightbox' component={LightboxExample} />

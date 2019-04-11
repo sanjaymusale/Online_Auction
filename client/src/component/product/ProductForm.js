@@ -43,6 +43,10 @@ export default
 
     }
 
+    // handleSelect = (data) => {
+    //     this.setState(() => ({ category: data }))
+    // }
+
     componentDidMount() {
         Promise.all([axios.get('/category', { headers: { "x-auth": localStorage.getItem("token") } }),
         axios.get('/sessions', { headers: { "x-auth": localStorage.getItem("token") } })])
@@ -146,13 +150,13 @@ export default
                                 <Input type="text" name="name" value={this.state.name} onChange={this.handleChange} />
                             </Label><br />
                             <p>{this.state.nameError}</p>
-
+                            {/* 
                             <Select
                                 name="category"
                                 value={this.state.category}
-                                onChange={this.handleChange}
+                                onChange={this.handleSelect}
                                 options={options}
-                            />
+                            /> */}
                             <select name="category" onChange={this.handleChange} >
                                 <option value="">Select Category</option>
                                 {this.state.categoryData.map(category => {
