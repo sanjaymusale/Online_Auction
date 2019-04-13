@@ -17,6 +17,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Input } from 'reactstrap'
 import Select from 'react-select'
 import axios from '../axios/config'
+import { Link } from 'react-router-dom'
 
 const styles = theme => ({
 
@@ -71,9 +72,8 @@ const styles = theme => ({
     }
 });
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-class Album extends React.Component {
+class UserDashboard extends React.Component {
 
     constructor(props) {
         super(props)
@@ -143,14 +143,11 @@ class Album extends React.Component {
                     <div className={classes.searchBar}>
                         <div className="container">
                             <div className="row">
-                                <div className="col-md-4" >
+                                <div className="col-md-8" >
                                     <Input type="text" onChange={this.filterHandle} placeholder="search" size="md" />
                                     <br />
                                 </div>
-                                <div className="col-md-4" >
-                                    <Input type="text" onChange={this.filterHandle} placeholder="search" size="md" />
-                                    <br />
-                                </div>
+                               
 
                                 <div className="col-md-4">
                                     <Select
@@ -168,13 +165,13 @@ class Album extends React.Component {
                     <div className={classNames(classes.layout, classes.cardGrid)}>
                         {/* End hero unit */}
                         <Grid container spacing={40}>
-                            {this.state.productData.filter(p => p.status === 'Approved').map(product => (
+                            {this.state.productData.filter(p => (p.status === 'Approved' && p.session !== undefined && p.sold.length === 0)).map(product => (
                                 <Grid item key={product._id} sm={6} md={4} lg={3}>
                                     <Card className={classes.card}>
                                         <CardMedia
                                             className={classes.cardMedia}
-                                            image={product.imageUrl[1]} // eslint-disable-line max-len
-                                            title='Click to View'
+                                            image={product.imageUrl[0]} // eslint-disable-line max-len
+                                            title={product.name}
 
                                         />
                                         <CardContent className={classes.cardContent}>
@@ -186,12 +183,12 @@ class Album extends React.Component {
                                             </Typography>
                                         </CardContent>
                                         <CardActions>
-                                            <Button size="small" color="primary">
-                                                View
-                    </Button>
-                                            <Button size="small" color="primary">
-                                                Edit
-                    </Button>
+                                            <Link to={`/productmt/${product._id}`}>
+                                                <Button size="small" color="primary">
+                                                    Details
+                                            </Button>
+                                            </Link>
+
                                         </CardActions>
                                     </Card>
                                 </Grid>
@@ -213,8 +210,8 @@ class Album extends React.Component {
         );
     }
 }
-Album.propTypes = {
+UserDashboard.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Album);
+export default withStyles(styles)(UserDashboard);

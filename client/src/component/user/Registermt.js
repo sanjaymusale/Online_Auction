@@ -8,7 +8,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import PermIdentity from '@material-ui/icons/PermIdentityOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -32,7 +32,7 @@ const styles = theme => ({
         },
     },
     paper: {
-        marginTop: theme.spacing.unit * 8,
+        marginTop: theme.spacing.unit * 7,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -40,7 +40,7 @@ const styles = theme => ({
     },
     avatar: {
         margin: theme.spacing.unit,
-        backgroundColor: theme.palette.secondary.main,
+        backgroundColor: "blue",
     },
     form: {
         width: '100%', // Fix IE 11 issue.
@@ -55,53 +55,88 @@ const styles = theme => ({
     }
 });
 
-class SignIn extends React.Component {
-    constructor(props) {
-        super(props)
+class Register extends React.Component {
+   constructor() {
+        super()
         this.state = {
+
+            firstName: '',
+            lastName: '',
             email: '',
             password: '',
-            redirectList: false,
+            mobile: '',
+            noticeMsg: '',
+            firstError: '',
+            lastError: '',
             emailError: '',
-            passwordError: ''
+            passwordError: '',
+            mobileError: ''
+
         }
     }
 
-    handleChange = (e) => {
-        //console.log(e.target.name, e.target.value)
-        e.persist()
+    //es6 arrow function for event handlers where you dont have bind the this keyword
+
+    handleChange =(e)=>{
+         e.persist()
 
         this.setState(() => ({
-            [e.target.name]: e.target.value,
-            emailError: '',
-            passwordError: ''
-
-        }))
+            [e.target.name]: e.target.value
+                    }))
     }
 
     validate = () => {
         let isError = false;
         const errors = {
-
+            firstError: '',
+            lastError: '',
             emailError: '',
             passwordError: '',
+            mobileError:''
         }
-
-
-        if (this.state.email.length === 0) {
+        const { firstName,lastName,email,password,mobile}=this.state
+        if (firstName.length === 0) {
             isError = true;
+            errors.firstError = "Provide First Name";
+        }
+        if (firstName.length > 0 && firstName.length < 4) {
+            isError = true;
+            errors.firstError = "Should be atleast 4 characters";
+        }
+        if (lastName.length === 0) {
+            isError = true;
+            errors.lastError = "Provide Last Name";
+        }
+        if (lastName.length > 0 && lastName.length < 4) {
+            isError = true;
+            errors.lastError = "Should be atleast 4 characters";
+        }
+        if(email.length === 0){
+             isError = true;
             errors.emailError = "Provide Email Id"
         }
-        if (this.state.email.length > 0 && this.state.email.indexOf("@") === -1) {
+        if(email.length > 0 && email.indexOf("@") === -1) {
             isError = true;
             errors.emailError = "Provide valid email"
         }
-
-        if (this.state.password.length === 0) {
-            isError = true;
-            errors.passwordError = "Provide Password";
+        if(password.length > 0 && password.length < 6){
+            isError = true
+            errors.passwordError = "Should be Minimum 6 Characters"
         }
-        this.setState({
+        if (password.length === 0) {
+            isError = true
+            errors.passwordError = "Provide Password"
+        }
+        if(mobile.length > 0 && mobile.length < 11){
+            isError = true
+            errors.mobileError = "Provide Valid Mobile Number"
+        }
+        if (mobile.length === 0) {
+            isError = true
+            errors.mobileError = "Provide Mobile Number"
+        }
+
+         this.setState({
             ...this.state,
             ...errors
         })
@@ -109,38 +144,46 @@ class SignIn extends React.Component {
 
 
     }
+
+
+
+
     handleSubmit = (e) => {
         e.preventDefault()
-
         const err = this.validate()
         if (!err) {
             const formData = {
+                firstName: this.state.firstName,
+                lastName: this.state.lastName,
                 email: this.state.email,
-                password: this.state.password
-            }
+                password: this.state.password,
+                mobile: this.state.mobile
 
+
+            }
+            alert("form submitted")
             console.log(formData)
 
-            axios.post('/users/login', formData)
+
+            axios.post('/users/register', formData)
                 .then((response) => {
                     console.log(response.data)
-                    const { token } = response.data
-
-                    localStorage.setItem('token', token)
-                    this.props.dispatch(setUser(token))
                     this.setState(() => ({
+                        noticeMsg: response.data.notice,
+                        firstName: '',
+                        lastName: '',
                         email: '',
                         password: '',
-                        redirectList: true
+                        mobile: ''
+
+
 
                     }))
                 })
                 .catch((err) => {
                     console.log(err)
                 })
-
         }
-
 
     }
 
@@ -155,15 +198,27 @@ class SignIn extends React.Component {
                 
                 <Paper className={classes.paper}>
                     <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon />
+                        <PermIdentity />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Sign in
+                        Sign Up
         </Typography>
                     <form className={classes.form}>
                         <FormControl margin="dense" fullWidth>
+                            <InputLabel htmlFor="firstName">First Name </InputLabel>
+                            <Input id="firstName" name="firstName" value={this.state.firstName} onChange={this.handleChange}  autoFocus />
+                            <FormLabel className={classes.formlabel} error={true}>{this.state.firstError}</FormLabel>
+                        </FormControl>
+
+                        <FormControl margin="dense" fullWidth>
+                            <InputLabel htmlFor="lastName">Last Name </InputLabel>
+                            <Input id="lastName" name="lastName" value={this.state.lastName} onChange={this.handleChange}  />
+                            <FormLabel className={classes.formlabel} error={true}>{this.state.lastError}</FormLabel>
+                        </FormControl>
+
+                        <FormControl margin="dense" fullWidth>
                             <InputLabel htmlFor="email">Email Address</InputLabel>
-                            <Input id="email" name="email" value={this.state.email} onChange={this.handleChange} autoFocus />
+                            <Input id="email" name="email" value={this.state.email} onChange={this.handleChange}   />
                             <FormLabel className={classes.formlabel} error={true}>{this.state.emailError}</FormLabel>
                         </FormControl>
 
@@ -172,10 +227,14 @@ class SignIn extends React.Component {
                             <Input name="password" type="password" id="password"  value={this.state.password} onChange={this.handleChange} />
                             <FormLabel className={classes.formlabel} margin="normal" error={true} >{this.state.passwordError}</FormLabel>
                         </FormControl>
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
-                        />
+
+                        <FormControl margin="dense" fullWidth>
+                            <InputLabel htmlFor="mobile">Mobile</InputLabel>
+                            <Input id="mobile" name="mobile" value={this.state.mobile} onChange={this.handleChange}   />
+                            <FormLabel className={classes.formlabel} error={true}>{this.state.mobileError}</FormLabel>
+                        </FormControl>
+
+                       
                         <Button
                             type="submit"
                             fullWidth
@@ -184,7 +243,7 @@ class SignIn extends React.Component {
                             className={classes.submit}
                             onClick={this.handleSubmit}
                         >
-                            Sign in
+                            Sign Up
           </Button>
                     </form>
                 </Paper>
@@ -193,9 +252,9 @@ class SignIn extends React.Component {
     }
 }
 
-SignIn.propTypes = {
+Register.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(
-    connect()(SignIn))
+    connect()(Register))

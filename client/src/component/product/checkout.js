@@ -259,7 +259,6 @@ class ProductForm extends React.Component {
                             Product Submission
                         </Typography>
                         <React.Fragment>
-                        <hr/>
                             <React.Fragment>
                                 <form className={classes.form}>
                                     <Grid container spacing={24} className={classes.container} alignItems="baseline" justify="center" >

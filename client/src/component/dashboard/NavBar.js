@@ -12,7 +12,7 @@ const Navbar = (props) => {
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-dark" style={{ background: "#000066" }}>
-                <i class="material-icons lg-48" style={{ color: '#ffcc66' }}>
+                <i className="material-icons lg-48" style={{ color: '#ffcc66' }}>
                     gavel
                 </i>
                 <Link className="navbar-brand" to='/'><img src={process.env.PUBLIC_URL + '/icon.png'} height="40px" width="40px" alt="" />{' '}Online Auction</Link>
