@@ -7,9 +7,9 @@ import './App.css';
 
 // import Register from './component/user/Register'
 import Register from './component/user/Registermt'
-import Login from './component/user/Login'
+// import Login from './component/user/Login'
 import HomePage from './component/user/HomePage'
-import Dashboard from './component/user/Dashboard'
+// import Dashboard from './component/user/Dashboard'
 import LogOut from './component/user/LogOut'
 
 
@@ -22,7 +22,7 @@ import AddCategory from './component/category/CategoryAdd'
 // import AddCategory from './component/category/CategoryForm'
 import EditCategory from './component/category/CategoryEdit'
 import ProductDetail from './component/product/ProductDetail';
-
+import UserProduct from './component/product/UserProduct'
 import SignIn from './component/user/SignIn'
 
 
@@ -34,10 +34,10 @@ import MyProduct from './component/product/MyProduct';
 import CurrentProduct from './component/bidding/CurrentProduct';
 import NavBar from './component/dashboard/NavBar';
 import CurrentBidding from './component/bidding/CurrentBidding';
-import LightboxExample from './component/product/lightbox';
+
 import UserDashboard from './component/user/DashboardMt'
-import PaperSheet from './component/product/ProductDetailmt'
-import Checkout from './component/product/checkout';
+import Product from './component/product/ProductDetailmt'
+
 
 class App extends React.Component {
   render() {
@@ -56,23 +56,24 @@ class App extends React.Component {
             {/* <Route exact path="/user/dashboard" component={Dashboard} /> */}
             <Route exact path="/product" component={ProductNew} />
 
-            <Route exact path='/productmt/:id' component={PaperSheet} />
+            <Route exact path='/productmt/:id' component={Product} />
             <Route exact path='/session/add/:id' component={SessionAdd} />
             <Route exact path='/session/list' component={SessionShow} />
             <Route exact path='/session_edit/:id' component={SessionEdit} />
 
             <Route exact path="/product/list" component={ProductShow} />
             <Route exact path='/product/:id' component={ProductDetail} />
-
+ <Route exact path='/userProduct/:id' component={UserProduct} />
             <Route exact path='/user/dashboard' component={UserDashboard} />
 
 
-            <Route exact path='/lightbox' component={LightboxExample} />
+            
 
 
             <Route exact path="/product/edit/:id" component={ProductEdit} />
             <Route exact path="/myproduct" component={MyProduct} />
-            <Route exact path="/lighbox" component={LightboxExample} />
+             
+           
             <Route exact path="/sign" component={SignIn} />
 
             <Route exact path="/category" component={ShowCategory} />
@@ -83,7 +84,7 @@ class App extends React.Component {
             <Route exact path="/currentBid" component={CurrentProduct} />
             <Route exact path='/biddingroom/:id' component={CurrentBidding} />
 
-            <Route exact path="/form" component={Checkout} />
+            
           </Switch>
         </div>
       </BrowserRouter>

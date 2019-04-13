@@ -11,6 +11,7 @@
     "formik": "^1.5.1",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.11",
+    "material-table": "^1.32.0",
     "material-ui-pickers": "^2.2.4",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",

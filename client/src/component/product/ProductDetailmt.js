@@ -36,7 +36,7 @@ const styles = theme => ({
     }
 });
 
-class ComplexGrid extends React.Component {
+class ProductDetail extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -128,8 +128,8 @@ class ComplexGrid extends React.Component {
     }
 
 }
-ComplexGrid.propTypes = {
+ProductDetail.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ComplexGrid);
+export default withStyles(styles)(ProductDetail);
