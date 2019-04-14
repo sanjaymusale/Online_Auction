@@ -24,10 +24,10 @@ import EditCategory from './component/category/CategoryEdit'
 import ProductDetail from './component/product/ProductDetail';
 import UserProduct from './component/product/UserProduct'
 import SignIn from './component/user/SignIn'
-
+import SessionForm from './component/session/SessionForm'
 
 import SessionAdd from './component/session/SessionAdd';
-import SessionShow from './component/session/SessionShow'
+
 import SessionEdit from './component/session/SessionEdit'
 
 import MyProduct from './component/product/MyProduct';
@@ -37,8 +37,9 @@ import CurrentBidding from './component/bidding/CurrentBidding';
 
 import UserDashboard from './component/user/DashboardMt'
 import Product from './component/product/ProductDetailmt'
-
-
+import CustomizedSnackbars from './component/user/alert'
+import MyBids from './component/product/MyBids'
+import ProductBidder from './component/product/MyProductParticipants'
 class App extends React.Component {
   render() {
     return (
@@ -58,22 +59,24 @@ class App extends React.Component {
 
             <Route exact path='/productmt/:id' component={Product} />
             <Route exact path='/session/add/:id' component={SessionAdd} />
-            <Route exact path='/session/list' component={SessionShow} />
+
             <Route exact path='/session_edit/:id' component={SessionEdit} />
 
             <Route exact path="/product/list" component={ProductShow} />
             <Route exact path='/product/:id' component={ProductDetail} />
- <Route exact path='/userProduct/:id' component={UserProduct} />
+            <Route exact path='/userProduct/:id' component={UserProduct} />
             <Route exact path='/user/dashboard' component={UserDashboard} />
+            <Route exact path='/session/addForm/:id' component={SessionAdd} />
 
-
-            
+            <Route exact path='/alert' component={CustomizedSnackbars} />
 
 
             <Route exact path="/product/edit/:id" component={ProductEdit} />
             <Route exact path="/myproduct" component={MyProduct} />
-             
-           
+
+            <Route exact path="/myBids" component={MyBids} />
+            <Route exact path="/bidders" component={ProductBidder} />
+
             <Route exact path="/sign" component={SignIn} />
 
             <Route exact path="/category" component={ShowCategory} />
@@ -84,7 +87,7 @@ class App extends React.Component {
             <Route exact path="/currentBid" component={CurrentProduct} />
             <Route exact path='/biddingroom/:id' component={CurrentBidding} />
 
-            
+
           </Switch>
         </div>
       </BrowserRouter>

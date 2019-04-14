@@ -15,19 +15,25 @@ class DatePick extends React.Component {
             selectedDate: moment().toISOString(),
             selectedTime: moment().toISOString(),
             currentTime: '',
-            isLoaded: false
+            isLoaded: false,
+            
         }
     }
-    // componentDidMount() {
-    //     axios.get('http://worldclockapi.com/api/json/utc/now')
-    //         .then((res) => {
-    //             // this.setState({ currentTime: res.data.currentDateTime, selectedDate: moment(res.data.currentDateTime).add(1, 'd'), isLoaded: true })
-    //             this.setState({ currentTime: res.data.currentDateTime, isLoaded: true })
-    //         })
-    //         .catch((err) => {
-    //             console.log(err)
-    //         })
-    // }
+    componentDidMount() {
+        axios.get('http://worldclockapi.com/api/json/utc/now')
+            .then((res) => {
+                // this.setState({ currentTime: res.data.currentDateTime, selectedDate: moment(res.data.currentDateTime).add(1, 'd'), isLoaded: true })
+                this.setState(() => ({
+                    currentTime: moment(res.data.currentDateTime).toISOString(),
+                    selectedDate: moment(res.data.currentDateTime).add(1, 'd').toISOString(),
+                    selectedTime: moment(res.data.currentDateTime).toISOString(),
+                    isLoaded: true
+                }))
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
     handleDateChange = (date) => {
         const selectedDate = moment(date).toISOString()
         this.setState({ selectedDate });
@@ -45,20 +51,20 @@ class DatePick extends React.Component {
             startTime: this.state.selectedTime,
             endTime: end
         }
-        
+
         this.props.handleSubmit(data)
     }
-    
+
     render() {
-       
+        console.log('session', this.state)
         return (
 
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <div className="pickers">
 
-                    {/* to disable current date <DatePicker value={this.state.selectedDate} onChange={this.handleDateChange} minDate={moment(this.state.currentTime).add(1, 'd')} /> */}
+                    {/* <DatePicker value={this.state.selectedDate} onChange={this.handleDateChange} minDate={moment(this.state.currentTime).add(1, 'd')} /> */}
 
-                    <DatePicker value={this.state.selectedDate} onChange={this.handleDateChange} disablePast />
+                    <DatePicker value={this.state.selectedDate} onChange={this.handleDateChange} />
                     <TimePicker value={this.state.selectedTime} onChange={this.handleTimeChange} />
 
                     <button onClick={this.handleSubmit}>Submit</button>

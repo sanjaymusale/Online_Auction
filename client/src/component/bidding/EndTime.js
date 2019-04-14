@@ -51,6 +51,7 @@ export default
 
         var clear
         if (status) {
+            clearInterval(clear)
             clear = setInterval(function () {
 
                 if (self.state.timeLeft === '00:00:01') {

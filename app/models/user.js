@@ -112,11 +112,11 @@ userSchema.statics.findByEmailAndPassword = function (email, password) {
                             return Promise.resolve(user)
                         }
                         else {
-                            return Promise.reject('invalid email and password')
+                            return Promise.reject({ error : 'invalid email and password'})
                         }
                     })
             } else {
-                return Promise.reject('invalid email and password')
+                return Promise.reject({error:'invalid email and password'})
             }
         })
         .catch((err) => {

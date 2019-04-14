@@ -14,6 +14,7 @@ import axios from '../axios/config';
 import FormLabel from '@material-ui/core/FormLabel';
 import { Redirect } from 'react-router-dom'
 import moment from 'moment'
+import { connect } from 'react-redux'
 
 const styles = theme => ({
 
@@ -45,21 +46,21 @@ const styles = theme => ({
 })
 
 
-class MyProduct extends React.Component{
+class MyBids extends React.Component{
     constructor(props){
         super(props)
         this.state={
-            myProduct: [],
+            myBids: [],
             isLoaded: false,
-            products: []
+           
         }
     }
     componentDidMount() {
-        axios.get('/products/myproduct', { headers: { 'x-auth': localStorage.getItem('token') } })
+        axios.get(`/bidding/user`, { headers: { 'x-auth': localStorage.getItem('token') } })
             .then((response) => {
                 const { data } = response
                 //console.log(data)
-                this.setState(() => ({ myProduct: data, products: data,isLoaded:true }))
+                this.setState(() => ({ myBids: data,isLoaded:true }))
             })
             .catch((err) => {
                 console.log(err)
@@ -82,33 +83,43 @@ class MyProduct extends React.Component{
 
     render(){
         const { classes} = this.props
-        const { products,isLoaded } = this.state 
+        const { myBids,isLoaded } = this.state 
+        const { person } = this.props
        // console.log('isLoaded',isLoaded)
-        const data = products.map(product=>{
-            if(product.session){
+        const amount = myBids.participant
+        var amt 
+        var status
+        const data = myBids.map(bid=>{
+                bid.participant.forEach(bidder =>{
+                   
+                    if(bidder.user._id === person.user.userId ){
+                       
+                        amt = bidder.amount
+                    }
+                })
+                bid.product.sold.forEach(item=>{
+                    if(item.user === person.user.userId){
+                        status = "Won"
+                    }else
+                    {
+                        status = "Lost"
+                    }
+                })
                 return {
-                id:product._id,name : product.name ,
-                category : product.category.name,
-                minPrice:product.minPrice,
-                status:product.status,
-                start : moment(product.session.date).format('DD-MM-YYYY')
+                id: bid.product._id,
+                name : bid.product.name ,
+                amount : amt,
+                start : moment(bid.session.date).format('DD-MM-YYYY'),
+                status : status
                 }
-            }else
-            {
-                 return { 
-                id:product._id,name : product.name ,
-                category : product.category.name,
-                minPrice:product.minPrice,
-                status:product.status
-
-            }
-            }
-           
-        })
+            
+            })
+        console.log(data)
+        // console.log(this.props)
         return(
              <React.Fragment>
             <main className={classes.layout}>
-                    <Paper className={classes.paper}>
+                <Paper className={classes.paper}>
            
             
 
@@ -120,12 +131,7 @@ class MyProduct extends React.Component{
         fontFamily: "'Montserrat', sans-serif",
         fontWeight: 600
     } },
-    { title: 'Category', field: 'category', cellStyle:{
-        fontSize:"14px",
-        fontFamily: "'Montserrat', sans-serif",
-        fontWeight: 600
-    } },
-    { title: 'Price', field: 'minPrice', type: 'numeric', cellStyle:{
+    { title: 'Amount', field: 'amount', cellStyle:{
         fontSize:"14px",
         fontFamily: "'Montserrat', sans-serif",
         fontWeight: 600
@@ -135,43 +141,20 @@ class MyProduct extends React.Component{
         fontFamily: "'Montserrat', sans-serif",
         fontWeight: 600
     } },
-    { title: 'Status', field: 'status' ,
-    cellStyle : data=>{
-        if(data==="Approved"){
-            return{
-                color:"green",
-                fontSize:"14px",
-                fontFamily: "'Montserrat', sans-serif",
-                fontWeight: 600
+    { title: 'Won/Lost', field: 'status', cellStyle:{
+        fontSize:"14px",
+        fontFamily: "'Montserrat', sans-serif",
+        fontWeight: 600
+    } }
 
-            }
-        }
-         if(data==="Pending"){
-            return{
-                color:"blue",
-                fontSize:"14px",
-                fontFamily: "'Montserrat', sans-serif",
-                fontWeight: 600
-            }
-        }
-         if(data==="Rejected"){
-            return{
-                color:"red",
-                fontSize:"14px",
-                fontFamily: "'Montserrat', sans-serif",
-                fontWeight: 600
-            }
-        }
-    }
-     },
   ]}
   data={data}
-  title="My Products"
+  title="My Bids"
   actions={[
     
     {
       icon: 'info',
-      tooltip: 'Show Product Info',
+      tooltip: 'Show Info',
       onClick: (event, rowData) => {
        this.props.history.push(`/userProduct/${rowData.id}`)
       },
@@ -196,8 +179,13 @@ class MyProduct extends React.Component{
     }
 }
 
-MyProduct.propTypes = {
+MyBids.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-
-export default withStyles(styles)(MyProduct);
+const mapStateToProps = (state)=>{
+    return {
+        person : state.users
+    }
+}
+export default withStyles(styles)(
+    connect(mapStateToProps)(MyBids));

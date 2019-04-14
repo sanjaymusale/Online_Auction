@@ -93,7 +93,7 @@ class UserDashboard extends React.Component {
 
             .then((response) => {
                 //const data = response.data
-                console.log(response)
+                //console.log(response)
                 this.setState(() => ({ categoryData: response[0].data }))
                 this.setState(() => ({ product: response[1].data, productData: response[1].data }))
             })
@@ -144,7 +144,7 @@ class UserDashboard extends React.Component {
                         <div className="container">
                             <div className="row">
                                 <div className="col-md-8" >
-                                    <Input type="text" onChange={this.filterHandle} placeholder="search" size="md" />
+                                    <Input type="text" onChange={this.filterHandle} placeholder="search" bssize="md" />
                                     <br />
                                 </div>
                                

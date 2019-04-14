@@ -32,6 +32,7 @@ class ProductEdit extends React.Component {
         axios.put(`/products/${id}`, formData, { headers: { 'x-auth': localStorage.getItem('token') } })
             .then((response) => {
                 console.log(response.data)
+                this.props.history.push(`/userProduct/${id}`)
             })
             .catch((err) => {
                 console.log(err)
@@ -40,19 +41,20 @@ class ProductEdit extends React.Component {
     render() {
         const { name, category, minPrice, description, imageUrl } = this.state.product
         console.log('state', this.state.product)
+
         return (
             <div>
                 {this.state.isLoaded &&
                     <>
                         <ProductForm
                             name={name}
-                            category={category}
+                            category={{ value : category._id , label : category.name}}
                             description={description}
                             minPrice={minPrice}
                             imageUrl={imageUrl}
 
                             handleSubmit={this.handleSubmit} />
-                        <Link to='/product/list'>Back</Link>
+                       
                     </>
                 }
             </div >

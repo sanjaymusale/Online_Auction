@@ -8,28 +8,31 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 
 class AlertDialog extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props)
-      this.state = {
-          open: false
+    this.state = {
+      open: false,
+      url: ''
 
     }
   }
-  
 
-  
+
+
 
   handleClose = () => {
     this.setState({ open: false });
-    
+    this.props.history.push(this.state.url)
+    console.log('close',this.state)
   }
 
-  componentWillReceiveProps(next){
-    console.log('next',next)
+  componentWillReceiveProps(next) {
+    console.log('next', next)
     const status = next.status
-    this.setState({ open : status})
+    this.setState({ open: status, url: next.url })
   }
   render() {
+    console.log('alert',this.state)
     return (
       <div>
         <Dialog
@@ -38,14 +41,14 @@ class AlertDialog extends React.Component {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          
+
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Product Submitted Successfully, Admin will Review Your Product, Once it is Approved U can Participate in Bidding Process
+              {this.props.title}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            
+
             <Button onClick={this.handleClose} color="primary" autoFocus>
               Ok
             </Button>

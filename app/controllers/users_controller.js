@@ -37,7 +37,7 @@ router.post('/login', (req, res) => {
             res.send({ token })
         })
         .catch((err) => {
-            console.log(err)
+            res.status(404).send(err)
         })
 })
 

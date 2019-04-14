@@ -3,11 +3,12 @@ import axios from '../axios/config'
 import ProductForm from './ProductForm';
 import AlertDialog from './alert'
 class ProductNew extends React.Component {
-    constructor(){
+    constructor() {
         super()
-        this.state={
-            success : false,
-            failure : false
+        this.state = {
+            success: false,
+            failure: false,
+            id: ''
         }
     }
 
@@ -15,24 +16,24 @@ class ProductNew extends React.Component {
         console.log(data)
         axios.post('/products', data, { headers: { 'x-auth': localStorage.getItem('token') } })
             .then((response) => {
-                    console.log(response.data)
-                    this.setState({ success : true})
-                    
+               // console.log(response.data)
+                this.setState({ success: true, id: response.data._id })
+
 
             })
             .catch((err) => {
                 console.log(err)
             })
     }
-    render(){
-        console.log(this.state)
+    render() {
+       // console.log(this.state)
 
-    return (
-        <div>
-            <ProductForm handleSubmit={this.handleSubmit} />
-            <AlertDialog status={this.state.success} />
-        </div>
-    )
-}
+        return (
+            <div>
+                <ProductForm handleSubmit={this.handleSubmit} />
+                <AlertDialog status={this.state.success} title=" Product Submitted Successfully, Admin will Review Your Product, Once it is Approved U can Participate in Bidding Process" history={this.props.history} url={`/userProduct/${this.state.id}`} />
+            </div>
+        )
+    }
 }
 export default ProductNew

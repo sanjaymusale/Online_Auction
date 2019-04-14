@@ -9,6 +9,7 @@ import axios from '../axios/config'
 import moment from 'moment'
 import Button from '@material-ui/core/Button';
 import Lightbox from 'react-image-lightbox';
+import 'react-image-lightbox/style.css'
 import { Link } from 'react-router-dom'
 
 
@@ -20,7 +21,7 @@ const styles = theme => ({
     paper: {
         padding: theme.spacing.unit * 2,
         margin: 'auto',
-        maxWidth: 600,
+        maxWidth: 800,
     },
     image: {
         width: 208,
@@ -51,7 +52,7 @@ class ProductDetail extends React.Component {
         const id = this.props.match.params.id
         axios.get(`/products/${id}`, { headers: { 'x-auth': localStorage.getItem('token') } })
             .then((res) => {
-                console.log(res.data)
+               // console.log(res.data)
                 this.setState({ product: res.data, isLoaded: true })
             })
             .catch((err) => {
@@ -69,7 +70,7 @@ class ProductDetail extends React.Component {
                         <Grid container spacing={16}>
                             <Grid item>
                                 <ButtonBase className={classes.image}>
-                                <img className={classes.img} alt="Click here" src={product.imageUrl[0]} onClick={() => this.setState({ isOpen: true })}/>
+                                    <img className={classes.img} alt="Click here" src={product.imageUrl[0]} onClick={() => this.setState({ isOpen: true })} />
                                 </ButtonBase>
                             </Grid>
                             <Grid item xs={12} sm container>
@@ -87,18 +88,18 @@ class ProductDetail extends React.Component {
                                         <Typography gutterBottom>End Time   : {moment(session.endTime).format('hh:mm A')} </Typography>
                                     </Grid>
                                     <Grid item>
-                                    <Link to="/user/dashboard">
-                                        <Button size="small" variant="contained" color="primary" className={classes.button}>
-                                            Back
+                                        <Link to="/user/dashboard">
+                                            <Button size="small" variant="contained" color="primary" className={classes.button}>
+                                                Back
                                     </Button>
-                                    </Link>
+                                        </Link>
                                         <Button size="small" variant="contained" color="primary" className={classes.button} onClick={() => this.setState({ isOpen: true })}>
                                             More Images
                                     </Button>
                                     </Grid>
                                 </Grid>
                                 <Grid item>
-                                <Typography variant="subtitle1" color="secondary">Bid : &#8377; {product.minPrice}</Typography>
+                                    <Typography variant="subtitle1" color="secondary">Bid : &#8377; {product.minPrice}</Typography>
                                 </Grid>
                             </Grid>
                         </Grid>

@@ -29,7 +29,8 @@ const User = (props) => {
 
                         <Link to='/currentBid' className="dropdown-item">Current Bid</Link>
                         <Link to='/myproduct' className="dropdown-item">My Product</Link>
-
+                         <Link to="/myBids" className="dropdown-item">My Bids</Link>
+                         <Link to="/bidders" className="dropdown-item">My Product Bidders</Link>
 
                     </div>
                 </li>

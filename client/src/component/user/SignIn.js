@@ -18,6 +18,7 @@ import axios from '../axios/config';
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { setUser } from '../../redux/actions/users'
+import CustomizedSnackbars from './alert'
 
 const styles = theme => ({
     main: {
@@ -62,8 +63,10 @@ class SignIn extends React.Component {
             email: '',
             password: '',
             redirectList: false,
+            loginFail : false,
             emailError: '',
-            passwordError: ''
+            passwordError: '',
+            passwordType:"password"
         }
     }
 
@@ -74,7 +77,8 @@ class SignIn extends React.Component {
         this.setState(() => ({
             [e.target.name]: e.target.value,
             emailError: '',
-            passwordError: ''
+            passwordError: '',
+            loginFail:false
 
         }))
     }
@@ -119,13 +123,14 @@ class SignIn extends React.Component {
                 password: this.state.password
             }
 
-            console.log(formData)
+           // console.log(formData)
 
             axios.post('/users/login', formData)
                 .then((response) => {
-                    console.log(response.data)
+                    //console.log(response)
+                    if(!response.data.error){
                     const { token } = response.data
-
+                       
                     localStorage.setItem('token', token)
                     this.props.dispatch(setUser(token))
                     this.setState(() => ({
@@ -134,14 +139,26 @@ class SignIn extends React.Component {
                         redirectList: true
 
                     }))
+                }
                 })
                 .catch((err) => {
-                    console.log(err)
+                   // console.log(err)
+                    this.setState({ loginFail : true})
                 })
 
         }
 
 
+    }
+
+    handleShowPassword=(e)=>{
+         if(e.target.checked){
+             this.setState({ passwordType : "text",loginFail:false})
+         }else
+             {
+                this.setState({ passwordType : "password",loginFail:false})
+                            
+             }
     }
 
     render() {
@@ -152,7 +169,7 @@ class SignIn extends React.Component {
 
         return (
             <main className={classes.main}>
-                
+                <CustomizedSnackbars status={this.state.loginFail}/>
                 <Paper className={classes.paper}>
                     <Avatar className={classes.avatar}>
                         <LockOutlinedIcon />
@@ -169,12 +186,12 @@ class SignIn extends React.Component {
 
                         <FormControl margin="dense" fullWidth>
                             <InputLabel htmlFor="password">Password</InputLabel>
-                            <Input name="password" type="password" id="password"  value={this.state.password} onChange={this.handleChange} />
+                            <Input name="password" type={this.state.passwordType} id="password" value={this.state.password} onChange={this.handleChange} />
                             <FormLabel className={classes.formlabel} margin="normal" error={true} >{this.state.passwordError}</FormLabel>
                         </FormControl>
                         <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
+                            control={<Checkbox value="remember" color="primary" onClick={this.handleShowPassword}/>}
+                            label="Show Password"
                         />
                         <Button
                             type="submit"
@@ -188,6 +205,7 @@ class SignIn extends React.Component {
           </Button>
                     </form>
                 </Paper>
+                
             </main>
         )
     }

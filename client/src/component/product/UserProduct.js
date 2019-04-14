@@ -12,8 +12,11 @@ import Lightbox from 'react-image-lightbox';
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { isEmpty } from 'lodash'
+import AlertDialog from './alert'
 import FormLabel from '@material-ui/core/FormLabel';
 
+
+import 'react-image-lightbox/style.css'
 
 const styles = theme => ({
     root: {
@@ -27,18 +30,18 @@ const styles = theme => ({
     },
     formlabelApproved: {
         fontSize: '15px',
-        color:"Green",
-        fontWeight:"bold"
+        color: "Green",
+        fontWeight: "bold"
     },
     formlabelPending: {
         fontSize: '15px',
-        color:"Blue",
-        fontWeight:"bold"
+        color: "Blue",
+        fontWeight: "bold"
     },
     formlabelRejected: {
         fontSize: '15px',
-        color:"Red",
-        fontWeight:"bold"
+        color: "Red",
+        fontWeight: "bold"
     },
     image: {
         width: 208,
@@ -52,10 +55,10 @@ const styles = theme => ({
     button: {
         margin: theme.spacing.unit,
     },
-    label : {
+    label: {
         fontSize: '15px',
-        color:"Black",
-        fontWeight:"bold"
+        color: "Black",
+        fontWeight: "bold"
     }
 });
 
@@ -63,12 +66,14 @@ class UserProduct extends React.Component {
     constructor() {
         super()
         this.state = {
+            isOpen: false,
+            photoIndex: 0,
             product: {},
             session: {},
             category: {},
             status: '',
             time: '',
-            isLoaded:false
+            isLoaded: false
         }
     }
 
@@ -83,7 +88,7 @@ class UserProduct extends React.Component {
                     status: response.data.status,
                     category: response.data.category,
                     session: response.data.session,
-                    isLoaded:true
+                    isLoaded: true
 
                 }))
             })
@@ -91,6 +96,8 @@ class UserProduct extends React.Component {
                 console.log(err)
             })
     }
+
+
     handleDelete = () => {
         if (!isEmpty(this.state.session)) {
             axios.get('http://worldclockapi.com/api/json/utc/now')
@@ -190,7 +197,7 @@ class UserProduct extends React.Component {
                         <Grid container spacing={16}>
                             <Grid item>
                                 <ButtonBase className={classes.image}>
-                                <img className={classes.img} alt="Click here" src={product.imageUrl[0]} onClick={() => this.setState({ isOpen: true })}/>
+                                    <img className={classes.img} alt="Click here" src={product.imageUrl[0]} onClick={() => this.setState({ isOpen: true })} />
                                 </ButtonBase>
                             </Grid>
                             <Grid item xs={12} sm container>
@@ -204,63 +211,71 @@ class UserProduct extends React.Component {
                                         <hr />
                                         <Typography><FormLabel className={classes.label}>Category : {category.name}</FormLabel></Typography>
                                         <Typography gutterBottom>
-                                        {product.status === "Approved" && <>
-                                        <FormLabel className={classes.label}>Status :</FormLabel> <FormLabel className={classes.formlabelApproved}>{product.status}</FormLabel>
-                                        </>}
-                                        {product.status === "Pending" && <>
-                                        <FormLabel className={classes.label}>Status :</FormLabel><FormLabel className={classes.formlabelPending}>{product.status}</FormLabel>
-                                        </>}
-                                        {product.status === "Rejected" && <>
-                                       <FormLabel className={classes.label}>Status :</FormLabel> <FormLabel className={classes.formlabelRejected}>{product.status}</FormLabel>
-                                        </>}
+                                            {product.status === "Approved" && <>
+                                                <FormLabel className={classes.label}>Status :</FormLabel> <FormLabel className={classes.formlabelApproved}>{product.status}</FormLabel>
+                                            </>}
+                                            {product.status === "Pending" && <>
+                                                <FormLabel className={classes.label}>Status :</FormLabel><FormLabel className={classes.formlabelPending}>{product.status}</FormLabel>
+                                            </>}
+                                            {product.status === "Rejected" && <>
+                                                <FormLabel className={classes.label}>Status :</FormLabel> <FormLabel className={classes.formlabelRejected}>{product.status}</FormLabel>
+                                            </>}
 
                                         </Typography>
-                                     
+
                                         {!isEmpty(this.state.session) &&
                                             <>
-                                        <Typography gutterBottom><FormLabel className={classes.label}>Date : {moment(session.date).format('DD-MM-YYYY')}</FormLabel> </Typography>
-                                        <Typography gutterBottom><FormLabel className={classes.label}>Start Time : {moment(session.startTime).format('hh:mm A')}</FormLabel></Typography>
-                                        <Typography gutterBottom><FormLabel className={classes.label}>End Time   : {moment(session.endTime).format('hh:mm A')}</FormLabel> </Typography>
+                                                <Typography gutterBottom><FormLabel className={classes.label}>Date : {moment(session.date).format('DD-MM-YYYY')}</FormLabel> </Typography>
+                                                <Typography gutterBottom><FormLabel className={classes.label}>Start Time : {moment(session.startTime).format('hh:mm A')}</FormLabel></Typography>
+                                                <Typography gutterBottom><FormLabel className={classes.label}>End Time   : {moment(session.endTime).format('hh:mm A')}</FormLabel> </Typography>
                                             </>
-                                    }
+                                        }
                                     </Grid>
                                     <Grid item>
-                                    {this.props.user.user.role !== 'admin' &&
-                    <>
-                    <Link to="/myproduct">
-                                        <Button size="small" variant="contained" color="primary" className={classes.button}>
-                                            Back
+                                        {(this.props.user.user.role !== 'admin' && product.seller._id === this.props.user.user.userId) ?
+                                            <>
+                                                <Link to="/myproduct">
+                                                    <Button size="small" variant="contained" color="primary" className={classes.button}>
+                                                        Back
                                     </Button>
-                                    </Link>
+                                                </Link>
 
-                        <Link to={`/product/edit/${product._id}`}>
-                                        <Button size="small" variant="contained" color="primary" className={classes.button}>
-                                            Edit
+                                                <Link to={`/product/edit/${product._id}`}>
+                                                    <Button size="small" variant="contained" color="primary" className={classes.button}>
+                                                        Edit
                                     </Button>
-                                    </Link>
-                        <Button size="small" variant="contained" color="primary" className={classes.button} onClick={this.handleDelete}>
-                                           Delete
+                                                </Link>
+                                                <Button size="small" variant="contained" color="primary" className={classes.button} onClick={this.handleDelete}>
+                                                    Delete
                                     </Button>
-                    </>
-                }
-                {
-                    (this.state.status === 'Approved' && this.props.user.user.role === 'user' && isEmpty(this.state.session)) && 
-                    <Link to={`/session/add/${product._id}`}>
-                    <Button size="small" variant="contained" color="primary" className={classes.button}>
-                                           Add Time Slot
+                                            </>
+                                            :
+                                            <>
+                                                <Link to="/myBids">
+                                                    <Button size="small" variant="contained" color="primary" className={classes.button}>
+                                                        Back
                                     </Button>
-                    </Link>
-                }
-                {this.props.user.user.role === 'admin' &&
-                    <>
-                        <button onClick={this.handleApprove} disabled={this.state.status === "Approved" ? true : false}>Approve</button>
-                        <button onClick={this.handleReject} disabled={this.state.status === "Rejected" ? true : false}>Reject</button>
-                    </>
-                }
+                                                </Link>
+                                            </>
+                                        }
+                                        {
+                                            (this.state.status === 'Approved' && this.props.user.user.role === 'user' && isEmpty(this.state.session)) &&
+                                            <Link to={`/session/addForm/${product._id}`}>
+                                                <Button size="small" variant="contained" color="primary" className={classes.button}>
+                                                    Add Time Slot
+                                    </Button>
+                                            </Link>
+                                        }
+                                        {this.props.user.user.role === 'admin' &&
+                                            <>
+                                                <button onClick={this.handleApprove} disabled={this.state.status === "Approved" ? true : false}>Approve</button>
+                                                <button onClick={this.handleReject} disabled={this.state.status === "Rejected" ? true : false}>Reject</button>
+                                            </>
+                                        }
                                     </Grid>
                                 </Grid>
                                 <Grid item>
-                                <Typography variant="subtitle1" color="secondary">Bid : &#8377; {product.minPrice}</Typography>
+                                    <Typography variant="subtitle1" color="secondary">Bid : &#8377; {product.minPrice}</Typography>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -285,11 +300,15 @@ class UserProduct extends React.Component {
                         }
                     />
                 )}
+            
             </div>
-        );
+        )
     }
 
+
+
 }
+
 UserProduct.propTypes = {
     classes: PropTypes.object.isRequired,
 };

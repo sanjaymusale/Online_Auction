@@ -10,7 +10,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import axios from '../axios/config';
 import FormLabel from '@material-ui/core/FormLabel';
-
+import { Link } from 'react-router-dom'
 
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
@@ -44,7 +44,8 @@ const styles = theme => ({
     },
     button: {
         marginTop: theme.spacing.unit * 3,
-        marginLeft: theme.spacing.unit,
+        marginLeft: "10%",
+        
     },
     form: {
         width: '100%', // Fix IE 11 issue.
@@ -73,16 +74,16 @@ const styles = theme => ({
         marginBottom: "10px"
     },
     input: {
-    display: 'none',
-  },
-  rightIcon: {
-    marginLeft: theme.spacing.unit,
-  },
-  formlabel: {
+        display: 'none',
+    },
+    rightIcon: {
+        marginLeft: theme.spacing.unit,
+    },
+    formlabel: {
         fontSize: '12px',
         marginTop: '5px'
     },
-    fileLabel:{
+    fileLabel: {
         fontSize: '14px',
         marginTop: '10px'
     }
@@ -107,11 +108,9 @@ class ProductForm extends React.Component {
             nameError: '',
             minPriceError: '',
             descriptionError: '',
-            fileError:'',
-            categoryError:'',
-            filterSession: [],
-            start: '',
-            date: ''
+            fileError: '',
+            categoryError: '',
+           
 
         }
     }
@@ -122,25 +121,17 @@ class ProductForm extends React.Component {
         this.setState(() => ({ [name]: value }))
 
     }
-    handleStart = (e) => {
-        const start = e.target.value
-        this.setState(() => ({ start }))
-        // console.log('latest', EndTime)
-
-    }
 
     handleSelect = (data) => {
         this.setState(() => ({ category: data }))
     }
 
     componentDidMount() {
-        Promise.all([axios.get('/category', { headers: { "x-auth": localStorage.getItem("token") } }),
-        axios.get('/sessions', { headers: { "x-auth": localStorage.getItem("token") } })])
+        axios.get('/category', { headers: { "x-auth": localStorage.getItem("token") } })
             .then((response) => {
-                console.log(response)
+               // console.log(response)
                 this.setState(() => ({
-                    categoryData: response[0].data,
-                    SessionsData: response[1].data
+                    categoryData: response.data
                 }))
             })
             .catch((err) => {
@@ -151,7 +142,7 @@ class ProductForm extends React.Component {
     fileHandle = (e) => {
 
         const file = e.target.files
-       // console.log(file)
+        // console.log(file)
         this.setState(() => ({ file }))
     }
     validate = () => {
@@ -160,8 +151,8 @@ class ProductForm extends React.Component {
             nameError: '',
             minPriceError: '',
             descriptionError: '',
-            categoryError:'',
-            fileError:''
+            categoryError: '',
+            fileError: ''
 
         }
 
@@ -189,24 +180,26 @@ class ProductForm extends React.Component {
             isError = true;
             errors.minPriceError = "Minimum Price should be 50"
         }
-        if(this.state.file.length === 0){
-             isError = true;
-            errors.fileError = "Upload Image"
-        }
-        if(this.state.file.length > 0 && this.state.file.length <= 2){
-             isError = true;
-            errors.fileError = "Upload Minimum 3 Images"
-        }
-        if(this.state.file.length > 2){
-             var re = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg)$");
-             for (const file of this.state.file) {
-                if(!re.test(file.name)){
-                    isError = true;
-            errors.fileError = "Upload Only Jpg File"
+        if (!this.props.name) {
+            if (this.state.file.length === 0) {
+                isError = true;
+                errors.fileError = "Upload Image"
+            }
+            if (this.state.file.length > 0 && this.state.file.length <= 2) {
+                isError = true;
+                errors.fileError = "Upload Minimum 3 Images"
+            }
+            if (this.state.file.length > 2) {
+                var re = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg)$");
+                for (const file of this.state.file) {
+                    if (!re.test(file.name)) {
+                        isError = true;
+                        errors.fileError = "Upload Only Jpg File"
+                    }
                 }
             }
         }
-        if(this.state.category.length === 0){
+        if (this.state.category.length === 0) {
             isError = true;
             errors.categoryError = "Select Category"
         }
@@ -233,7 +226,7 @@ class ProductForm extends React.Component {
             for (const file of this.state.file) {
                 formData.append('image', file)
             }
-            console.log(formData)
+           // console.log(formData)
             this.props.handleSubmit(formData)
             // console.log(this.state)
 
@@ -241,17 +234,17 @@ class ProductForm extends React.Component {
 
     }
 
-    
+
 
     render() {
         const { classes } = this.props;
-         let options = this.state.categoryData.map(function (category) {
+        let options = this.state.categoryData.map(function (category) {
             return { value: category._id, label: category.name };
         })
-         //console.log(this.state.file.length)
+       // console.log(this.props)
         return (
             <React.Fragment>
-                
+
 
                 <main className={classes.layout}>
                     <Paper className={classes.paper}>
@@ -259,19 +252,19 @@ class ProductForm extends React.Component {
                             Product Submission
                         </Typography>
                         <React.Fragment>
-                        <hr/>
+                            <hr />
                             <React.Fragment>
                                 <form className={classes.form}>
                                     <Grid container spacing={24} className={classes.container} alignItems="baseline" justify="center" >
                                         <Grid item xs={2} className={classes.label} >
-                                            <Typography  variant="button"  gutterBottom>Name</Typography>
+                                            <Typography variant="button" gutterBottom>Name</Typography>
                                         </Grid>
                                         <Grid item xs={7}>
                                             <TextField
                                                 id="name"
-                                                 name="name" 
-                                                 value={this.state.name} 
-                                                 onChange={this.handleChange}
+                                                name="name"
+                                                value={this.state.name}
+                                                onChange={this.handleChange}
                                                 fullWidth
                                                 autoComplete="pname"
                                             />
@@ -280,25 +273,25 @@ class ProductForm extends React.Component {
                                     </Grid>
                                     <Grid container spacing={24} className={classes.container} alignItems="center" justify="center">
                                         <Grid item xs={2} className={classes.label} >
-                                             <Typography variant="button"  gutterBottom>Description</Typography>
+                                            <Typography variant="button" gutterBottom>Description</Typography>
                                         </Grid>
                                         <Grid item xs={7}>
                                             <TextField
                                                 id="description"
-                                                 name="description" 
-                                                 value={this.state.description}
-                                                  onChange={this.handleChange}
+                                                name="description"
+                                                value={this.state.description}
+                                                onChange={this.handleChange}
                                                 fullWidth
-                                                 multiline
-                                                 rows="4"
+                                                multiline
+                                                rows="4"
                                                 autoComplete="pdescription"
                                             />
-                                             <FormLabel className={classes.formlabel} error={true}>{this.state.descriptionError}</FormLabel>
+                                            <FormLabel className={classes.formlabel} error={true}>{this.state.descriptionError}</FormLabel>
                                         </Grid>
                                     </Grid>
                                     <Grid container spacing={24} className={classes.container} alignItems="center" justify="center">
                                         <Grid item xs={2} className={classes.label} >
-                                            <Typography variant="button"  gutterBottom>Category</Typography>
+                                            <Typography variant="button" gutterBottom>Category</Typography>
                                         </Grid>
                                         <Grid item xs={7}>
                                             <Select
@@ -306,58 +299,61 @@ class ProductForm extends React.Component {
                                                 value={this.state.category}
                                                 onChange={this.handleSelect}
                                                 options={options}
-                                            /> 
-                                             <FormLabel className={classes.formlabel} error={true}>{this.state.categoryError}</FormLabel>
+                                            />
+                                            <FormLabel className={classes.formlabel} error={true}>{this.state.categoryError}</FormLabel>
                                         </Grid>
                                     </Grid>
-                                      <Grid container spacing={24} className={classes.container} alignItems="center" justify="center">
+                                    <Grid container spacing={24} className={classes.container} alignItems="center" justify="center">
                                         <Grid item xs={2} className={classes.label} >
-                                            <Typography variant="button"  gutterBottom>Bid Price</Typography>
+                                            <Typography variant="button" gutterBottom>Bid Price</Typography>
                                         </Grid>
                                         <Grid item xs={7}>
                                             <TextField
                                                 id="price"
                                                 name="minPrice"
-                                                value={this.state.minPrice} 
+                                                value={this.state.minPrice}
                                                 onChange={this.handleChange}
                                                 fullWidth
                                                 autoComplete="price"
                                                 InputProps={{
-                                                startAdornment: <InputAdornment position="start">&#8377;</InputAdornment>,
-                                            }}
+                                                    startAdornment: <InputAdornment position="start">&#8377;</InputAdornment>,
+                                                }}
                                             />
-                                             <FormLabel className={classes.formlabel} error={true}>{this.state.minPriceError}</FormLabel>
+                                            <FormLabel className={classes.formlabel} error={true}>{this.state.minPriceError}</FormLabel>
                                         </Grid>
                                     </Grid>
-                                      <Grid container spacing={24} className={classes.container} alignItems="center" justify="center">
-                                        <Grid item xs={2} className={classes.label} >
-                                           <Typography variant="button"  gutterBottom>Image</Typography>
-                                        </Grid>
-                                        <Grid item xs={7}>
-                                        <input
-                                             name="image" onChange={this.fileHandle}
-                                            className={classes.input}
-                                            id="contained-button-file"
-                                            multiple
-                                            type="file"
-                                          />
-                                                 <label htmlFor="contained-button-file">
-                                                   <Button variant="contained" component="span" className={classes.button}>
-                                                     Upload
-                                                     <CloudUploadIcon className={classes.rightIcon} />
-                                                   </Button>
-                                                  <FormLabel className={classes.fileLabel} focused={true} required={true}>Upload Upto 4 Images</FormLabel>
-                                                 </label><br/>
-                                                 <FormLabel className={classes.formlabel}error={true}>{this.state.fileError}</FormLabel>
-                                        </Grid>
-                                    </Grid>
+                                    {!this.props.name &&
+                                        <Grid container spacing={24} className={classes.container} alignItems="center" justify="center">
+                                            <Grid item xs={2} className={classes.label} >
+                                                <Typography variant="button" gutterBottom>Image</Typography>
+                                            </Grid>
 
-                                   
+                                            <Grid item xs={7}>
+                                                <input
+                                                    name="image" onChange={this.fileHandle}
+                                                    className={classes.input}
+                                                    id="contained-button-file"
+                                                    multiple
+                                                    type="file"
+                                                />
+                                                <label htmlFor="contained-button-file">
+                                                    <Button variant="contained" component="span" className={classes.button}>
+                                                        Upload
+                                                     <CloudUploadIcon className={classes.rightIcon} />
+                                                    </Button>
+                                                    <FormLabel className={classes.fileLabel} focused={true} required={true}>Upload Upto 4 Images</FormLabel>
+                                                </label><br />
+                                                <FormLabel className={classes.formlabel} error={true}>{this.state.fileError}</FormLabel>
+                                            </Grid>
+
+                                        </Grid>
+
+                                    }
                                     <Grid container spacing={0} alignItems="center" justify="center">
 
                                         <div className={classes.buttons}>
-
-                                            <Button 
+                                        <Link to='/user/dashboard'>
+                                            <Button
                                                 variant="contained"
                                                 color="primary"
                                                 onClick={this.handleBack}
@@ -365,6 +361,7 @@ class ProductForm extends React.Component {
                                                 fullWidth>
                                                 Back
                                             </Button>
+                                            </Link>
 
                                             <Button
                                                 variant="contained"
