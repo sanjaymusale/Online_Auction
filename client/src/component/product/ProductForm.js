@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -79,10 +78,7 @@ const styles = theme => ({
     rightIcon: {
         marginLeft: theme.spacing.unit,
     },
-    formlabel: {
-        fontSize: '12px',
-        marginTop: '5px'
-    },
+   
     fileLabel: {
         fontSize: '14px',
         marginTop: '10px'
@@ -194,7 +190,7 @@ class ProductForm extends React.Component {
                 for (const file of this.state.file) {
                     if (!re.test(file.name)) {
                         isError = true;
-                        errors.fileError = "Upload Only Jpg File"
+                        errors.fileError="Upload Only Jpg File"
                     }
                 }
             }

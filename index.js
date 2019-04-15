@@ -41,43 +41,16 @@ io.origins('http://localhost:3000/')
 io.on('connection', (socket) => {
     console.log('socket id', socket.id);
 
-    // socket.on('SEND_MESSAGE', function (data) {
-    //     io.emit('RECEIVE_MESSAGE', data);
-    // // })
-    // socket.on("SEND_MESSAGE", ({ room, message, user, firstName }) => {
-
-    //     io.in(room).emit("RECEIVE_MESSAGE", {
-    //         message,
-    //         user,
-    //         firstName,
-    //     });
-    // });
-
     socket.on("join_room", (data) => {
         //console.log('room', room.id)
         socket.join(data.id);
         socket.broadcast.in(data.id).emit("new_user", data.name + " has joined");
+        io.to(`${socket.id}`).emit('ADMIN_MSG', 'Admin : Welcome to Bidding');
+
         console.log('connected to room', data.id)
     });
 
-    // socket.on('SET_TIME', (data) => {
 
-    //     io.sockets.in(data.roomid).emit('UPDATED_TIME', { time: data.time })
-
-
-    // })
-
-    // socket.on('GET_TIME', (data) => {
-    //     console.log('GETTIME', data)
-    //     const otherRoom = data
-    //     socket.on('CURRENT_TIME', (data) => {
-    //         console.log('GET TIME CURRENT TIME', data)
-    //     })
-    // })
-
-    // socket.on('UPDATED_TIME', (data) => {
-    //     io.sockets.in(data.roomid).emit('UPDATED_TIME', { time: data.time })
-    // })
 
 });
 

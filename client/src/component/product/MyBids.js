@@ -1,18 +1,9 @@
 import React from 'react'
 import MaterialTable from 'material-table'
-import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import Select from 'react-select'
-import InputAdornment from '@material-ui/core/InputAdornment';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import axios from '../axios/config';
-import FormLabel from '@material-ui/core/FormLabel';
-import { Redirect } from 'react-router-dom'
 import moment from 'moment'
 import { connect } from 'react-redux'
 
@@ -83,10 +74,10 @@ class MyBids extends React.Component{
 
     render(){
         const { classes} = this.props
-        const { myBids,isLoaded } = this.state 
+        const { myBids} = this.state 
         const { person } = this.props
        // console.log('isLoaded',isLoaded)
-        const amount = myBids.participant
+       
         var amt 
         var status
         const data = myBids.map(bid=>{
@@ -114,7 +105,7 @@ class MyBids extends React.Component{
                 }
             
             })
-        console.log(data)
+       // console.log(data)
         // console.log(this.props)
         return(
              <React.Fragment>

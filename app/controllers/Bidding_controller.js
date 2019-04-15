@@ -15,14 +15,21 @@ router.get('/session/:id', (req, res) => {
         })
 })
 
-router.get('/',authenticateUser,(req,res)=>{
-    Bidding.find().populate('product').populate('participant.user').populate('session')
-    .then((data)=>{
-        res.send(data)
-    })
-    .catch((err)=>{
-        res.send(data)
-    })
+router.get('/', authenticateUser, (req, res) => {
+    Bidding.find().populate({
+        path: "product",
+        populate: {
+            path: 'sold.user',
+
+        }
+    }).populate('participant.user').populate('session')
+        .then((data) => {
+            console.log(data)
+            res.send(data)
+        })
+        .catch((err) => {
+            res.send(data)
+        })
 })
 // router.post('/session/:id', authenticateUser, (req, res) => {
 //     const id = req.params.id
@@ -58,15 +65,15 @@ router.put('/session/:id', authenticateUser, (req, res) => {
         })
 })
 
-router.get('/user',authenticateUser,(req,res)=>{
-    const id=req.user._id
-    Bidding.find({ 'participant.user' : id}).populate('session').populate('participant.user').populate('product')
-    .then((data)=>{
-        res.send(data)
-    })
-    .catch((err)=>{
-        res.send(err)
-    })
+router.get('/user', authenticateUser, (req, res) => {
+    const id = req.user._id
+    Bidding.find({ 'participant.user': id }).populate('session').populate('participant.user').populate('product')
+        .then((data) => {
+            res.send(data)
+        })
+        .catch((err) => {
+            res.send(err)
+        })
 })
 
 module.exports = {

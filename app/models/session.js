@@ -30,7 +30,7 @@ const sessionSchema = new Schema({
 
 sessionSchema.post('save', function (next) {
     const self = this
-    console.log('session post save self', self)
+   // console.log('session post save self', self)
     const data = {
         session: self._id,
         product: self.product
@@ -39,7 +39,7 @@ sessionSchema.post('save', function (next) {
     const bidding = new Bidding(data)
     bidding.save()
         .then((res) => {
-            console.log('save bidding', res)
+            //console.log('save bidding', res)
             next
         })
         .catch((err) => {

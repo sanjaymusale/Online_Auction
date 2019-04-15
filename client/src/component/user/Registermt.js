@@ -2,10 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import PermIdentity from '@material-ui/icons/PermIdentityOutlined';
@@ -17,7 +14,6 @@ import FormLabel from '@material-ui/core/FormLabel';
 import axios from '../axios/config';
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { setUser } from '../../redux/actions/users'
 
 const styles = theme => ({
     main: {
@@ -127,7 +123,7 @@ class Register extends React.Component {
             isError = true
             errors.passwordError = "Provide Password"
         }
-        if(mobile.length > 0 && mobile.length < 11){
+        if(mobile.length > 0 && mobile.length < 10){
             isError = true
             errors.mobileError = "Provide Valid Mobile Number"
         }

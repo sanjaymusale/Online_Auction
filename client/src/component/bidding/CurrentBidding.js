@@ -172,10 +172,7 @@ class CurrentBidding extends React.Component {
         }
     }
 
-    calculateHighestBid = () => {
-        const timeLeft = this.state.timeLeft
-        //if (timeLeft === )
-    }
+   
 
     saveBid = (bids) => {
         const data = {
@@ -212,7 +209,7 @@ class CurrentBidding extends React.Component {
                             socket={socket}
                             saveBid={this.saveBid}
                             user={this.state.user}
-                            socket={socket}
+                           
                         />
                         :
                         <>

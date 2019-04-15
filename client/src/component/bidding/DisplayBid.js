@@ -1,7 +1,16 @@
 import React from 'react'
+import PropTypes from 'prop-types';
+import withStyles from '@material-ui/core/styles/withStyles';
+import FormLabel from '@material-ui/core/FormLabel';
 
-export default
-    class DisplayBid extends React.Component {
+const styles = theme => ({
+    msgLabel: {
+        fontSize: 18,
+        color: "blue"
+    }
+})
+
+class DisplayBid extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -10,14 +19,15 @@ export default
     }
 
     render() {
+        const { classes } = this.props
         return (
-            <div>
+            <React.Fragment>
                 {this.props.bidHistory && this.props.bidHistory.sort(function (a, b) {
                     return b.amount - a.amount
                 }).map((bid, i) => {
 
                     if (bid.amount) {
-                        return <div key={i}>{bid.user.firstName}: {bid.amount}</div>
+                        return <><FormLabel className={classes.msgLabel} key={bid._id}>{bid.user.firstName}: &#8377; {bid.amount}</FormLabel><br/></>
                     }
                     else {
                         return
@@ -25,7 +35,13 @@ export default
 
 
                 })}
-            </div>
+            </React.Fragment>
         )
     }
 }
+
+DisplayBid.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(DisplayBid);

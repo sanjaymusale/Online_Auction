@@ -12,7 +12,6 @@ import Lightbox from 'react-image-lightbox';
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { isEmpty } from 'lodash'
-import AlertDialog from './alert'
 import FormLabel from '@material-ui/core/FormLabel';
 
 
@@ -189,7 +188,7 @@ class UserProduct extends React.Component {
     render() {
         const { classes } = this.props;
         const { isLoaded, product, photoIndex, isOpen } = this.state
-        const { category, session, seller } = this.state.product
+        const { category, session } = this.state.product
         return (
             <div className={classes.root}>
                 {isLoaded &&

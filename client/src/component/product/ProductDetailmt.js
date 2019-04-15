@@ -62,7 +62,7 @@ class ProductDetail extends React.Component {
     render() {
         const { classes } = this.props;
         const { isLoaded, product, photoIndex, isOpen } = this.state
-        const { category, session, seller } = this.state.product
+        const { session, seller } = this.state.product
         return (
             <div className={classes.root}>
                 {isLoaded &&

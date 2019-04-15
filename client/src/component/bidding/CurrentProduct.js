@@ -1,12 +1,79 @@
-import React from 'react'
-import axios from '../axios/config'
-import moment from 'moment'
-import { Link } from 'react-router-dom'
-import { isEmpty } from 'lodash'
+import React from 'react';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
-export default
-    class CurrentProduct extends React.Component {
-    constructor() {
+import Button from '@material-ui/core/Button';
+
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import { withStyles } from '@material-ui/core/styles';
+import axios from '../axios/config'
+import { Link } from 'react-router-dom'
+import moment from 'moment'
+import { isEmpty } from 'lodash'
+import CircularSpinner from '../Progress/CircularSpinner'
+import AlertDialog from '../product/alert'
+
+const styles = theme => ({
+
+    heroContent: {
+        maxWidth: 600,
+        margin: '0 auto',
+        padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 6}px`,
+    },
+    heroButtons: {
+        marginTop: theme.spacing.unit * 4,
+    },
+    layout: {
+        width: 'auto',
+        marginLeft: theme.spacing.unit * 3,
+        marginRight: theme.spacing.unit * 3,
+        [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
+            width: 1100,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+    },
+    cardGrid: {
+        padding: `${theme.spacing.unit * 8}px 0`,
+    },
+    card: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    cardMedia: {
+        paddingTop: '56.25%', // 16:9
+
+        height: "40px",
+
+        width: "100%"
+
+    },
+    cardContent: {
+        flexGrow: 1,
+    },
+    footer: {
+        backgroundColor: theme.palette.background.paper,
+        padding: theme.spacing.unit * 6,
+    },
+    paper: {
+        padding: theme.spacing.unit * 2,
+        textAlign: 'center',
+
+    },
+    searchBar: {
+        marginTop: '20px'
+    }
+});
+
+
+class CurrentProduct extends React.Component {
+      constructor() {
         super()
         this.state = {
             products: [],
@@ -20,24 +87,10 @@ export default
 
     currentBid = () => {
         const { currentDateTime } = this.state.time
-        //console.log('current', currentDateTime)
-
+        
         const currentDate = moment(currentDateTime, 'DD-MM-YYYY')
         const currentTime = moment(currentDateTime)
 
-        // console.log('currentDate', currentDate, 'currentTime', currentTime)
-
-        // const biddingStartDate = moment(date, 'DD-MM-YYYY')
-        // const biddingStartTime = moment(startTime)
-        // const biddingEndTime = moment(endTime)
-        //console.log(biddingStartDate, biddingStartTime, biddingEndTime)
-
-        // const datestatus = currentDate.isSame(biddingStartDate)
-        // const timestatus = currentTime.isBetween(biddingStartTime, biddingEndTime)
-        //console.log('time', time)
-        //console.log('date', date)
-        // console.log(currentDaySessions)
-        //console.log(Product)
         const BiddingProducts = this.state.products.filter(product => {
             if (!isEmpty(product.session)) {
                 return (moment(product.session.date, 'DD-MM-YYYY').isSame(currentDate)
@@ -46,7 +99,7 @@ export default
             }
         })
 
-        console.log(BiddingProducts)
+        //console.log(BiddingProducts)
 
         this.setState(() => ({ currentProducts: BiddingProducts }))
     }
@@ -71,35 +124,80 @@ export default
                 console.log(err)
             })
     }
+   
     render() {
-        const { currentProduct } = this.state
-        //console.log(this.state)
+        const { classes } = this.props;
+         const { currentProducts } = this.state
 
         return (
-            <div>
-                {this.state.isLoaded &&
-                    <div>
-                        {this.state.currentProducts.length === 0 ? 'No Product For Bidding at current Time' :
-                            <>
-                                {this.state.currentProducts.map(product => {
-                                    return (
-                                        <div key={product._id}>
-                                            Name : {product.name}<br />
-                                            Min Price : {product.minPrice}<br />
-                                            Date  : {moment(product.session.date).format('DD-MM-YYYY') + ', Start Time :' + moment(product.session.startTime).format('h:mm a') + ', End Time : ' +
-                                                moment(product.session.endTime).format('h:mm a')
-                                            }<br />
-                                            <Link to={`/biddingroom/${product.session._id}`} className="btn btn-primary">Enter Bidding Room</Link><br />
-                                        </div>
-                                    )
-                                })}
 
-                            </>
+            <React.Fragment>
 
-                        }
+                <main>
+                     {!this.state.isLoaded ? <CircularSpinner /> :
+                    <div className={classNames(classes.layout, classes.cardGrid)}>
+                       {this.state.currentProducts.length === 0 ? 
+
+                       <AlertDialog status={true} title="Currently No Product is Available For Bidding" history={this.props.history} url={`/user/dashboard`} />
+
+                        :
+                        <Grid container spacing={40}>
+                            {currentProducts.map(product => (
+                                <Grid item key={product._id} sm={6} md={4} lg={3}>
+                                    <Card className={classes.card}>
+                                        <CardMedia
+                                            className={classes.cardMedia}
+                                            image={product.imageUrl[0]} // eslint-disable-line max-len
+                                            title={product.name}
+
+                                        />
+                                        <CardContent className={classes.cardContent}>
+                                            <Typography gutterBottom variant="h5" component="h2">
+                                                {product.name}
+                                            </Typography>
+                                            <Typography>
+                                                 Min Price : {product.minPrice}
+                                            </Typography>
+                                            <Typography>
+                                                Date  : {moment(product.session.date).format('DD-MM-YYYY')}
+                                            </Typography>
+                                             <Typography>
+                                               Start Time : {moment(product.session.startTime).format('h:mm a')} 
+                                            </Typography>
+                                            <Typography>
+                                               End Time : {moment(product.session.endTime).format('h:mm a')} 
+                                            </Typography>
+                                        </CardContent>
+                                        <CardActions>
+                                            <Link to={`/biddingrooms/${product.session._id}`} target="_blank">
+                                                <Button size="small" color="primary" variant="contained">
+                                                   Enter Bidding Room
+                                            </Button>
+                                            </Link>
+                                            <Link to={`/productmt/${product._id}`}>
+                                                <Button size="small" color="primary" variant="contained">
+                                                   Details
+                                            </Button>
+                                            </Link>
+
+                                        </CardActions>
+                                    </Card>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    }
                     </div>
                 }
-            </div >
-        )
+                </main>
+                {/* Footer */}
+               
+                {/* End footer */}
+            </React.Fragment>
+        );
     }
 }
+CurrentProduct.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(CurrentProduct);

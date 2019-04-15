@@ -8,7 +8,7 @@ import './App.css';
 // import Register from './component/user/Register'
 import Register from './component/user/Registermt'
 // import Login from './component/user/Login'
-import HomePage from './component/user/HomePage'
+// import HomePage from './component/user/HomePage'
 // import Dashboard from './component/user/Dashboard'
 import LogOut from './component/user/LogOut'
 
@@ -24,7 +24,7 @@ import EditCategory from './component/category/CategoryEdit'
 import ProductDetail from './component/product/ProductDetail';
 import UserProduct from './component/product/UserProduct'
 import SignIn from './component/user/SignIn'
-import SessionForm from './component/session/SessionForm'
+// import SessionForm from './component/session/SessionForm'
 
 import SessionAdd from './component/session/SessionAdd';
 
@@ -32,6 +32,7 @@ import SessionEdit from './component/session/SessionEdit'
 
 import MyProduct from './component/product/MyProduct';
 import CurrentProduct from './component/bidding/CurrentProduct';
+import CurrentBiddings from './component/bidding/CurrentBiddingmt';
 import NavBar from './component/dashboard/NavBar';
 import CurrentBidding from './component/bidding/CurrentBidding';
 
@@ -85,6 +86,7 @@ class App extends React.Component {
             <Route exact path="/category/edit/:id" component={EditCategory} />
 
             <Route exact path="/currentBid" component={CurrentProduct} />
+            <Route exact path="/biddingrooms/:id" component={CurrentBiddings} />
             <Route exact path='/biddingroom/:id' component={CurrentBidding} />
 
 

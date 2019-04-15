@@ -1,10 +1,31 @@
 import React from 'react'
 import validator from 'validator'
-import CountDown from './ProgressBarTimer'
-import { isEmpty } from 'lodash'
+// import CountDown from './ProgressBarTimer'
+// import { isEmpty } from 'lodash'
+import PropTypes from 'prop-types';
+import withStyles from '@material-ui/core/styles/withStyles';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import FormLabel from '@material-ui/core/FormLabel';
 
-export default
-    class BidInput extends React.Component {
+const styles = theme => ({
+    button: {
+        marginTop: 10,
+
+    },
+    errorLabel: {
+        marginTop: 15,
+        color: "red",
+        fontSize: 14
+    },
+    titleLabel: {
+        marginBottom: 50,
+        color: "blue",
+        fontSize: 18
+    }
+})
+
+class BidInput extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -53,6 +74,8 @@ export default
         const errors = {
             bidPriceEmpty: '',
         }
+        const price = this.minPriceCheck()
+
         if (this.state.bidPrice.length === 0) {
             isError = true;
             errors.bidPriceEmpty = "Insert Your Bid";
@@ -65,7 +88,10 @@ export default
         //     isError = true;
         //     errors.bidPriceEmpty = "Enter Only Integer Number";
         // }
-
+        if (this.state.bidPrice.length && price) {
+            isError = true;
+            errors.bidPriceEmpty = "Bid Should Be More Then Minimum Price";
+        }
 
         this.setState({
             ...this.state,
@@ -75,19 +101,6 @@ export default
     }
 
     componentWillReceiveProps(nextProp) {
-
-        // const time = nextProp.time
-        // //console.log('will receive prop time', time)
-        // this.setState({ time: time }, () => {
-        //     if (time > 0) {
-        //         //console.log('after bid input setstate', this.state.time)
-        //         setTimeout(() => {
-        //             nextProp.socket.emit('UPDATED_TIME', { roomid: nextProp.roomid, time: time })
-        //             //nextProp.socket.emit('CURRENT_TIME', { roomid: nextProp.roomid, time: time })
-        //         }, 5000);
-        //     }
-        // })
-
         const winner = nextProp.winner
         this.setState({ winner })
 
@@ -114,6 +127,7 @@ export default
 
             //console.log('bid', updateBids)
 
+            // this.props.setHighBid(this.state.bidPrice)
             this.props.saveBid(updateBids)
             this.setState({ bidPrice: '', buttonDisable: false, bidPriceEmpty: '' })
         }
@@ -122,23 +136,37 @@ export default
 
     render() {
         // console.log('bid input props', this.props)
+        const { classes } = this.props
         return (
-            <>
-                <h2>bidding Room</h2>
+            <React.Fragment>
+                <FormLabel className={classes.titleLabel}>Place Your Bid</FormLabel>
 
                 {/* <CountDown time={this.state.time} /> */}
 
-                <form onSubmit={this.handleSubmit}>
-                    <input type="text" value={this.state.bidPrice} onChange={this.BidChange} />
+                <form>
+                    <TextField
+                        id="bid"
+                        name="bid"
+                        value={this.state.bidPrice}
+                        onChange={this.BidChange}
+                        autoFocus
+                    /><br />
 
-                    <button disabled={this.state.buttonDisable} >BID</button><br />
-                    <p>{this.state.bidPriceError && 'Bid Amount Should be greater'}{this.state.bidPriceEmpty}</p>
+
+                    <Button onClick={this.handleSubmit} className={classes.button} variant="contained" color="primary" disabled={this.state.buttonDisable} >BID</Button><br />
+                    <FormLabel className={classes.errorLabel}>{this.state.bidPriceError && 'Bid Amount Should be greater'}{this.state.bidPriceEmpty}</FormLabel>
 
                 </form>
 
 
-            </>
+            </React.Fragment>
         )
     }
 
 }
+
+BidInput.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(BidInput);

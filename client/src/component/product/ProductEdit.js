@@ -1,7 +1,6 @@
 import React from 'react'
 import axios from '../axios/config'
 import ProductForm from './ProductForm';
-import { Link } from 'react-router-dom'
 
 class ProductEdit extends React.Component {
     constructor() {

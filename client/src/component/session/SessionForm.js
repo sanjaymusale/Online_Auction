@@ -1,21 +1,17 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DateFnsUtils from "@date-io/date-fns"; // choose your lib
 import moment from 'moment'
-import { Redirect } from 'react-router-dom'
  
 import {
     DatePicker,
     TimePicker,
     MuiPickersUtilsProvider,
 } from "material-ui-pickers";
-import axios from "../axios/config";
 
 export default class FormDialog extends React.Component {
   constructor(props){
@@ -42,7 +38,7 @@ export default class FormDialog extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault()
-        var end = moment(this.state.selectedTime).add(2, 'minutes').toISOString()
+        var end = moment(this.state.selectedTime).add(60, 'minutes').toISOString()
         const data = {
             date: this.state.selectedDate,
             startTime: this.state.selectedTime,
