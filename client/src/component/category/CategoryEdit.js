@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from '../axios/config';
 import { Link } from 'react-router-dom'
-import FormCategory from './CategoryForm'
+import FormCategory from './CategoryFormmt'
 
 
 
@@ -63,12 +63,11 @@ class EditCategory extends React.Component {
 
         return (
             <div>
-                <h2>edit</h2>
+                
                 {this.state.isLoaded &&
-                    <FormCategory name={this.state.category.name} handleSubmit={this.handleSubmit} />}
+                    <FormCategory name={this.state.category.name} handleSubmit={this.handleSubmit} title="Edit Category"/>}
                 <br />
-                <button onClick={this.handleDelete}>Delete</button>
-                <Link to="/category">back</Link>
+
 
 
             </div>

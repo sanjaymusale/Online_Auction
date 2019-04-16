@@ -13,7 +13,12 @@ const styles = theme => ({
         marginLeft: theme.spacing.unit * 2,
         marginRight: theme.spacing.unit * 2,
         [theme.breakpoints.up(600 + theme.spacing.unit * 2 * 2)]: {
-            width: 900,
+            width: "80%",
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+        [theme.breakpoints.down(600 + theme.spacing.unit * 2 * 2)]: {
+            width: "80%",
             marginLeft: 'auto',
             marginRight: 'auto',
         },
@@ -24,6 +29,12 @@ const styles = theme => ({
         padding: theme.spacing.unit * 2,
         background: "#000066",
         [theme.breakpoints.up(600 + theme.spacing.unit * 3 * 2)]: {
+
+            marginTop: theme.spacing.unit * 6,
+            marginBottom: theme.spacing.unit * 6,
+            padding: theme.spacing.unit * 0.5,
+        },
+        [theme.breakpoints.down(600 + theme.spacing.unit * 3 * 2)]: {
 
             marginTop: theme.spacing.unit * 6,
             marginBottom: theme.spacing.unit * 6,
