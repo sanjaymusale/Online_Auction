@@ -23,11 +23,11 @@ class AlertDialog extends React.Component {
   handleClose = () => {
     this.setState({ open: false });
     this.props.history.push(this.state.url)
-    console.log('close',this.state)
+  // console.log('close',this.state)
   }
 
   componentWillReceiveProps(next) {
-    console.log('next', next)
+   // console.log('next', next)
     const status = next.status
     this.setState({ open: status, url: next.url })
   }

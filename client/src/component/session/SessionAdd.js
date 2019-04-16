@@ -45,7 +45,7 @@ class SessionAdd extends React.Component{
                 console.log(response.data)
                 axios.put(`/products/${id}`, data, { headers: { "x-auth": localStorage.getItem("token") } })
                     .then((response) => {
-                        console.log(response)
+                       // console.log(response)
                         this.props.history.push(`/userProduct/${id}`)
 
                     })
@@ -59,7 +59,7 @@ class SessionAdd extends React.Component{
             })
     }
     render(){
-        console.log('add',this.state)
+       // console.log('add',this.state)
         const {currentTime,selectedDate,selectedTime,open,id} = this.state
         return (
         <>

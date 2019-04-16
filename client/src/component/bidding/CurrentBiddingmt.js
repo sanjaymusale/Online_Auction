@@ -29,7 +29,7 @@ const styles = theme => ({
         marginLeft: theme.spacing.unit * 2,
         marginRight: theme.spacing.unit * 2,
         [theme.breakpoints.up(600 + theme.spacing.unit * 2 * 2)]: {
-            width: 1200,
+            width: 600,
             marginLeft: 'auto',
             marginRight: 'auto',
         },
@@ -127,6 +127,7 @@ class MyProduct extends React.Component {
         //handle to listen updateBid from server socket
         socket.on('updateBid', function (bidObj) {
             //console.log('socket updatebid', bidObj)
+            
             const max = bidObj.reduce((prev, current) => (prev.amount > current.amount) ? prev : current)
             //console.log(max)
             self.setState({ bidHistory: bidObj, highBidUser: max.user.firstName, highBidAmt: max.amount });
@@ -215,7 +216,8 @@ class MyProduct extends React.Component {
             .then((response) => {
                 console.log('get user', response.data)
                 if (response.data.participant) {
-                    if (response.data.participant.length >= 1) {
+                    if (response.data.participant.length > 1) {
+                        console.log('insode get')
                         const high = response.data.participant.reduce((prev, current) => (prev.amount > current.amount) ? prev : current)
                         this.setState({
                             bidHistory: response.data.participant, fullData: response.data,
@@ -227,7 +229,7 @@ class MyProduct extends React.Component {
                     }
                     else {
                         this.setState({
-                            bidHistory: response.data.participant, fullData: response.data
+                            bidHistory: response.data.participant, fullData: response.data, highBidUser:"--------"
                         })
                         this.setUser(response.data.participant)
                     }
@@ -300,18 +302,18 @@ class MyProduct extends React.Component {
                     {this.state.isLoaded &&
                         <>
                             <Paper className={classes.paper}>
-                                <Grid container spacing={8}>
-                                    <Grid item xs={4}>
+                                <Grid container wrap="nowrap" spacing={8}>
+                                    <Grid item xs={4} sm={4}>
                                         <Paper className={classes.titlepaper}>
                                             <FormLabel className={classes.titleLabel} >{this.state.fullData.product.name.toUpperCase()}</FormLabel>
                                         </Paper>
                                     </Grid>
-                                    <Grid item xs={4}>
+                                    <Grid item xs={4} sm={4}sss>
                                         <Paper className={classes.titlepaper}>
                                             <EndTime fullData={this.state.fullData} timeLeft={this.timeLeft} />
                                         </Paper>
                                     </Grid>
-                                    <Grid item xs={4}>
+                                    <Grid item xs={4} sm={4}>
                                         <Paper className={classes.titlepaper}>
                                             <FormLabel className={classes.titleLabel} >
 

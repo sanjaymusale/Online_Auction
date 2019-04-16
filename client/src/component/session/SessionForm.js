@@ -38,7 +38,7 @@ export default class FormDialog extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault()
-        var end = moment(this.state.selectedTime).add(60, 'minutes').toISOString()
+        var end = moment(this.state.selectedTime).add(5, 'minutes').toISOString()
         const data = {
             date: this.state.selectedDate,
             startTime: this.state.selectedTime,
@@ -57,12 +57,12 @@ export default class FormDialog extends React.Component {
      this.props.history.push(`/userProduct/${this.props.id}`)
   };
 componentWillReceiveProps(next){
-  console.log('receive',next)
+  //console.log('receive',next)
     const status = next.open
     this.setState({ open:status})
   }
   render() {
-    console.log('sessionForm',this.state)
+    //console.log('sessionForm',this.state)
     return (
       <div>
         <Dialog

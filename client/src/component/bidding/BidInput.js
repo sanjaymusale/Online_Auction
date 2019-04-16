@@ -9,19 +9,9 @@ import TextField from '@material-ui/core/TextField';
 import FormLabel from '@material-ui/core/FormLabel';
 
 const styles = theme => ({
-    button: {
-        marginTop: 10,
+    button:{
+        marginTop:10,
 
-    },
-    errorLabel: {
-        marginTop: 15,
-        color: "red",
-        fontSize: 14
-    },
-    titleLabel: {
-        marginBottom: 50,
-        color: "blue",
-        fontSize: 18
     }
 })
 
@@ -66,7 +56,7 @@ class BidInput extends React.Component {
     highestBid = () => {
 
         const max = this.props.bidHistory.reduce((prev, current) => (prev.amount > current.amount) ? prev : current)
-        return max
+         return max
     }
 
     validate = () => {
@@ -74,8 +64,6 @@ class BidInput extends React.Component {
         const errors = {
             bidPriceEmpty: '',
         }
-        const price = this.minPriceCheck()
-
         if (this.state.bidPrice.length === 0) {
             isError = true;
             errors.bidPriceEmpty = "Insert Your Bid";
@@ -88,10 +76,7 @@ class BidInput extends React.Component {
         //     isError = true;
         //     errors.bidPriceEmpty = "Enter Only Integer Number";
         // }
-        if (this.state.bidPrice.length && price) {
-            isError = true;
-            errors.bidPriceEmpty = "Bid Should Be More Then Minimum Price";
-        }
+
 
         this.setState({
             ...this.state,
@@ -127,7 +112,7 @@ class BidInput extends React.Component {
 
             //console.log('bid', updateBids)
 
-            // this.props.setHighBid(this.state.bidPrice)
+
             this.props.saveBid(updateBids)
             this.setState({ bidPrice: '', buttonDisable: false, bidPriceEmpty: '' })
         }
@@ -139,22 +124,22 @@ class BidInput extends React.Component {
         const { classes } = this.props
         return (
             <React.Fragment>
-                <FormLabel className={classes.titleLabel}>Place Your Bid</FormLabel>
+                <FormLabel>Place Your Bid</FormLabel>
 
                 {/* <CountDown time={this.state.time} /> */}
 
                 <form>
-                    <TextField
-                        id="bid"
-                        name="bid"
-                        value={this.state.bidPrice}
-                        onChange={this.BidChange}
-                        autoFocus
-                    /><br />
+                 <TextField
+                    id="bid"
+                    name="bid"
+                    value={this.state.bidPrice}
+                    onChange={this.BidChange}
+                    autoFocus
+                /><br/>
 
 
                     <Button onClick={this.handleSubmit} className={classes.button} variant="contained" color="primary" disabled={this.state.buttonDisable} >BID</Button><br />
-                    <FormLabel className={classes.errorLabel}>{this.state.bidPriceError && 'Bid Amount Should be greater'}{this.state.bidPriceEmpty}</FormLabel>
+                    <p>{this.state.bidPriceError && 'Bid Amount Should be greater'}{this.state.bidPriceEmpty}</p>
 
                 </form>
 
