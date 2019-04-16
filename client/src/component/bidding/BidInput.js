@@ -61,6 +61,7 @@ class BidInput extends React.Component {
 
     validate = () => {
         let isError = false;
+
         const errors = {
             bidPriceEmpty: '',
         }
@@ -72,10 +73,10 @@ class BidInput extends React.Component {
             isError = true;
             errors.bidPriceEmpty = "Enter Only Number";
         }
-        // if (this.state.bidPrice.length > 0 && validator.isFloat(this.state.bidPrice)) {
-        //     isError = true;
-        //     errors.bidPriceEmpty = "Enter Only Integer Number";
-        // }
+        if (this.state.bidPrice.length > 0 && (this.minPriceCheck())) {
+            isError = true;
+            errors.bidPriceEmpty = "Bid Should Be more than Min price";
+        }
 
 
         this.setState({

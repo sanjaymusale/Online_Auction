@@ -17,7 +17,7 @@ import ProductNew from './component/product/ProductNew'
 import ProductEdit from './component/product/ProductEdit'
 import ProductShow from './component/product/ProductShow';
 
-import ShowCategory from './component/category/CategoryShow'
+import ShowCategory from './component/category/CategoryShowmt'
 import AddCategory from './component/category/CategoryAdd'
 // import AddCategory from './component/category/CategoryForm'
 import EditCategory from './component/category/CategoryEdit'

@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from '../axios/config';
-import FormCategory from './CategoryForm'
+import FormCategory from './CategoryFormmt'
 import { Link } from 'react-router-dom'
 
 
@@ -23,7 +23,7 @@ class AddCategory extends React.Component {
         return (
             <div>
                 {/* <h2>add</h2> */}
-                <FormCategory handleSubmit={this.handleSubmit} />
+                <FormCategory handleSubmit={this.handleSubmit} title="Add New Category" />
                 <Link to="/category">back</Link>
 
             </div>
