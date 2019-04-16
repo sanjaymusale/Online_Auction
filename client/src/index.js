@@ -7,9 +7,9 @@ import App from './App';
 
 const store = configureStore()
 
-store.subscribe(() => {
-    console.log('state', store.getState())
-})
+// store.subscribe(() => {
+//     console.log('state', store.getState())
+// })
 
 const ele = (
     <Provider store={store}>

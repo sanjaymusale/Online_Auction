@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  background-color: gray
+  background-color: rgb(134, 18, 18)
 }
 
 .App-logo {
@@ -34,7 +34,8 @@
 }
 
 body {
-  background: #f3f3f3(151, 153, 15)
+  background-color:#ccccff
+  /* background: #051138(151, 153, 15) */
 }
 
 img {

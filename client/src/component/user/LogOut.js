@@ -15,7 +15,7 @@ class LogOut extends React.Component {
         //console.log('compon logout')
         axios.delete('/users/logout', { headers: { 'x-auth': localStorage.getItem('token') } })
             .then((response) => {
-                console.log(response)
+               // console.log(response)
                 this.props.dispatch(removeUser({}))
                 localStorage.removeItem('token')
 

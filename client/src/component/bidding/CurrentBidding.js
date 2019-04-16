@@ -1,7 +1,10 @@
 import React from 'react'
-import jwtDecode from 'jwt-decode'
 import { connect } from 'react-redux'
 import axios from '../axios/config';
+import BidInput from './BidInput';
+import EndTime from './EndTime';
+import DisplayBid from './DisplayBid';
+//import { isEmpty } from 'lodash'
 
 // import io from 'socket.io-client'
 
@@ -18,52 +21,22 @@ class CurrentBidding extends React.Component {
             roomid: this.props.match.params.id,
             user: props.person.user.userId,
             name: props.person.user.firstName,
-            message: '',
-            messages: [],
+            bidHistory: [],
+            isLoaded: false,
             joinedUsers: [],
-            isLoaded: false
+            fullData: {},
+            time: 100,
+            timeLeft: '00:00:00',
+            winner: {},
+            Declaredwinner: false,
+            noWinner: false
+
         };
 
-        // console.log(this.state)
-        const roomid = this.props.match.params.id
-        // this.socket = io(SocketURL);
         socket.on('connect', () => {
             console.log('connected react')
         })
 
-        socket.emit('join_room', { id: roomid })
-
-        //     socket.on('RECEIVE_MESSAGE', function (data) {
-        //         console.log('receive msg', data)
-        //         addMessage(data);
-
-        //     });
-
-        //     socket.on('SEND_MESSAGE', function (data) {
-        //         console.log('send mess', data)
-        //         addMessage(data);
-        //     });
-
-        //     const addMessage = data => {
-        //         console.log(data);
-        //         this.setState({ messages: [...this.state.messages, data] });
-        //         console.log(this.state.messages);
-        //     };
-
-
-        // }
-
-        // sendMessage = (ev) => {
-        //     ev.preventDefault();
-        //     const roomid = this.props.match.params.id
-        //     socket.emit('SEND_MESSAGE', {
-        //         room: roomid,
-        //         user: this.state.user,
-        //         firstName: this.state.name,
-        //         message: this.state.message
-        //     })
-
-        //     this.setState({ message: '' });
 
     }
     componentDidMount() {
@@ -71,22 +44,86 @@ class CurrentBidding extends React.Component {
 
         var self = this;
         //handle to listen updateBid from server socket
-        // socket.on('updateBid', function (bidObj) {
-        //     self.setState({ bidHistory: bidObj });
+        socket.on('updateBid', function (bidObj) {
+            //console.log('socket updatebid', bidObj)
+            self.setState({ bidHistory: bidObj });
 
-        // });
-        // //Emits 'getTime' to server socket
-        // socket.emit('getTime', 'test');
-        // //handle to listen 'remaining time' from server socket
-        // socket.on('remainingTime', function (timeFromServer) {
-        //     self.setState({ timeRemain: timeFromServer });
-        // });
+        });
+
+        socket.on("new_user", function (data) {
+            // console.log('usr joine', data)
+
+            self.setState((prevState) => ({
+                joinedUsers: [].concat(prevState.joinedUsers).concat(data)
+            }))
+        });
+
+
     }
+    timeLeft = (data) => {
+        const timeLeft = data
+        this.setState({ timeLeft })
+        if (timeLeft === '00:00:00') {
+            const { bidHistory } = this.state
+            if (bidHistory.length !== 0) {
+                this.filterBidhistory(this.state.bidHistory)
+
+            }
+        }
+    }
+
+    filterBidhistory = (bidHistory) => {
+        const filteredUsers = bidHistory.filter(user => {
+            return user.hasOwnProperty('amount')
+        })
+        console.log('filtered users', filteredUsers)
+        const highBid = filteredUsers.sort(function (a, b) {
+            return b.amount - a.amount
+        })
+        console.log('high bid', highBid)
+
+        if (highBid.length > 0) {
+            const winner = highBid[0]
+            this.setState({ winner, Declaredwinner: true })
+            const Data = [{
+                user: winner.user._id,
+                amount: winner.amount
+            }]
+            const winnerData = {
+                sold: Data
+            }
+
+            const { _id } = this.state.fullData.product
+            axios.put(`/products/${_id}`, winnerData, { headers: { 'x-auth': localStorage.getItem('token') } })
+                .then((res) => {
+                    console.log(res.data)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+        else {
+            this.setState({ noWinner: true, Declaredwinner: true })
+        }
+    }
+    getTime = () => {
+        console.log('inside getTime function')
+        socket.on('CURRENT_TIME', (data) => {
+            console.log('inside socket currentTime')
+            const time = --data.time
+            //console.log('before set state', time)
+            this.setState({ time: time })
+        })
+    }
+
+
     getUsers = () => {
         axios.get(`/bidding/session/${this.state.roomid}`)
             .then((response) => {
-                console.log('set user', response.data)
+                console.log('get user', response.data)
+                if (response.data.participant)
 
+                    this.setState({ bidHistory: response.data.participant, fullData: response.data })
                 this.setUser(response.data.participant)
             })
             .catch((err) => {
@@ -97,38 +134,94 @@ class CurrentBidding extends React.Component {
     setUser = (data) => {
         // Get the bidhistory and store them in state
         var currentUserID = this.props.person.user.userId
-
-        const uniqueUser = data.some(p => p.user === currentUserID)
-        //console.log('unique', uniqueUser)
+        const self = this
+        //console.log('set user first', data)
+        const uniqueUser = data.some(p => p.user._id === currentUserID)
+        // console.log('unique', uniqueUser)
         if (!uniqueUser) {
-            const participant = { user: currentUserID }
-            //console.log('inside if unique', participant)
-            axios.post(`/bidding/session/${this.state.roomid}`, participant, { headers: { 'x-auth': localStorage.getItem('token') } })
+            const user = { user: currentUserID }
+            const update = [].concat(this.state.bidHistory).concat(user)
+            const data = {
+                participant: update
+            }
+            //console.log('inside if unique', data)
+
+            axios.put(`/bidding/session/${self.state.roomid}`, data, { headers: { 'x-auth': localStorage.getItem('token') } })
                 .then((response) => {
-                    //console.log('set user', response.data)
-                    this.setState({ joinedUsers: response.data.participant })
+                    // console.log('set user response', response.data)
+                    self.setState({ bidHistory: response.data.participant, fullData: response.data, isLoaded: true })
+                    socket.emit('join_room', { id: self.state.roomid, name: self.state.name })
+                    // if (response.data.participant.length === 1) {
+                    //     socket.emit('SET_TIME', { roomid: self.state.roomid, time: self.state.time })
+                    // } else {
+                    //     // socket.on('CURRENT_TIME', (data) => {
+                    //     //     this.setState({ time: data.time })
+                    //     // })
+                    //     this.getTime()
+                    // }
                 })
                 .catch((err) => {
-                    console.log('getHistoryerror', err)
-
+                    console.log('get historyerror', err)
+                    // window.location.reload()
                 })
+        } else {
+            socket.emit('join_room', { id: self.state.roomid, name: self.state.name })
+            // socket.emit('GET_TIME', { roomid: self.state.roomid })
+            // socket.emit('SET_TIME', { roomid: self.state.roomid, time: self.state.time })
+            self.setState({ isLoaded: true })
         }
     }
+
+   
+
+    saveBid = (bids) => {
+        const data = {
+            participant: bids
+        }
+        // console.log('save bid', data)
+        axios.put(`/bidding/session/${this.state.roomid}`, data, { headers: { 'x-auth': localStorage.getItem('token') } })
+            .then((response) => {
+                console.log(response)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+
+    }
     render() {
+        //console.log('current Bid', this.state)
 
         return (
-            <>{this.state.isLoaded && <>
-                <h2>bidding Room</h2>
-                <form onSubmit={this.sendMessage}>
-                    <input type="text" value={this.state.message} onChange={ev => this.setState({ message: ev.target.value })} />
-                    <button>Submit</button>
-                </form>
-                {this.state.messages.map((message, i) => {
-                    return (
-                        <div key={i}>{message.firstName}: {message.message}</div>
-                    )
-                })}
-            </>
+            <>{this.state.isLoaded &&
+                <div>
+                    <p>{this.state.fullData.product.name}</p>
+                    {this.state.joinedUsers.map((user, i) => {
+                        return <p key={i + 1}>{user}</p>
+                    })}
+                    <EndTime fullData={this.state.fullData} timeLeft={this.timeLeft} />
+                    {!this.state.Declaredwinner ?
+                        <BidInput
+                            bidHistory={this.state.bidHistory}
+                            roomid={this.state.roomid}
+                            winner={this.state.winner}
+                            fullData={this.state.fullData}
+                            time={this.state.time}
+                            socket={socket}
+                            saveBid={this.saveBid}
+                            user={this.state.user}
+                           
+                        />
+                        :
+                        <>
+                            {!this.state.noWinner ?
+                                <p>The Item Is Sold to {this.state.winner.user.firstName} At the Price of {this.state.winner.amount}</p>
+                                :
+                                <p>No Bidding Happened to This Current Product</p>
+                            }
+                        </>
+                    }
+                    <DisplayBid bidHistory={this.state.bidHistory} />
+                </div>
             }
             </>
         )

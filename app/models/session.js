@@ -28,24 +28,25 @@ const sessionSchema = new Schema({
 
 
 
-sessionSchema.post('save', async function (next) {
+sessionSchema.post('save', function (next) {
     const self = this
-    console.log('self', self)
+   // console.log('session post save self', self)
     const data = {
         session: self._id,
         product: self.product
     }
-    console.log('post save bidding', data)
+    console.log('post save session', data)
     const bidding = new Bidding(data)
     bidding.save()
         .then((res) => {
-            console.log('post save bidding', res)
-            next()
+            //console.log('save bidding', res)
+            next
         })
         .catch((err) => {
             console.log(err)
-            next()
+            next
         })
+
 })
 
 const Session = mongoose.model('Session', sessionSchema)

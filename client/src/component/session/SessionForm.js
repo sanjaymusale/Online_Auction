@@ -1,124 +1,97 @@
-import React from 'react'
-import { time } from './Time'
-import axios from '../axios/config';
-// const end = [].concat(time)
-import { Button, Form, Label, Input } from 'reactstrap'
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DateFnsUtils from "@date-io/date-fns"; // choose your lib
+import moment from 'moment'
+ 
+import {
+    DatePicker,
+    TimePicker,
+    MuiPickersUtilsProvider,
+} from "material-ui-pickers";
 
-export default
-    class SessionForm extends React.Component {
-    constructor() {
-        super()
-        this.state = {
-            sessionData: [],
-            start: '',
-            time: time,
-            end: '',
-            date: '',
-            EndTime: []
-        }
+export default class FormDialog extends React.Component {
+  constructor(props){
+    super(props)
+      this.state={
+            open: props.open,
+            selectedDate: moment().toISOString(),
+            selectedTime: moment().toISOString(),
+            currentTime: '',
+            isLoaded: false,
+            id:props.id
+      }
+    
+  }
+
+    handleDateChange = (date) => {
+        const selectedDate = moment(date).toISOString()
+        this.setState({ selectedDate });
     }
-
-    componentDidMount() {
-        axios.get('/sessions', { headers: { 'x-auth': localStorage.getItem('token') } })
-            .then((response) => {
-                console.log('componentdid', response.data)
-                this.setState(() => ({ sessionData: response.data }))
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }
-
-    handleDate = (e) => {
-        const date = e.target.value
-
-        const sessionDate = this.state.sessionData.filter(session => session.date === date)
-
-        const uniqueSessions = [...new Set(sessionDate.map(item => item.startSession))];
-        console.log('unique Session', uniqueSessions)
-
-        const startTime = time.filter(t => !uniqueSessions.includes(t))
-        console.log("startTime", startTime)
-        this.setState(() => ({ date, time: startTime, end: startTime }))
-    }
-    handleStart = (e) => {
-        const start = e.target.value
-        var EndTime
-        var index = this.state.time.indexOf(start)
-        EndTime = this.state.end.filter(e => e === this.state.time[index + 1])
-        this.setState(() => ({ start, EndTime }))
-        console.log('latest', EndTime)
-
-    }
-
-
-    handleEnd = (e) => {
-        const end = e.target.value
-        console.log('end', end)
-        this.setState(() => ({ end }))
+    handleTimeChange = (time) => {
+        const selectedTime = moment(time).toISOString()
+        this.setState({ selectedTime });
     }
 
     handleSubmit = (e) => {
         e.preventDefault()
-        const formData = {
-            startSession: this.state.start,
-            endSession: this.state.end,
-            date: this.state.date
+        var end = moment(this.state.selectedTime).add(5, 'minutes').toISOString()
+        const data = {
+            date: this.state.selectedDate,
+            startTime: this.state.selectedTime,
+            endTime: end
         }
-        console.log(formData)
-        this.props.handleSubmit(formData)
-        this.setState(() => ({
-            start: '',
-            date: '',
-            end: ''
-        }))
+
+        this.props.handleSubmit(data)
     }
 
-    render() {
-        console.log('state', this.state)
-        console.log('time', this.state.time)
+  handleClickOpen = () => {
+    this.setState({ open: true });
+  };
 
-        return (
-            <div>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-5"></div>
-                        <Form onSubmit={this.handleSubmit}>
-                            <Label>
-                                Date :<br /><Input type="date" value={this.state.date} onChange={this.handleDate} />
-                            </Label><br />
-                            <Label>
-                                Start Time :<br />
-                                <select onChange={this.handleStart} value={this.state.start}>
-                                    <option value="" >Select Start Time</option>
-                                    {
-                                        this.state.time.map((t, i) => {
-                                            if (i !== time.length - 1) {
-                                                return <option key={t} value={t}>{t}</option>
-                                            }
+  handleClose = () => {
+    this.setState({ open: false });
+     this.props.history.push(`/userProduct/${this.props.id}`)
+  };
+componentWillReceiveProps(next){
+  //console.log('receive',next)
+    const status = next.open
+    this.setState({ open:status})
+  }
+  render() {
+    //console.log('sessionForm',this.state)
+    return (
+      <div>
+        <Dialog
+          open={this.state.open}
+          onClose={this.handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Add Date And Time</DialogTitle>
+          <DialogContent>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+             
 
-                                        })
-                                    }
-                                </select>
-                            </Label><br />
-                            <Label>
-                                End Time :<br />
-                                <select onChange={this.handleEnd} value={this.state.end}>
-                                    <option value="">Select End Time</option>
-                                    {
-                                        this.state.EndTime.map((t, i) => {
-                                            return <option key={t} value={t}>{t}</option>
-                                        })
-                                    }
-                                </select>
-                            </Label><br />
-                            <Button type='submit' color="primary">submit</Button>
-                            {/* <button>Submit</button> */}
-                        </Form>
-                    </div>
-                </div>
+                    {/* <DatePicker value={this.state.selectedDate} onChange={this.handleDateChange} minDate={moment(this.state.currentTime).add(1, 'd')} /> */}
 
-            </div>
-        )
-    }
+                    <DatePicker value={this.state.selectedDate} onChange={this.handleDateChange} />
+                    <TimePicker value={this.state.selectedTime} onChange={this.handleTimeChange} />
+
+                    <Button onClick={this.handleSubmit} size="small" variant="contained" color="primary" >Submit</Button>
+
+               
+            </MuiPickersUtilsProvider>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  }
 }

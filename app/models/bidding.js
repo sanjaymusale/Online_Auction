@@ -15,7 +15,6 @@ const biddingSchema = new Schema({
             amount: {
                 type: Number
             }
-
         }
     ],
     product: {
@@ -26,14 +25,15 @@ const biddingSchema = new Schema({
 
 biddingSchema.methods.addParticipant = function (data) {
     const bidding = this
-    console.log('inside add participant', this)
-    bidding.participant.push({ data })
+    //console.log('inside add participant', this)
+    bidding.participant.push(data)
 
-    return bidding.save().then((bidding) => {
-        return bidding
-    }).catch((err) => {
-        return err
-    })
+    return bidding.save()
+        .then((bidding) => {
+            return Promise.resolve(bidding)
+        }).catch((err) => {
+            return Promise.reject(err)
+        })
 
 
 }

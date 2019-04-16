@@ -25,7 +25,7 @@ const productSchema = new Schema({
 
     },
     session: {
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: 'Session'
     },
     status: {
@@ -37,6 +37,17 @@ const productSchema = new Schema({
             type: String,
             required: true
 
+        }
+    ],
+    sold: [
+        {
+            user: {
+                type: Schema.Types.ObjectId,
+                ref: 'User'
+            },
+            amount: {
+                type: Number
+            }
         }
     ]
 

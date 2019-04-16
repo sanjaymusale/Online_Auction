@@ -67,7 +67,7 @@ router.post('/', authenticateUser, upload.array('image', 3), (req, res) => {
 router.get('/:id', authenticateUser, (req, res) => {
     const _id = req.params.id
     //console.log('product get')
-    Product.findOne({ _id }).populate('category').populate('session')
+    Product.findOne({ _id }).populate('category').populate('session').populate('seller')
         .then((product) => {
             if (product) {
                 // console.log(product)

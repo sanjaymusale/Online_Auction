@@ -11,12 +11,10 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import { Input } from 'reactstrap'
+import Select from 'react-select'
 import axios from '../axios/config'
 import { Link } from 'react-router-dom'
-import moment from 'moment'
-import { isEmpty } from 'lodash'
-import CircularSpinner from '../Progress/CircularSpinner'
-import AlertDialog from '../product/alert'
 
 const styles = theme => ({
 
@@ -32,6 +30,7 @@ const styles = theme => ({
         width: 'auto',
         marginLeft: theme.spacing.unit * 3,
         marginRight: theme.spacing.unit * 3,
+        minHeight: 370,
         [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
             width: 1100,
             marginLeft: 'auto',
@@ -72,77 +71,99 @@ const styles = theme => ({
 });
 
 
-class CurrentProduct extends React.Component {
-      constructor() {
-        super()
+class UserDashboard extends React.Component {
+
+    constructor(props) {
+        super(props)
         this.state = {
-            products: [],
-            sessions: [],
-            currentProducts: [],
-            isLoaded: false,
-            time: ''
+            categoryData: [],
+            category: '',
+            product: [],
+            productData: [],
+            filterUser: []
         }
-
-    }
-
-    currentBid = () => {
-        const { currentDateTime } = this.state.time
-        
-        const currentDate = moment(currentDateTime, 'DD-MM-YYYY')
-        const currentTime = moment(currentDateTime)
-
-        const BiddingProducts = this.state.products.filter(product => {
-            if (!isEmpty(product.session)) {
-                return (moment(product.session.date, 'DD-MM-YYYY').isSame(currentDate)
-                    &&
-                    moment(currentTime).isBetween(product.session.startTime, product.session.endTime))
-            }
-        })
-
-        //console.log(BiddingProducts)
-
-        this.setState(() => ({ currentProducts: BiddingProducts }))
     }
 
 
     componentDidMount() {
-        Promise.all(
-            [
-                axios.get('/products', { headers: { 'x-auth': localStorage.getItem('token') } }),
-                axios.get('http://worldclockapi.com/api/json/utc/now')
-            ])
+        Promise.all([axios.get('/category'),
+        axios.get('/products', { headers: { 'x-auth': localStorage.getItem('token') } })])
+
             .then((response) => {
+                //const data = response.data
                 //console.log(response)
-                //console.log(response.data)
-                this.setState(() => ({
-                    products: response[0].data.filter(product => product.status === 'Approved'),
-                    time: response[1].data,
-                    isLoaded: true
-                }), () => { this.currentBid() })
+                this.setState(() => ({ categoryData: response[0].data }))
+                this.setState(() => ({ product: response[1].data, productData: response[1].data }))
             })
             .catch((err) => {
                 console.log(err)
             })
+
+
+
     }
-   
+
+    handleChange = (e) => {
+        const id = e.target.value
+        //console.log('nischal', id)
+        // this.setState(() => ({ category }))
+        console.log(this.state.product)
+
+        // const id = this.state.category
+        const result = this.state.product.filter(output => output.category._id === id)
+        console.log('Myrsult', result)
+        this.setState(() => ({ productData: result }))
+
+    }
+
+    filterHandle = (e) => {
+        const value = e.target.value
+
+        const result = this.state.product.filter(output => output.name.toLowerCase().includes(value.toLowerCase()))
+        //console.log(result)
+        this.setState(() => ({ productData: result }))
+    }
+
+    handleSelect = (data) => {
+        this.setState(() => ({ category: data }))
+    }
+
     render() {
         const { classes } = this.props;
-         const { currentProducts } = this.state
-
+        let options = this.state.categoryData.map(function (category) {
+            return { value: category._id, label: category.name };
+        })
         return (
 
             <React.Fragment>
 
                 <main>
-                     {!this.state.isLoaded ? <CircularSpinner /> :
+                    <div className={classes.searchBar}>
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-md-8" >
+                                    <Input type="text" onChange={this.filterHandle} placeholder="search" bssize="md" />
+                                    <br />
+                                </div>
+
+
+                                <div className="col-md-4">
+                                    <Select
+                                        name="category"
+                                        value={this.state.category}
+                                        onChange={this.handleSelect}
+                                        options={options}
+                                    />
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div className={classNames(classes.layout, classes.cardGrid)}>
-                       {this.state.currentProducts.length === 0 ? 
-
-                       <AlertDialog status={true} title="Currently No Product is Available For Bidding" history={this.props.history} url={`/user/dashboard`} />
-
-                        :
+                        {/* End hero unit */}
                         <Grid container spacing={40}>
-                            {currentProducts.map(product => (
+                            {this.state.productData.filter(p => (p.status === 'Approved' && p.session !== undefined && p.sold.length === 0)).map(product => (
                                 <Grid item key={product._id} sm={6} md={4} lg={3}>
                                     <Card className={classes.card}>
                                         <CardMedia
@@ -156,27 +177,13 @@ class CurrentProduct extends React.Component {
                                                 {product.name}
                                             </Typography>
                                             <Typography>
-                                                 Min Price : {product.minPrice}
-                                            </Typography>
-                                            <Typography>
-                                                Date  : {moment(product.session.date).format('DD-MM-YYYY')}
-                                            </Typography>
-                                             <Typography>
-                                               Start Time : {moment(product.session.startTime).format('h:mm a')} 
-                                            </Typography>
-                                            <Typography>
-                                               End Time : {moment(product.session.endTime).format('h:mm a')} 
+                                                {product.description.slice(0, 50) + '...'}
                                             </Typography>
                                         </CardContent>
                                         <CardActions>
-                                            <Link to={`/biddingrooms/${product.session._id}`} target="_blank">
-                                                <Button size="small" color="primary" variant="contained">
-                                                   Enter Bidding Room
-                                            </Button>
-                                            </Link>
                                             <Link to={`/productmt/${product._id}`}>
-                                                <Button size="small" color="primary" variant="contained">
-                                                   Details
+                                                <Button size="small" color="primary">
+                                                    Details
                                             </Button>
                                             </Link>
 
@@ -185,19 +192,24 @@ class CurrentProduct extends React.Component {
                                 </Grid>
                             ))}
                         </Grid>
-                    }
                     </div>
-                }
                 </main>
                 {/* Footer */}
-               
+                {/* <footer className={classes.footer}>
+                    <Typography variant="h6" align="center" gutterBottom>
+                        Footer
+        </Typography>
+                    <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
+                        Something here to give the footer a purpose!
+        </Typography>
+                </footer> */}
                 {/* End footer */}
             </React.Fragment>
         );
     }
 }
-CurrentProduct.propTypes = {
+UserDashboard.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(CurrentProduct);
+export default withStyles(styles)(UserDashboard);
