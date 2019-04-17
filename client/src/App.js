@@ -11,13 +11,13 @@ import Register from './component/user/Registermt'
 // import HomePage from './component/user/HomePage'
 // import Dashboard from './component/user/Dashboard'
 import LogOut from './component/user/LogOut'
-
+import AdminProductView from './component/product/AdminProductView'
 
 import ProductNew from './component/product/ProductNew'
 import ProductEdit from './component/product/ProductEdit'
 import ProductShow from './component/product/ProductShow';
 
-import ShowCategory from './component/category/CategoryShowmt'
+import ShowCategory from './component/category/CategoryShow'
 import AddCategory from './component/category/CategoryAdd'
 // import AddCategory from './component/category/CategoryForm'
 import EditCategory from './component/category/CategoryEdit'
@@ -32,7 +32,6 @@ import SessionEdit from './component/session/SessionEdit'
 
 import MyProduct from './component/product/MyProduct';
 import CurrentProduct from './component/bidding/CurrentProduct';
-import CurrentBiddings from './component/bidding/CurrentBiddingmt';
 import NavBar from './component/dashboard/NavBar';
 import CurrentBidding from './component/bidding/CurrentBidding';
 
@@ -63,7 +62,7 @@ class App extends React.Component {
 
             <Route exact path='/session_edit/:id' component={SessionEdit} />
 
-            <Route exact path="/product/list" component={ProductShow} />
+            <Route exact path="/product/list" component={AdminProductView} />
             <Route exact path='/product/:id' component={ProductDetail} />
             <Route exact path='/userProduct/:id' component={UserProduct} />
             <Route exact path='/user/dashboard' component={UserDashboard} />
@@ -86,7 +85,7 @@ class App extends React.Component {
             <Route exact path="/category/edit/:id" component={EditCategory} />
 
             <Route exact path="/currentBid" component={CurrentProduct} />
-            <Route exact path="/biddingrooms/:id" component={CurrentBiddings} />
+
             <Route exact path='/biddingroom/:id' component={CurrentBidding} />
 
 

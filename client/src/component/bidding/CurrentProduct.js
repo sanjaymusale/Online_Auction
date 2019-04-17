@@ -8,9 +8,14 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
+import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
+import { Input } from 'reactstrap'
+import Select from 'react-select'
 import axios from '../axios/config'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
@@ -87,7 +92,7 @@ class CurrentProduct extends React.Component {
 
     currentBid = () => {
         const { currentDateTime } = this.state.time
-        
+
         const currentDate = moment(currentDateTime, 'DD-MM-YYYY')
         const currentTime = moment(currentDateTime)
 
@@ -99,7 +104,7 @@ class CurrentProduct extends React.Component {
             }
         })
 
-        //console.log(BiddingProducts)
+        console.log(BiddingProducts)
 
         this.setState(() => ({ currentProducts: BiddingProducts }))
     }
@@ -124,7 +129,7 @@ class CurrentProduct extends React.Component {
                 console.log(err)
             })
     }
-   
+
     render() {
         const { classes } = this.props;
          const { currentProducts } = this.state
@@ -136,7 +141,7 @@ class CurrentProduct extends React.Component {
                 <main>
                      {!this.state.isLoaded ? <CircularSpinner /> :
                     <div className={classNames(classes.layout, classes.cardGrid)}>
-                       {this.state.currentProducts.length === 0 ? 
+                       {this.state.currentProducts.length === 0 ?
 
                        <AlertDialog status={true} title="Currently No Product is Available For Bidding" history={this.props.history} url={`/user/dashboard`} />
 
@@ -162,14 +167,14 @@ class CurrentProduct extends React.Component {
                                                 Date  : {moment(product.session.date).format('DD-MM-YYYY')}
                                             </Typography>
                                              <Typography>
-                                               Start Time : {moment(product.session.startTime).format('h:mm a')} 
+                                               Start Time : {moment(product.session.startTime).format('h:mm a')}
                                             </Typography>
                                             <Typography>
-                                               End Time : {moment(product.session.endTime).format('h:mm a')} 
+                                               End Time : {moment(product.session.endTime).format('h:mm a')}
                                             </Typography>
                                         </CardContent>
                                         <CardActions>
-                                            <Link to={`/biddingrooms/${product.session._id}`} target="_blank">
+                                            <Link to={`/biddingroom/${product.session._id}`}>
                                                 <Button size="small" color="primary" variant="contained">
                                                    Enter Bidding Room
                                             </Button>
@@ -190,7 +195,7 @@ class CurrentProduct extends React.Component {
                 }
                 </main>
                 {/* Footer */}
-               
+
                 {/* End footer */}
             </React.Fragment>
         );

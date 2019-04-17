@@ -125,7 +125,10 @@ class UserDashboard extends React.Component {
     }
 
     handleSelect = (data) => {
-        this.setState(() => ({ category: data }))
+        const filteredProduct = this.state.product.filter(p => p.category._id === data.value)
+        console.log('filteredProduct',filteredProduct)
+        this.setState(() => ({ category: data,productData:filteredProduct }))
+
     }
 
     render() {
@@ -133,6 +136,7 @@ class UserDashboard extends React.Component {
         let options = this.state.categoryData.map(function (category) {
             return { value: category._id, label: category.name };
         })
+        console.log(this.state)
         return (
 
             <React.Fragment>

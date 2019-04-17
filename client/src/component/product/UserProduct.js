@@ -187,7 +187,7 @@ class UserProduct extends React.Component {
     }
     render() {
         const { classes } = this.props;
-        const { isLoaded, product, photoIndex, isOpen } = this.state
+        const { isLoaded, product, photoIndex, isOpen,status } = this.state
         const { category, session } = this.state.product
         return (
             <div className={classes.root}>
@@ -210,14 +210,14 @@ class UserProduct extends React.Component {
                                         <hr />
                                         <Typography><FormLabel className={classes.label}>Category : {category.name}</FormLabel></Typography>
                                         <Typography gutterBottom>
-                                            {product.status === "Approved" && <>
-                                                <FormLabel className={classes.label}>Status :</FormLabel> <FormLabel className={classes.formlabelApproved}>{product.status}</FormLabel>
+                                            {status === "Approved" && <>
+                                                <FormLabel className={classes.label}>Status :</FormLabel> <FormLabel className={classes.formlabelApproved}>{status}</FormLabel>
                                             </>}
-                                            {product.status === "Pending" && <>
-                                                <FormLabel className={classes.label}>Status :</FormLabel><FormLabel className={classes.formlabelPending}>{product.status}</FormLabel>
+                                            {status === "Pending" && <>
+                                                <FormLabel className={classes.label}>Status :</FormLabel><FormLabel className={classes.formlabelPending}>{status}</FormLabel>
                                             </>}
-                                            {product.status === "Rejected" && <>
-                                                <FormLabel className={classes.label}>Status :</FormLabel> <FormLabel className={classes.formlabelRejected}>{product.status}</FormLabel>
+                                            {status === "Rejected" && <>
+                                                <FormLabel className={classes.label}>Status :</FormLabel> <FormLabel className={classes.formlabelRejected}>{status}</FormLabel>
                                             </>}
 
                                         </Typography>
@@ -250,7 +250,7 @@ class UserProduct extends React.Component {
                                             </>
                                             :
                                             <>
-                                                <Link to="/myBids">
+                                                <Link to="/product/list">
                                                     <Button size="small" variant="contained" color="primary" className={classes.button}>
                                                         Back
                                     </Button>
@@ -267,8 +267,8 @@ class UserProduct extends React.Component {
                                         }
                                         {this.props.user.user.role === 'admin' &&
                                             <>
-                                                <button onClick={this.handleApprove} disabled={this.state.status === "Approved" ? true : false}>Approve</button>
-                                                <button onClick={this.handleReject} disabled={this.state.status === "Rejected" ? true : false}>Reject</button>
+                                                <Button onClick={this.handleApprove} size="small" variant="contained" color="primary" className={classes.button} disabled={this.state.status === "Approved" ? true : false}>Approve</Button>
+                                                <Button onClick={this.handleReject} size="small" variant="contained" color="primary" className={classes.button} disabled={this.state.status === "Rejected" ? true : false}>Reject</Button>
                                             </>
                                         }
                                     </Grid>
@@ -299,7 +299,7 @@ class UserProduct extends React.Component {
                         }
                     />
                 )}
-            
+
             </div>
         )
     }

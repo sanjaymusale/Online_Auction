@@ -24,7 +24,7 @@ class AddCategory extends React.Component {
             <div>
                 {/* <h2>add</h2> */}
                 <FormCategory handleSubmit={this.handleSubmit} title="Add New Category" />
-                <Link to="/category">back</Link>
+              
 
             </div>
         )

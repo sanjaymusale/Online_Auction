@@ -43,7 +43,7 @@ class ProductBidder extends React.Component {
         super(props)
         this.state = {
             bidding: [],
-           
+
 
         }
     }
@@ -81,6 +81,7 @@ class ProductBidder extends React.Component {
         let sold, amount
         bidding.forEach(bid => {
             if (bid.product.seller === person.user.userId) {
+                amount = ''
                 if (bid.product.sold.length === 0) {
                     sold = "Item not Sold"
                 } else {
@@ -158,4 +159,3 @@ const mapStateToProps = (state) => {
 }
 export default withStyles(styles)(
     connect(mapStateToProps)(ProductBidder));
-
