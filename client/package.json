@@ -8,7 +8,6 @@
     "@material-ui/icons": "^3.0.2",
     "bootstrap": "^4.3.1",
     "date-fns": "^2.0.0-alpha.27",
-    "formik": "^1.5.1",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.11",
     "material-table": "^1.32.0",
@@ -27,10 +26,8 @@
     "react-select": "^2.4.2",
     "reactstrap": "^7.1.0",
     "redux": "^4.0.1",
-    "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
-    "validator": "^10.11.0",
-    "yup": "^0.27.0"
+    "validator": "^10.11.0"
   },
   "scripts": {
     "start": "react-scripts start",

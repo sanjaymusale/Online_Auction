@@ -35,22 +35,7 @@ class EditCategory extends React.Component {
             })
 
     }
-    handleDelete = () => {
-        const confirmDelete = window.confirm("Are you Sure ??")
-        const id = this.state.category._id
-        console.log('delete', id)
-        if (confirmDelete) {
-
-            axios.delete(`/category/${id}`, { headers: { 'x-auth': localStorage.getItem('token') } })
-                .then((response) => {
-                    console.log(response)
-                    this.props.history.push('/category')
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-        }
-    }
+  
 
 
 
@@ -63,7 +48,7 @@ class EditCategory extends React.Component {
 
         return (
             <div>
-                
+
                 {this.state.isLoaded &&
                     <FormCategory name={this.state.category.name} handleSubmit={this.handleSubmit} title="Edit Category"/>}
                 <br />
