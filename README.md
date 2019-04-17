@@ -53,6 +53,12 @@ Online Auction is a Live Bidding platform built on ReactJS, ExpressJs and Node, 
 * Declare The Winner
   * After the provided time frame gets over the bidding stops and the winner of the Bid is Declared
   
+## `view the bid` ##
+* Participated in Bids
+  * can view the history in which all products the user participated and place his bids for what amount
+* View Product results
+  * can view who all participated in the bidding of the users Product, what which user quoted what Price
+  
 # Author
 
  * Sanjay Musale
