@@ -43,6 +43,19 @@ Online Auction is a Live Bidding platform built on ReactJS, ExpressJs and Node, 
 * Add Date and Time
   * Each product is made available a time slot during which the product will be available for Bidding
   
+## `current bidding` ##
+* Live Bidding for the Product
+  * Each product is made available for Bidding during its alloted date and Time.
+* Enter the Bidding room
+  * By clicking the `Enter Bidding room` Button user gets access to the Bidding page
+* Place Bid
+  * Enter the price at which u want to bid the Product, Other Users also Bid at the same moment
+* Declare The Winner
+  * After the provided time frame gets over the bidding stops and the winner of the Bid is Declared
   
+# Author
+
+ * Sanjay Musale
+
 
 
