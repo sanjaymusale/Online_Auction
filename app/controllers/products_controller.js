@@ -10,9 +10,9 @@ const link = 'http://localhost:3001'
 
 
 router.get('/', authenticateUser, (req, res) => {
-    Product.find().populate('category').populate('session')
+    Product.find().sort({ _id : -1}).populate('category').populate('session')
         .then((products) => {
-            //console.log('nischal', products)
+            console.log(products)
             res.send(products)
         })
         .catch((err) => {
@@ -21,7 +21,7 @@ router.get('/', authenticateUser, (req, res) => {
 })
 
 router.get('/myproduct', authenticateUser, (req, res) => {
-    Product.find({ seller: req.user._id }).populate('category').populate('session')
+    Product.find({ seller: req.user._id }).sort({ _id : -1}).populate('category').populate('session')
         .then((products) => {
             res.send(products)
         })

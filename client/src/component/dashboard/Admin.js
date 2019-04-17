@@ -27,9 +27,8 @@ const Admin = (props) => {
                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                         <Link to="/category/add" className="dropdown-item">Add Category</Link>
 
-                        <Link to="/category" className="dropdown-item">Category</Link>
-                        <Link to='/session/add' className="dropdown-item">Add Session</Link>
-                        <Link to='/session/list' className="dropdown-item">View Session</Link>
+                        <Link to="/category" className="dropdown-item">View Category</Link>
+
                         <Link to="/product/list" className="dropdown-item">Products</Link>
                         {/* <Link to='/product' className="dropdown-item">All products</Link> */}
 

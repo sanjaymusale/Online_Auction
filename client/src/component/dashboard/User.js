@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 const User = (props) => {
 
-    const name = props.user.user.firstName[0].toUpperCase() + props.user.user.firstName.slice(1).toLowerCase() + ' ...'
+    const name = props.user.user.firstName[0].toUpperCase() + props.user.user.firstName.slice(1).toLowerCase()
 
 
     // const name = props.user.user.firstName
@@ -15,6 +15,9 @@ const User = (props) => {
 
                 <li className="nav-item active">
                     <Link className="nav-link" to="#">Welcome {name}</Link>
+                </li>
+                <li className="nav-item active">
+                  <Link to='/currentBid' className="nav-link">Current Auctions</Link>
                 </li>
 
                 <li className="nav-item dropdown">
@@ -27,7 +30,7 @@ const User = (props) => {
                         <Link to="/user/dashboard" className="dropdown-item">Dashboard</Link>
                         <Link to="/product" className="dropdown-item">Add Product</Link>
 
-                        <Link to='/currentBid' className="dropdown-item">Current Bid</Link>
+
                         <Link to='/myproduct' className="dropdown-item">My Product</Link>
                          <Link to="/myBids" className="dropdown-item">My Bids</Link>
                          <Link to="/bidders" className="dropdown-item">My Product Bidders</Link>

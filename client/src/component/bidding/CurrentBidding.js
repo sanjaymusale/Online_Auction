@@ -1,6 +1,15 @@
 import React from 'react'
-import { connect } from 'react-redux'
+
+import Grid from '@material-ui/core/Grid';
+import PropTypes from 'prop-types';
+import withStyles from '@material-ui/core/styles/withStyles';
+
+import Paper from '@material-ui/core/Paper';
+
 import axios from '../axios/config';
+import FormLabel from '@material-ui/core/FormLabel';
+
+import { connect } from 'react-redux'
 import BidInput from './BidInput';
 import EndTime from './EndTime';
 import DisplayBid from './DisplayBid';
@@ -13,7 +22,98 @@ const SocketURL = 'http://localhost:3001/'
 const io = require('socket.io-client');
 const socket = io(SocketURL);
 
-class CurrentBidding extends React.Component {
+const styles = theme => ({
+
+    layout: {
+        width: 'auto',
+        marginLeft: theme.spacing.unit * 2,
+        marginRight: theme.spacing.unit * 2,
+
+        [theme.breakpoints.down(600 + theme.spacing.unit * 2 * 2)]: {
+            width:"80%",
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+        [theme.breakpoints.up(1200 + theme.spacing.unit * 2 * 2)]: {
+            width:"80%",
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+        [theme.breakpoints.up(300 + theme.spacing.unit * 2 * 2)]: {
+            width:"80%",
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+    },
+    paper: {
+        marginTop: theme.spacing.unit * 3,
+        marginBottom: theme.spacing.unit * 3,
+        padding: theme.spacing.unit * 2,
+        background: "#ffcc66",
+        [theme.breakpoints.up(600 + theme.spacing.unit * 3 * 2)]: {
+
+            marginTop: theme.spacing.unit * 6,
+            marginBottom: theme.spacing.unit * 6,
+            padding: theme.spacing.unit * 0.5,
+        },
+        [theme.breakpoints.up(1200 + theme.spacing.unit * 2 * 2)]: {
+
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+        [theme.breakpoints.down(300 + theme.spacing.unit * 2 * 2)]: {
+
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+    },
+    bottompaper: {
+        marginTop: theme.spacing.unit * 3,
+        marginBottom: theme.spacing.unit * 3,
+        padding: theme.spacing.unit * 2,
+
+        [theme.breakpoints.up(600 + theme.spacing.unit * 3 * 2)]: {
+
+            marginTop: theme.spacing.unit * 6,
+            marginBottom: theme.spacing.unit * 6,
+            padding: theme.spacing.unit * 0.5,
+        },
+    },
+
+    titlepaper: {
+        padding: theme.spacing.unit * 2,
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+    },
+    joinpaper: {
+        padding: theme.spacing.unit * 2,
+        textAlign: 'center',
+        minHeight: 200,
+        color: theme.palette.text.secondary,
+    },
+    formLabel: {
+        fontSize: 20,
+        fontWeight: "bold"
+    },
+    innerpaper: {
+        padding: theme.spacing.unit * 2,
+        textAlign: 'center',
+        minHeight: 200,
+    },
+    joinLabel: {
+        fontSize: 18,
+        fontWeight: "bold",
+        color: "red"
+    },
+    titleLabel: {
+        fontSize: 18,
+        fontWeight: "bold",
+        color: "blue"
+    }
+})
+
+
+class MyProduct extends React.Component {
     constructor(props) {
         super(props);
 
@@ -29,7 +129,9 @@ class CurrentBidding extends React.Component {
             timeLeft: '00:00:00',
             winner: {},
             Declaredwinner: false,
-            noWinner: false
+            noWinner: false,
+            highBidUser: '',
+            highBidAmt: ''
 
         };
 
@@ -46,7 +148,10 @@ class CurrentBidding extends React.Component {
         //handle to listen updateBid from server socket
         socket.on('updateBid', function (bidObj) {
             //console.log('socket updatebid', bidObj)
-            self.setState({ bidHistory: bidObj });
+
+            const max = bidObj.reduce((prev, current) => (prev.amount > current.amount) ? prev : current)
+            //console.log(max)
+            self.setState({ bidHistory: bidObj, highBidUser: max.user.firstName, highBidAmt: max.amount });
 
         });
 
@@ -57,6 +162,13 @@ class CurrentBidding extends React.Component {
                 joinedUsers: [].concat(prevState.joinedUsers).concat(data)
             }))
         });
+
+        socket.on('ADMIN_MSG', function (data) {
+            console.log('admin msg', data)
+            self.setState((prevState) => ({
+                joinedUsers: [].concat(prevState.joinedUsers).concat(data)
+            }))
+        })
 
 
     }
@@ -72,6 +184,9 @@ class CurrentBidding extends React.Component {
         }
     }
 
+    // setHighBid = (max) => {
+    //     this.setState({ highBid: max })
+    // }
     filterBidhistory = (bidHistory) => {
         const filteredUsers = bidHistory.filter(user => {
             return user.hasOwnProperty('amount')
@@ -121,10 +236,26 @@ class CurrentBidding extends React.Component {
         axios.get(`/bidding/session/${this.state.roomid}`)
             .then((response) => {
                 console.log('get user', response.data)
-                if (response.data.participant)
+                if (response.data.participant) {
+                    if (response.data.participant.length > 1) {
+                        console.log('insode get')
+                        const high = response.data.participant.reduce((prev, current) => (prev.amount > current.amount) ? prev : current)
+                        this.setState({
+                            bidHistory: response.data.participant, fullData: response.data,
+                            highBidUser: high.user.firstName,
+                            highBidAmt: high.amount
 
-                    this.setState({ bidHistory: response.data.participant, fullData: response.data })
-                this.setUser(response.data.participant)
+                        })
+                        this.setUser(response.data.participant)
+                    }
+                    else {
+                        this.setState({
+                            bidHistory: response.data.participant, fullData: response.data, highBidUser:"--------"
+                        })
+                        this.setUser(response.data.participant)
+                    }
+
+                }
             })
             .catch((err) => {
                 console.log('getHistoryerror', err)
@@ -151,14 +282,7 @@ class CurrentBidding extends React.Component {
                     // console.log('set user response', response.data)
                     self.setState({ bidHistory: response.data.participant, fullData: response.data, isLoaded: true })
                     socket.emit('join_room', { id: self.state.roomid, name: self.state.name })
-                    // if (response.data.participant.length === 1) {
-                    //     socket.emit('SET_TIME', { roomid: self.state.roomid, time: self.state.time })
-                    // } else {
-                    //     // socket.on('CURRENT_TIME', (data) => {
-                    //     //     this.setState({ time: data.time })
-                    //     // })
-                    //     this.getTime()
-                    // }
+
                 })
                 .catch((err) => {
                     console.log('get historyerror', err)
@@ -172,7 +296,6 @@ class CurrentBidding extends React.Component {
         }
     }
 
-   
 
     saveBid = (bids) => {
         const data = {
@@ -181,52 +304,110 @@ class CurrentBidding extends React.Component {
         // console.log('save bid', data)
         axios.put(`/bidding/session/${this.state.roomid}`, data, { headers: { 'x-auth': localStorage.getItem('token') } })
             .then((response) => {
-                console.log(response)
+                // console.log(response)
             })
             .catch((err) => {
                 console.log(err)
             })
 
     }
+
     render() {
-        //console.log('current Bid', this.state)
+        const { classes } = this.props
+
+        // console.log('current', this.state)
 
         return (
-            <>{this.state.isLoaded &&
-                <div>
-                    <p>{this.state.fullData.product.name}</p>
-                    {this.state.joinedUsers.map((user, i) => {
-                        return <p key={i + 1}>{user}</p>
-                    })}
-                    <EndTime fullData={this.state.fullData} timeLeft={this.timeLeft} />
-                    {!this.state.Declaredwinner ?
-                        <BidInput
-                            bidHistory={this.state.bidHistory}
-                            roomid={this.state.roomid}
-                            winner={this.state.winner}
-                            fullData={this.state.fullData}
-                            time={this.state.time}
-                            socket={socket}
-                            saveBid={this.saveBid}
-                            user={this.state.user}
-                           
-                        />
-                        :
+            <React.Fragment>
+                <main className={classes.layout}>
+                    {this.state.isLoaded &&
                         <>
-                            {!this.state.noWinner ?
-                                <p>The Item Is Sold to {this.state.winner.user.firstName} At the Price of {this.state.winner.amount}</p>
-                                :
-                                <p>No Bidding Happened to This Current Product</p>
-                            }
+                            <Paper className={classes.paper}>
+                                <Grid container wrap="nowrap" spacing={8}>
+                                    <Grid item xs={4} sm={4}>
+                                        <Paper className={classes.titlepaper}>
+                                            <FormLabel className={classes.titleLabel} >{this.state.fullData.product.name.toUpperCase()}</FormLabel>
+                                        </Paper>
+                                    </Grid>
+                                    <Grid item xs={4} sm={4}sss>
+                                        <Paper className={classes.titlepaper}>
+                                            <EndTime fullData={this.state.fullData} timeLeft={this.timeLeft} />
+                                        </Paper>
+                                    </Grid>
+                                    <Grid item xs={4} sm={4}>
+                                        <Paper className={classes.titlepaper}>
+                                            <FormLabel className={classes.titleLabel} >
+
+
+                                                High Bid : {this.state.highBidUser} &#8377; {this.state.highBidAmt}
+
+                                            </FormLabel>
+                                        </Paper>
+                                    </Grid>
+                                </Grid>
+
+
+
+                            </Paper>
+                            <div className={classes.bottompaper}>
+                                {!this.state.Declaredwinner ?
+                                    <Grid container spacing={24}>
+                                        <Grid item xs={12} sm={4}>
+                                            <Paper className={classes.innerpaper}>
+                                                <BidInput
+                                                    bidHistory={this.state.bidHistory}
+                                                    roomid={this.state.roomid}
+                                                    winner={this.state.winner}
+                                                    fullData={this.state.fullData}
+                                                    time={this.state.time}
+                                                    socket={socket}
+                                                    saveBid={this.saveBid}
+                                                    user={this.state.user}
+                                                    setHighBid={this.setHighBid}
+                                                />
+                                            </Paper>
+                                        </Grid>
+
+                                        <Grid item xs={12} sm={4}>
+                                            <Paper className={classes.innerpaper}>
+                                                <DisplayBid bidHistory={this.state.bidHistory} />
+                                            </Paper>
+                                        </Grid>
+
+                                        <Grid item xs={12} sm={4}>
+                                            <Paper className={classes.joinpaper}>
+                                                {this.state.joinedUsers.map((user, i) => {
+                                                    return <><FormLabel className={classes.joinLabel} key={i + 1}>{user}</FormLabel><br /></>
+                                                })}
+                                            </Paper>
+                                        </Grid>
+                                    </Grid>
+                                    :
+                                    <Grid container spacing={24}>
+                                        {!this.state.noWinner ?
+                                            <Grid item xs={12} sm={12}>
+                                                <Paper className={classes.innerpaper}>The Item Is Sold to {this.state.winner.user.firstName} At the Price of {this.state.winner.amount}</Paper>
+                                            </Grid>
+                                            :
+                                            <Grid item xs={12} sm={12}>
+                                                <Paper className={classes.innerpaper}>No Bidding Happened to This Current Product</Paper>
+                                            </Grid>
+                                        }
+
+                                    </Grid>
+                                }
+                            </div>
                         </>
                     }
-                    <DisplayBid bidHistory={this.state.bidHistory} />
-                </div>
-            }
-            </>
+                </main>
+            </React.Fragment>
         )
     }
 }
+
+MyProduct.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
 
 const mapStateToProps = (state) => {
     return {
@@ -234,4 +415,5 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(CurrentBidding)
+export default withStyles(styles)(
+    connect(mapStateToProps)(MyProduct));

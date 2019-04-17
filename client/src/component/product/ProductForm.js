@@ -44,7 +44,7 @@ const styles = theme => ({
     button: {
         marginTop: theme.spacing.unit * 3,
         marginLeft: "10%",
-        
+
     },
     form: {
         width: '100%', // Fix IE 11 issue.
@@ -78,7 +78,7 @@ const styles = theme => ({
     rightIcon: {
         marginLeft: theme.spacing.unit,
     },
-   
+
     fileLabel: {
         fontSize: '14px',
         marginTop: '10px'
@@ -106,7 +106,7 @@ class ProductForm extends React.Component {
             descriptionError: '',
             fileError: '',
             categoryError: '',
-           
+
 
         }
     }
@@ -172,9 +172,9 @@ class ProductForm extends React.Component {
             isError = true;
             errors.minPriceError = "Provide Price"
         }
-        if (this.state.minPrice.length > 0 && this.state.minPrice < 49) {
+        if (this.state.minPrice.length > 0 && this.state.minPrice < 99) {
             isError = true;
-            errors.minPriceError = "Minimum Price should be 50"
+            errors.minPriceError = "Minimum Price should be 100"
         }
         if (!this.props.name) {
             if (this.state.file.length === 0) {

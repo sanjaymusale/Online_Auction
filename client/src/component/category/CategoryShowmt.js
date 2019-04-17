@@ -123,11 +123,13 @@ class CategoryShow extends React.Component {
                                 onRowDelete: oldData =>
                                 axios.delete(`/category/${oldData.id}`, { headers: { 'x-auth': localStorage.getItem('token') } })
                                     .then((response) => {
-                                        console.log(response)
+                                        //console.log('inside',response)
                                         let data = this.state.category;
-                                const index = data.indexOf(oldData);
-                                data.splice(index, 1);
-                                this.setState({ category:data })
+                                        console.log('data',data)
+                                        const index = data.findIndex(item=> item._id === oldData.id);
+                                        console.log("index",index)
+                                        data.splice(index, 1);
+                                        this.setState({ category:data })
                                     })
                                     .catch((err) => {
                                         console.log(err)
