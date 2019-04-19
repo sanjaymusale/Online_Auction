@@ -17,7 +17,7 @@ import DisplayBid from './DisplayBid';
 
 // import io from 'socket.io-client'
 
-const SocketURL = '/'
+const SocketURL = 'https://my-auctions.herokuapp.com/'
 
 const io = require('socket.io-client');
 const socket = io(SocketURL);
