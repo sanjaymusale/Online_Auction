@@ -17,7 +17,7 @@ import DisplayBid from './DisplayBid';
 
 // import io from 'socket.io-client'
 
-const SocketURL = 'http://localhost:3001/'
+const SocketURL = '/'
 
 const io = require('socket.io-client');
 const socket = io(SocketURL);
