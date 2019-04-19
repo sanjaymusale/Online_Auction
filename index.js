@@ -11,7 +11,11 @@ const { sessionsRouter } = require('./app/controllers/sessions_controller')
 const { biddingRouter } = require('./app/controllers/Bidding_controller')
 
 const app = express()
-const port = 3001
+const port = process.env.PORT || 5000
+
+const path = require('path')
+app.use(express.static(path.join(__dirname, 'client/build')))
+
 
 var server = app.listen(port, () => {
     console.log('listening to port', port)
@@ -30,9 +34,9 @@ app.use('/bidding', biddingRouter)
 
 
 
-app.get('/', (req, res) => {
-    res.send('Welcome')
-})
+// app.get('/', (req, res) => {
+//     res.send('Welcome')
+// })
 
 
 
@@ -53,5 +57,6 @@ io.on('connection', (socket) => {
 
 
 });
-
-
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname + '/client/build/index.html'))
+  })
