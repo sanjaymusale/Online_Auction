@@ -41,7 +41,13 @@ app.use('/bidding', biddingRouter)
 
 
 io = socket(server);
-io.origins('http://localhost:3000/')
+io.origins('/')
+
+io.configure(function () {
+  io.set("transports", ["xhr-polling"]);
+  io.set("polling duration", 10);
+});
+
 io.on('connection', (socket) => {
     console.log('socket id', socket.id);
 
