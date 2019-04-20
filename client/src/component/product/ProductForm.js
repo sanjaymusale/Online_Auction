@@ -10,7 +10,7 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import axios from '../axios/config';
 import FormLabel from '@material-ui/core/FormLabel';
 import { Link } from 'react-router-dom'
-
+import {SERVER_URL} from '../config/config'
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
@@ -109,6 +109,7 @@ class ProductForm extends React.Component {
 
 
         }
+        console.log('SERVER',SERVER_URL)
     }
 
     handleChange = (e) => {

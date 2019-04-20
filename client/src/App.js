@@ -50,7 +50,7 @@ class App extends React.Component {
           <NavBar />
 
           <Switch>
-            <Route exact path="/" component={UserDashboard} /> 
+            // <Route exact path="/" component={UserDashboard} /> 
             <Route exact path="/user/register" component={Register} />
             <Route exact path="/user/login" component={SignIn} />
             <Route exact path="/logout" component={LogOut} />

@@ -16,9 +16,9 @@ import DisplayBid from './DisplayBid';
 import {SERVER_URL} from '../config/config'
 
 const SocketURL = 'http://localhost:3001/'
-
+console.log('SERVER_URL',SERVER_URL)
 const io = require('socket.io-client');
-const socket = io(SERVER_URL);
+const socket = io(`${SERVER_URL}`);
 
 const styles = theme => ({
 

@@ -19,7 +19,8 @@ app.use(function (req, res, next){
     next();
   }
 });
-
+console.log(process.env.SERVER_URL)
+console.log(process.env.MONGODB_URI)
 const path = require('path')
 app.use(express.static(path.join(__dirname, 'client/build')))
 
