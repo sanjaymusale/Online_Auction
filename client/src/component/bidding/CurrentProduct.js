@@ -87,7 +87,10 @@ class CurrentProduct extends React.Component {
             isLoaded: false,
             time: ''
         }
-
+        console.log('SERVER_URL',SERVER_URL)
+        console.log('SERVER_URL',SERVER_URL)
+        console.log('SERVER_URL',SERVER_URL)
+        console.log('SERVER_URL',SERVER_URL)
     }
 
     currentBid = () => {
@@ -104,7 +107,7 @@ class CurrentProduct extends React.Component {
             }
         })
 
-        //console.log(BiddingProducts)
+      //  console.log(BiddingProducts)
 
         this.setState(() => ({ currentProducts: BiddingProducts }))
     }
