@@ -1,4 +1,4 @@
-const SERVER_URL = process.env.SERVER_URL || 'http://localhost:3001'
+const SERVER_URL = 'https://my-auctions.herokuapp.com/' 
 
 module.exports = {
     SERVER_URL
