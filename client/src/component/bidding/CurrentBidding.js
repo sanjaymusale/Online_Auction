@@ -13,14 +13,12 @@ import { connect } from 'react-redux'
 import BidInput from './BidInput';
 import EndTime from './EndTime';
 import DisplayBid from './DisplayBid';
-//import { isEmpty } from 'lodash'
+import {SERVER_URL} from '../config/config'
 
-// import io from 'socket.io-client'
-
-const SocketURL = 'https://my-auctions.herokuapp.com/'
+const SocketURL = 'http://localhost:3001/'
 
 const io = require('socket.io-client');
-const socket = io(SocketURL);
+const socket = io(SERVER_URL);
 
 const styles = theme => ({
 

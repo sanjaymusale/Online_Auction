@@ -12,7 +12,7 @@ const link = '/'
 router.get('/', authenticateUser, (req, res) => {
     Product.find().sort({ _id : -1}).populate('category').populate('session')
         .then((products) => {
-            console.log(products)
+            //console.log(products)
             res.send(products)
         })
         .catch((err) => {

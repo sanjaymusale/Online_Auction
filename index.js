@@ -1,7 +1,7 @@
 const express = require('express')
 const mongoose = require('./config/database')
 const cors = require('cors')
-var socket = require('socket.io')
+let socket = require('socket.io')
 
 
 const { usersRouter } = require('./app/controllers/users_controller')
@@ -11,7 +11,9 @@ const { sessionsRouter } = require('./app/controllers/sessions_controller')
 const { biddingRouter } = require('./app/controllers/Bidding_controller')
 
 const app = express()
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 3001
+
+
 
 const path = require('path')
 app.use(express.static(path.join(__dirname, 'client/build')))
@@ -41,12 +43,8 @@ app.use('/bidding', biddingRouter)
 
 
 io = socket(server);
-io.origins('/')
-
-// io.configure(function () {
-//   io.set("transports", ["xhr-polling"]);
-//   io.set("polling duration", 10);
-// });
+// io.origins('http://localhost:3000/')
+//console.log('io',server)
 
 io.on('connection', (socket) => {
     console.log('socket id', socket.id);
@@ -63,6 +61,3 @@ io.on('connection', (socket) => {
 
 
 });
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname + '/client/build/index.html'))
-  })
