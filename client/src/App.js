@@ -88,7 +88,7 @@ class App extends React.Component {
             <Route exact path="/currentBid" component={CurrentProduct} />
 
             <Route exact path='/biddingroom/:id' component={CurrentBidding} />
-            <Route component={NotFound}/>
+            <Route component={NotFound} />
 
 
           </Switch>

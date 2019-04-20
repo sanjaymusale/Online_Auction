@@ -90,23 +90,23 @@ export default class FormDialog extends React.Component {
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
 
 
-              {/* <DatePicker value={this.state.selectedDate} onChange={this.handleDateChange} minDate={moment(this.state.currentTime).add(1, 'd')} /> */}
+            {/* <DatePicker value={this.state.selectedDate} onChange={this.handleDateChange} minDate={moment(this.state.currentTime).add(1, 'd')} /> */}
 
-              <DatePicker value={this.state.selectedDate} onChange={this.handleDateChange} />
-              <TimePicker value={this.state.selectedTime} onChange={this.handleTimeChange} />
+            <DatePicker value={this.state.selectedDate} onChange={this.handleDateChange} />
+            <TimePicker value={this.state.selectedTime} onChange={this.handleTimeChange} />
 
-              <Button onClick={this.handleSubmit} size="small" variant="contained" color="primary" >Submit</Button>
+            <Button onClick={this.handleSubmit} size="small" variant="contained" color="primary" >Submit</Button>
 
 
             </MuiPickersUtilsProvider>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Cancel
+      <DialogActions>
+        <Button onClick={this.handleClose} color="primary">
+          Cancel
             </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
+      </DialogActions>
+        </Dialog >
+      </div >
     );
   }
 }

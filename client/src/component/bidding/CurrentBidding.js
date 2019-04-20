@@ -129,7 +129,7 @@ class MyProduct extends React.Component {
             highBidAmt: ''
 
         };
-        console.console.log('SERVER_URL',SERVER_URL);
+        console.console.log('SERVER_URL', SERVER_URL);
         socket.on('connect', () => {
             console.log('connected react')
         })
@@ -324,7 +324,7 @@ class MyProduct extends React.Component {
     render() {
         const { classes } = this.props
 
-      console.log('current', this.state.timer)
+        console.log('current', this.state.timer)
 
         return (
             <React.Fragment>

@@ -79,7 +79,7 @@ const styles = theme => ({
 
 
 class CurrentProduct extends React.Component {
-      constructor() {
+    constructor() {
         super()
         this.state = {
             products: [],
@@ -88,7 +88,10 @@ class CurrentProduct extends React.Component {
             isLoaded: false,
             time: ''
         }
-
+        console.log('SERVER_URL', SERVER_URL)
+        console.log('SERVER_URL', SERVER_URL)
+        console.log('SERVER_URL', SERVER_URL)
+        console.log('SERVER_URL', SERVER_URL)
     }
 
     currentBid = () => {
@@ -133,67 +136,67 @@ class CurrentProduct extends React.Component {
 
     render() {
         const { classes } = this.props;
-         const { currentProducts } = this.state
+        const { currentProducts } = this.state
 
         return (
 
             <React.Fragment>
 
                 <main>
-                     {!this.state.isLoaded ? <CircularSpinner /> :
-                    <div className={classNames(classes.layout, classes.cardGrid)}>
-                       {this.state.currentProducts.length === 0 ?
+                    {!this.state.isLoaded ? <CircularSpinner /> :
+                        <div className={classNames(classes.layout, classes.cardGrid)}>
+                            {this.state.currentProducts.length === 0 ?
 
-                       <AlertDialog status={true} title="Currently No Product is Available For Bidding" history={this.props.history} url={`/user/dashboard`} />
+                                <AlertDialog status={true} title="Currently No Product is Available For Bidding" history={this.props.history} url={`/user/dashboard`} />
 
-                        :
-                        <Grid container spacing={40}>
-                            {currentProducts.map(product => (
-                                <Grid item key={product._id} sm={6} md={4} lg={3}>
-                                    <Card className={classes.card}>
-                                        <CardMedia
-                                            className={classes.cardMedia}
-                                            image={product.imageUrl[0]} // eslint-disable-line max-len
-                                            title={product.name}
+                                :
+                                <Grid container spacing={40}>
+                                    {currentProducts.map(product => (
+                                        <Grid item key={product._id} sm={6} md={4} lg={3}>
+                                            <Card className={classes.card}>
+                                                <CardMedia
+                                                    className={classes.cardMedia}
+                                                    image={product.imageUrl[0]} // eslint-disable-line max-len
+                                                    title={product.name}
 
-                                        />
-                                        <CardContent className={classes.cardContent}>
-                                            <Typography gutterBottom variant="h5" component="h2">
-                                                {product.name}
-                                            </Typography>
-                                            <Typography>
-                                                 Min Price : {product.minPrice}
-                                            </Typography>
-                                            <Typography>
-                                                Date  : {moment(product.session.date).format('DD-MM-YYYY')}
-                                            </Typography>
-                                             <Typography>
-                                               Start Time : {moment(product.session.startTime).format('h:mm a')}
-                                            </Typography>
-                                            <Typography>
-                                               End Time : {moment(product.session.endTime).format('h:mm a')}
-                                            </Typography>
-                                        </CardContent>
-                                        <CardActions>
-                                            <Link to={`/biddingroom/${product.session._id}`} target="_blank">
-                                                <Button size="small" color="primary" variant="contained">
-                                                   Enter Bidding Room
+                                                />
+                                                <CardContent className={classes.cardContent}>
+                                                    <Typography gutterBottom variant="h5" component="h2">
+                                                        {product.name}
+                                                    </Typography>
+                                                    <Typography>
+                                                        Min Price : {product.minPrice}
+                                                    </Typography>
+                                                    <Typography>
+                                                        Date  : {moment(product.session.date).format('DD-MM-YYYY')}
+                                                    </Typography>
+                                                    <Typography>
+                                                        Start Time : {moment(product.session.startTime).format('h:mm a')}
+                                                    </Typography>
+                                                    <Typography>
+                                                        End Time : {moment(product.session.endTime).format('h:mm a')}
+                                                    </Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Link to={`/biddingroom/${product.session._id}`} target="_blank">
+                                                        <Button size="small" color="primary" variant="contained">
+                                                            Enter Bidding Room
                                             </Button>
-                                            </Link>
-                                            <Link to={`/productmt/${product._id}`}>
-                                                <Button size="small" color="primary" variant="contained">
-                                                   Details
+                                                    </Link>
+                                                    <Link to={`/productmt/${product._id}`}>
+                                                        <Button size="small" color="primary" variant="contained">
+                                                            Details
                                             </Button>
-                                            </Link>
+                                                    </Link>
 
-                                        </CardActions>
-                                    </Card>
+                                                </CardActions>
+                                            </Card>
+                                        </Grid>
+                                    ))}
                                 </Grid>
-                            ))}
-                        </Grid>
+                            }
+                        </div>
                     }
-                    </div>
-                }
                 </main>
                 {/* Footer */}
 
