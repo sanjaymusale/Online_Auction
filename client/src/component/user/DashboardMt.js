@@ -125,17 +125,31 @@ class UserDashboard extends React.Component {
     }
 
     handleSelect = (data) => {
+      console.log(data)
+      if(data.value === 'All'){
+        this.setState(() => ({ category: data , productData:this.state.product }))
+      }else {
         const filteredProduct = this.state.product.filter(p => p.category._id === data.value)
-        console.log('filteredProduct',filteredProduct)
+        // console.log('filteredProduct',filteredProduct)
         this.setState(() => ({ category: data,productData:filteredProduct }))
+      }
+
 
     }
 
     render() {
         const { classes } = this.props;
-        let options = this.state.categoryData.map(function (category) {
+        let options = this.state.categoryData.sort(function(a, b){
+            var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase()
+                if (nameA < nameB) //sort string ascending
+                return -1
+                if (nameA > nameB)
+                return 1
+                return 0 //default return value (no sorting)
+              }).map(function (category) {
             return { value: category._id, label: category.name };
         })
+        options.unshift({ value : 'All' ,label:'Show All'})
         console.log(this.state)
         return (
 
