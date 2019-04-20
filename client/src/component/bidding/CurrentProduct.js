@@ -88,6 +88,9 @@ class CurrentProduct extends React.Component {
             time: ''
         }
         console.log('SERVER_URL',SERVER_URL)
+        console.log('SERVER_URL',SERVER_URL)
+        console.log('SERVER_URL',SERVER_URL)
+        console.log('SERVER_URL',SERVER_URL)
     }
 
     currentBid = () => {
