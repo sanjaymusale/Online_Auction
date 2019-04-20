@@ -44,6 +44,9 @@ app.use('/bidding', biddingRouter)
 // app.get('/', (req, res) => {
 //     res.send('Welcome')
 // })
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname + '/client/build/index.html'))
+  })
 
 
 
