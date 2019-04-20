@@ -39,6 +39,7 @@ import UserDashboard from './component/user/DashboardMt'
 import Product from './component/product/ProductDetailmt'
 import CustomizedSnackbars from './component/user/alert'
 import MyBids from './component/product/MyBids'
+import NotFound from './component/dashboard/NotFound'
 import ProductBidder from './component/product/MyProductParticipants'
 class App extends React.Component {
   render() {
@@ -49,7 +50,7 @@ class App extends React.Component {
           <NavBar />
 
           <Switch>
-            {/* <Route exact path="/" component={HomePage} /> */}
+            <Route exact path="/" component={UserDashboard} /> 
             <Route exact path="/user/register" component={Register} />
             <Route exact path="/user/login" component={SignIn} />
             <Route exact path="/logout" component={LogOut} />
@@ -87,6 +88,7 @@ class App extends React.Component {
             <Route exact path="/currentBid" component={CurrentProduct} />
 
             <Route exact path='/biddingroom/:id' component={CurrentBidding} />
+            <Route component={NotFound}/>
 
 
           </Switch>
