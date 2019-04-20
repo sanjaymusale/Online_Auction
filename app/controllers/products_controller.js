@@ -6,13 +6,13 @@ const { Session } = require('../models/session')
 const { authenticateUser } = require('../middlewares/authenticate')
 const { upload } = require('../middlewares/fileUpload')
 
-const link = 'http://localhost:3001'
+const link = 'http://my-auctions.herokuapp.com/'
 
 
 router.get('/', authenticateUser, (req, res) => {
     Product.find().sort({ _id : -1}).populate('category').populate('session')
         .then((products) => {
-            console.log(products)
+            //console.log(products)
             res.send(products)
         })
         .catch((err) => {

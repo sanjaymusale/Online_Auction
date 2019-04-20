@@ -1,27 +1,22 @@
 import React from 'react'
-
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
-
 import Paper from '@material-ui/core/Paper';
-
 import axios from '../axios/config';
 import FormLabel from '@material-ui/core/FormLabel';
-
+// import CountDown from './ProgressBarTimer'
 import { connect } from 'react-redux'
 import BidInput from './BidInput';
 import EndTime from './EndTime';
 import DisplayBid from './DisplayBid';
-//import { isEmpty } from 'lodash'
+import { SERVER_URL } from '../config/config'
 
-// import io from 'socket.io-client'
 
-const SocketURL = 'http://localhost:3001/'
 
 const io = require('socket.io-client');
-const socket = io(SocketURL);
-
+const socket = io(`${SERVER_URL}`);
+let clear
 const styles = theme => ({
 
     layout: {
@@ -30,17 +25,17 @@ const styles = theme => ({
         marginRight: theme.spacing.unit * 2,
 
         [theme.breakpoints.down(600 + theme.spacing.unit * 2 * 2)]: {
-            width:"80%",
+            width: "80%",
             marginLeft: 'auto',
             marginRight: 'auto',
         },
         [theme.breakpoints.up(1200 + theme.spacing.unit * 2 * 2)]: {
-            width:"80%",
+            width: "80%",
             marginLeft: 'auto',
             marginRight: 'auto',
         },
         [theme.breakpoints.up(300 + theme.spacing.unit * 2 * 2)]: {
-            width:"80%",
+            width: "80%",
             marginLeft: 'auto',
             marginRight: 'auto',
         },
@@ -125,7 +120,7 @@ class MyProduct extends React.Component {
             isLoaded: false,
             joinedUsers: [],
             fullData: {},
-            time: 100,
+            timer: 30,
             timeLeft: '00:00:00',
             winner: {},
             Declaredwinner: false,
@@ -134,7 +129,7 @@ class MyProduct extends React.Component {
             highBidAmt: ''
 
         };
-
+        console.console.log('SERVER_URL',SERVER_URL);
         socket.on('connect', () => {
             console.log('connected react')
         })
@@ -152,6 +147,7 @@ class MyProduct extends React.Component {
             const max = bidObj.reduce((prev, current) => (prev.amount > current.amount) ? prev : current)
             //console.log(max)
             self.setState({ bidHistory: bidObj, highBidUser: max.user.firstName, highBidAmt: max.amount });
+            //self.getTime(30)
 
         });
 
@@ -172,6 +168,7 @@ class MyProduct extends React.Component {
 
 
     }
+
     timeLeft = (data) => {
         const timeLeft = data
         this.setState({ timeLeft })
@@ -221,15 +218,27 @@ class MyProduct extends React.Component {
             this.setState({ noWinner: true, Declaredwinner: true })
         }
     }
-    getTime = () => {
-        console.log('inside getTime function')
-        socket.on('CURRENT_TIME', (data) => {
-            console.log('inside socket currentTime')
-            const time = --data.time
-            //console.log('before set state', time)
-            this.setState({ time: time })
-        })
-    }
+    // implement further
+    // getTime = (time) => {
+    //   const self = this
+    //   clearTimeout(clear)
+    //     clear = setTimeout(function timer(){
+    //
+    //           time--
+    //           self.setState({ timer : time })
+    //         if (time > 0) {
+    //           clear = setTimeout(timer,1000)
+    //
+    //         }
+    //         if(time == 0){
+    //           self.filterBidhistory(self.state.bidHistory)
+    //         }
+    //
+    //         console.log('time',time)
+    //
+    //     }, 1000);
+    //
+    // }
 
 
     getUsers = () => {
@@ -250,7 +259,7 @@ class MyProduct extends React.Component {
                     }
                     else {
                         this.setState({
-                            bidHistory: response.data.participant, fullData: response.data, highBidUser:"--------"
+                            bidHistory: response.data.participant, fullData: response.data, highBidUser: "--------"
                         })
                         this.setUser(response.data.participant)
                     }
@@ -315,7 +324,7 @@ class MyProduct extends React.Component {
     render() {
         const { classes } = this.props
 
-        // console.log('current', this.state)
+      console.log('current', this.state.timer)
 
         return (
             <React.Fragment>
@@ -329,7 +338,7 @@ class MyProduct extends React.Component {
                                             <FormLabel className={classes.titleLabel} >{this.state.fullData.product.name.toUpperCase()}</FormLabel>
                                         </Paper>
                                     </Grid>
-                                    <Grid item xs={4} sm={4}sss>
+                                    <Grid item xs={4} sm={4} sss>
                                         <Paper className={classes.titlepaper}>
                                             <EndTime fullData={this.state.fullData} timeLeft={this.timeLeft} />
                                         </Paper>
@@ -365,6 +374,7 @@ class MyProduct extends React.Component {
                                                     user={this.state.user}
                                                     setHighBid={this.setHighBid}
                                                 />
+
                                             </Paper>
                                         </Grid>
 

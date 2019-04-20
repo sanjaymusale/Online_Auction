@@ -23,6 +23,7 @@ import { isEmpty } from 'lodash'
 import CircularSpinner from '../Progress/CircularSpinner'
 import AlertDialog from '../product/alert'
 
+
 const styles = theme => ({
 
     heroContent: {
@@ -104,7 +105,7 @@ class CurrentProduct extends React.Component {
             }
         })
 
-        console.log(BiddingProducts)
+        //console.log(BiddingProducts)
 
         this.setState(() => ({ currentProducts: BiddingProducts }))
     }
@@ -174,7 +175,7 @@ class CurrentProduct extends React.Component {
                                             </Typography>
                                         </CardContent>
                                         <CardActions>
-                                            <Link to={`/biddingroom/${product.session._id}`}>
+                                            <Link to={`/biddingroom/${product.session._id}`} target="_blank">
                                                 <Button size="small" color="primary" variant="contained">
                                                    Enter Bidding Room
                                             </Button>

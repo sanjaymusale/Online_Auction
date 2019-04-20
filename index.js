@@ -1,7 +1,7 @@
 const express = require('express')
 const mongoose = require('./config/database')
 const cors = require('cors')
-var socket = require('socket.io')
+let socket = require('socket.io')
 
 
 const { usersRouter } = require('./app/controllers/users_controller')
@@ -11,7 +11,19 @@ const { sessionsRouter } = require('./app/controllers/sessions_controller')
 const { biddingRouter } = require('./app/controllers/Bidding_controller')
 
 const app = express()
-const port = 3001
+const port = process.env.PORT || 3001
+app.use(function (req, res, next){
+  if (req.headers['x-forwarded-proto'] === 'https') {
+    res.redirect('http://' + req.hostname + req.url);
+  } else {
+    next();
+  }
+});
+console.log(process.env.SERVER_URL)
+console.log(process.env.MONGODB_URI)
+const path = require('path')
+app.use(express.static(path.join(__dirname, 'client/build')))
+
 
 var server = app.listen(port, () => {
     console.log('listening to port', port)
@@ -30,14 +42,19 @@ app.use('/bidding', biddingRouter)
 
 
 
-app.get('/', (req, res) => {
-    res.send('Welcome')
-})
+// app.get('/', (req, res) => {
+//     res.send('Welcome')
+// })
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname + '/client/build/index.html'))
+  })
 
 
 
 io = socket(server);
-io.origins('http://localhost:3000/')
+// io.origins('http://localhost:3000/')
+//console.log('io',server)
+
 io.on('connection', (socket) => {
     console.log('socket id', socket.id);
 
@@ -53,5 +70,3 @@ io.on('connection', (socket) => {
 
 
 });
-
-

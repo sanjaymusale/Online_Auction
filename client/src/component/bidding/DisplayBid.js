@@ -20,6 +20,7 @@ class DisplayBid extends React.Component {
 
     render() {
         const { classes } = this.props
+        //console.log('displaybid',this.props.bidHistory)
         return (
             <React.Fragment>
                 {this.props.bidHistory && this.props.bidHistory.sort(function (a, b) {
@@ -27,10 +28,10 @@ class DisplayBid extends React.Component {
                 }).map((bid, i) => {
 
                     if (bid.amount) {
-                        return <><FormLabel className={classes.msgLabel} key={bid._id}>{bid.user.firstName}: &#8377; {bid.amount}</FormLabel><br/></>
+                        return <React.Fragment  key={bid._id}><FormLabel className={classes.msgLabel}>{bid.user.firstName}: &#8377; {bid.amount}</FormLabel><br/></React.Fragment>
                     }
                     else {
-                        return
+                        return <React.Fragment key={bid._id}></React.Fragment>
                     }
 
 
