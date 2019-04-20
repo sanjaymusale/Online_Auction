@@ -1,80 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
-
-import Button from '@material-ui/core/Button';
-
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
-import { Input } from 'reactstrap'
-import Select from 'react-select'
+import React from 'react'
 import axios from '../axios/config'
 import { Link } from 'react-router-dom'
+// import { isEmpty } from 'lodash'
 
-const styles = theme => ({
+import { Input } from 'reactstrap'
+import '../../App.css'
+// import SelectCategory from './SelectCategory'
 
-    heroContent: {
-        maxWidth: 600,
-        margin: '0 auto',
-        padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 6}px`,
-    },
-    heroButtons: {
-        marginTop: theme.spacing.unit * 4,
-    },
-    layout: {
-        width: 'auto',
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        minHeight: 370,
-        [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
-            width: 1100,
-            marginLeft: 'auto',
-            marginRight: 'auto',
-        },
-    },
-    cardGrid: {
-        padding: `${theme.spacing.unit * 8}px 0`,
-    },
-    card: {
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    cardMedia: {
-        paddingTop: '56.25%', // 16:9
-
-        height: "40px",
-
-        width: "100%"
-
-    },
-    cardContent: {
-        flexGrow: 1,
-    },
-    footer: {
-        backgroundColor: theme.palette.background.paper,
-        padding: theme.spacing.unit * 6,
-    },
-    paper: {
-        padding: theme.spacing.unit * 2,
-        textAlign: 'center',
-
-    },
-    searchBar: {
-        marginTop: '20px'
-    }
-});
-
-
-class UserDashboard extends React.Component {
-
-    constructor(props) {
-        super(props)
+export default class Dashboard extends React.Component {
+    constructor() {
+        super()
         this.state = {
             categoryData: [],
             category: '',
@@ -91,7 +26,7 @@ class UserDashboard extends React.Component {
 
             .then((response) => {
                 //const data = response.data
-                //console.log(response)
+                console.log(response)
                 this.setState(() => ({ categoryData: response[0].data }))
                 this.setState(() => ({ product: response[1].data, productData: response[1].data }))
             })
@@ -107,9 +42,11 @@ class UserDashboard extends React.Component {
         const id = e.target.value
         //console.log('nischal', id)
         // this.setState(() => ({ category }))
+        console.log(this.state.product)
+
         // const id = this.state.category
         const result = this.state.product.filter(output => output.category._id === id)
-
+        console.log('Myrsult', result)
         this.setState(() => ({ productData: result }))
 
     }
@@ -122,110 +59,97 @@ class UserDashboard extends React.Component {
         this.setState(() => ({ productData: result }))
     }
 
-    handleSelect = (data) => {
-      
-      if(data.value === 'All'){
-        this.setState(() => ({ category: data , productData:this.state.product }))
-      }else {
-        const filteredProduct = this.state.product.filter(p => p.category._id === data.value)
-        // console.log('filteredProduct',filteredProduct)
-        this.setState(() => ({ category: data,productData:filteredProduct }))
-      }
 
 
-    }
+
+
+
+
 
     render() {
-        const { classes } = this.props;
-        let options = this.state.categoryData.sort(function(a, b){
-            var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase()
-                if (nameA < nameB) //sort string ascending
-                return -1
-                if (nameA > nameB)
-                return 1
-                return 0 //default return value (no sorting)
-              }).map(function (category) {
-            return { value: category._id, label: category.name };
-        })
-        options.unshift({ value : 'All' ,label:'Show All'})
-
         return (
+            <div className="container">
+                <div className="row">
+                    <div className="col-md-8" >
+                        <Input type="text" bsSize="sm" onChange={this.filterHandle} placeholder="search" />
+                        <br />
+                    </div>
 
-            <React.Fragment>
-
-                <main>
-                    <div className={classes.searchBar}>
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-md-8" >
-                                    <Input type="text" onChange={this.filterHandle} placeholder="search" bssize="md" />
-                                    <br />
-                                </div>
-
-
-                                <div className="col-md-4">
-                                    <Select
-                                        name="category"
-                                        value={this.state.category}
-                                        onChange={this.handleSelect}
-                                        options={options}
-                                    />
+                    <div className="col-md-4">
+                        < select name="category" onChange={this.handleChange} >
+                            <option value="">category</option>
+                            {this.state.categoryData.map(category => {
+                                return (
+                                    <option key={category._id} value={category._id} > {category.name}</option>
+                                )
+                            })}
+                        </select>
+                        {/* <h2>{this.state.category}</h2> */}
+                    </div>
 
 
-                                </div>
-                            </div>
+                    <div className="container">
+                        <div className="row">
+                            {this.state.productData.filter(p => p.status === 'Approved').map(pro => {
+                                // return <li key={pro._id}> {pro.name} {pro.minPrice}<Link to={`/product/${pro._id}`}>  details</Link></li>
+                                return (
+
+                                    <div key={pro.name} className="col-md-4" style={{ marginBottom: "3rem" }}>
+
+                                        <div className="product__text">
+                                            <b>{pro.name}</b>
+
+                                            <div className="product__boxx">
+                                                <img src={pro.imageUrl[0]} style={{ width: "200px", height: "200px" }} />
+                                            </div>
+
+
+                                            <div className="product__text">
+
+                                                <b>price :</b>  {pro.minPrice}
+
+                                                <div className="product__text">
+
+                                                    <Link to={`/products/${pro._id}`}>  details</Link>
+                                                </div>
+
+
+
+
+
+                                            </div>
+
+                                        </div>
+
+
+
+                                    </div>
+                                )
+
+                            })}
+
                         </div>
                     </div>
-                    <div className={classNames(classes.layout, classes.cardGrid)}>
-                        {/* End hero unit */}
-                        <Grid container spacing={40}>
-                            {this.state.productData.filter(p => (p.status === 'Approved' && p.session !== undefined && p.sold.length === 0)).map(product => (
-                                <Grid item key={product._id} sm={6} md={4} lg={3}>
-                                    <Card className={classes.card}>
-                                        <CardMedia
-                                            className={classes.cardMedia}
-                                            image={product.imageUrl[0]} // eslint-disable-line max-len
-                                            title={product.name}
 
-                                        />
-                                        <CardContent className={classes.cardContent}>
-                                            <Typography gutterBottom variant="h5" component="h2">
-                                                {product.name}
-                                            </Typography>
-                                            <Typography>
-                                                {product.description.slice(0, 50) + '...'}
-                                            </Typography>
-                                        </CardContent>
-                                        <CardActions>
-                                            <Link to={`/productmt/${product._id}`}>
-                                                <Button size="small" color="primary">
-                                                    Details
-                                            </Button>
-                                            </Link>
 
-                                        </CardActions>
-                                    </Card>
-                                </Grid>
-                            ))}
-                        </Grid>
-                    </div>
-                </main>
-                {/* Footer */}
-                {/* <footer className={classes.footer}>
-                    <Typography variant="h6" align="center" gutterBottom>
-                        Footer
-        </Typography>
-                    <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-                        Something here to give the footer a purpose!
-        </Typography>
-                </footer> */}
-                {/* End footer */}
-            </React.Fragment>
-        );
+
+
+
+
+
+                </div>
+
+
+
+
+
+
+
+
+
+
+            </div>
+
+        )
     }
 }
-UserDashboard.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(UserDashboard);
