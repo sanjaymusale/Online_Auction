@@ -147,7 +147,7 @@ class MyBids extends React.Component{
       icon: 'info',
       tooltip: 'Show Info',
       onClick: (event, rowData) => {
-       this.props.history.push(`/userProduct/${rowData.id}`)
+       this.props.history.push(`/productmt/${rowData.id}`)
       },
       iconProps: {
         style: {

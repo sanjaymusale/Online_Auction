@@ -56,14 +56,14 @@ class AdminViewProduct extends React.Component {
         }
     }
     componentDidMount() {
-      axios.get('/products', { headers: { 'x-auth': localStorage.getItem('token') } })
-          .then((response) => {
-              console.log(response.data)
-              this.setState(() => ({ products: response.data }))
-          })
-          .catch((err) => {
-              console.log(err)
-          })
+        axios.get('/products', { headers: { 'x-auth': localStorage.getItem('token') } })
+            .then((response) => {
+              //  console.log(response.data)
+                this.setState(() => ({ products: response.data }))
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 
 

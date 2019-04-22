@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DateFnsUtils from "@date-io/date-fns"; // choose your lib
 import moment from 'moment'
- 
+
 import {
     DatePicker,
     TimePicker,
@@ -24,7 +24,7 @@ export default class FormDialog extends React.Component {
             isLoaded: false,
             id:props.id
       }
-    
+
   }
 
     handleDateChange = (date) => {
@@ -38,7 +38,7 @@ export default class FormDialog extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault()
-        var end = moment(this.state.selectedTime).add(5, 'minutes').toISOString()
+        var end = moment(this.state.selectedTime).add(10, 'minutes').toISOString()
         const data = {
             date: this.state.selectedDate,
             startTime: this.state.selectedTime,
@@ -73,7 +73,7 @@ componentWillReceiveProps(next){
           <DialogTitle id="form-dialog-title">Add Date And Time</DialogTitle>
           <DialogContent>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-             
+
 
                     {/* <DatePicker value={this.state.selectedDate} onChange={this.handleDateChange} minDate={moment(this.state.currentTime).add(1, 'd')} /> */}
 
@@ -82,7 +82,7 @@ componentWillReceiveProps(next){
 
                     <Button onClick={this.handleSubmit} size="small" variant="contained" color="primary" >Submit</Button>
 
-               
+
             </MuiPickersUtilsProvider>
           </DialogContent>
           <DialogActions>

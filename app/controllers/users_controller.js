@@ -61,7 +61,7 @@ router.delete('/logout', authenticateUser, (req, res) => {
     //console.log(tokenData)
     user.save()
         .then((user) => {
-            console.log(user)
+          //  console.log(user)
             res.send(user)
         })
         .catch((err) => {

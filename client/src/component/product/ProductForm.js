@@ -10,7 +10,7 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import axios from '../axios/config';
 import FormLabel from '@material-ui/core/FormLabel';
 import { Link } from 'react-router-dom'
-
+import { SERVER_URL } from '../config/config'
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
@@ -109,6 +109,7 @@ class ProductForm extends React.Component {
 
 
         }
+
     }
 
     handleChange = (e) => {
@@ -125,7 +126,7 @@ class ProductForm extends React.Component {
     componentDidMount() {
         axios.get('/category', { headers: { "x-auth": localStorage.getItem("token") } })
             .then((response) => {
-               // console.log(response)
+                // console.log(response)
                 this.setState(() => ({
                     categoryData: response.data
                 }))
@@ -190,7 +191,7 @@ class ProductForm extends React.Component {
                 for (const file of this.state.file) {
                     if (!re.test(file.name)) {
                         isError = true;
-                        errors.fileError="Upload Only Jpg File"
+                        errors.fileError = "Upload Only Jpg File"
                     }
                 }
             }
@@ -222,7 +223,7 @@ class ProductForm extends React.Component {
             for (const file of this.state.file) {
                 formData.append('image', file)
             }
-           // console.log(formData)
+            // console.log(formData)
             this.props.handleSubmit(formData)
             // console.log(this.state)
 
@@ -237,7 +238,7 @@ class ProductForm extends React.Component {
         let options = this.state.categoryData.map(function (category) {
             return { value: category._id, label: category.name };
         })
-       // console.log(this.props)
+        // console.log(this.props)
         return (
             <React.Fragment>
 
@@ -337,7 +338,7 @@ class ProductForm extends React.Component {
                                                         Upload
                                                      <CloudUploadIcon className={classes.rightIcon} />
                                                     </Button>
-                                                    <FormLabel className={classes.fileLabel} focused={true} required={true}>Upload Upto 4 Images</FormLabel>
+                                                    <FormLabel className={classes.fileLabel} focused={true} required={true}>Can Upload Maximum 3 Images</FormLabel>
                                                 </label><br />
                                                 <FormLabel className={classes.formlabel} error={true}>{this.state.fileError}</FormLabel>
                                             </Grid>
@@ -348,14 +349,14 @@ class ProductForm extends React.Component {
                                     <Grid container spacing={0} alignItems="center" justify="center">
 
                                         <div className={classes.buttons}>
-                                        <Link to='/user/dashboard'>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={this.handleBack}
-                                                className={classes.button}
-                                                fullWidth>
-                                                Back
+                                            <Link to='/user/dashboard'>
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={this.handleBack}
+                                                    className={classes.button}
+                                                    fullWidth>
+                                                    Back
                                             </Button>
                                             </Link>
 

@@ -12,7 +12,7 @@ const link = 'http://localhost:3001'
 router.get('/', authenticateUser, (req, res) => {
     Product.find().sort({ _id : -1}).populate('category').populate('session')
         .then((products) => {
-            console.log(products)
+            //console.log(products)
             res.send(products)
         })
         .catch((err) => {
@@ -32,18 +32,17 @@ router.get('/myproduct', authenticateUser, (req, res) => {
 
 
 
-router.post('/', authenticateUser, upload.array('image', 3), (req, res) => {
+router.post('/', authenticateUser,upload.array('image', 3), (req, res) => {
     const body = req.body
     //console.log(req)
     //console.log(body)
     body.seller = req.user._id
     //console.log(req)
     const image = []
-
+        //console.log('file',req.files)
     req.files.forEach(file => {
-        const imageDest = file.destination
-        const imageUrl = link + imageDest.slice(1) + file.filename
-        image.push(imageUrl)
+        const imageDest = file.location
+        image.push(imageDest)
     })
 
     body.imageUrl = image

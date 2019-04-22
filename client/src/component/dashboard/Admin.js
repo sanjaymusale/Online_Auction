@@ -13,13 +13,9 @@ const Admin = (props) => {
                 <li className="nav-item active">
                     <Link className="nav-link" to="/">Welcome {name}</Link>
                 </li>
-
-
-
-
-
-
-
+                <li className="nav-item active">
+                    <Link className="nav-link" to="/user/dashboard">Dashboard</Link>
+                </li>
                 <li className="nav-item dropdown">
                     <Link className="nav-link dropdown-toggle " to="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span className="text-white">Actions</span>
@@ -30,8 +26,6 @@ const Admin = (props) => {
                         <Link to="/category" className="dropdown-item">View Category</Link>
 
                         <Link to="/product/list" className="dropdown-item">Products</Link>
-                        {/* <Link to='/product' className="dropdown-item">All products</Link> */}
-
 
 
                     </div>

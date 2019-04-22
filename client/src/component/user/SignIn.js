@@ -63,10 +63,10 @@ class SignIn extends React.Component {
             email: '',
             password: '',
             redirectList: false,
-            loginFail : false,
+            loginFail: false,
             emailError: '',
             passwordError: '',
-            passwordType:"password"
+            passwordType: "password"
         }
     }
 
@@ -78,7 +78,7 @@ class SignIn extends React.Component {
             [e.target.name]: e.target.value,
             emailError: '',
             passwordError: '',
-            loginFail:false
+            loginFail: false
 
         }))
     }
@@ -123,27 +123,27 @@ class SignIn extends React.Component {
                 password: this.state.password
             }
 
-           // console.log(formData)
+            // console.log(formData)
 
             axios.post('/users/login', formData)
                 .then((response) => {
                     //console.log(response)
-                    if(!response.data.error){
-                    const { token } = response.data
-                       
-                    localStorage.setItem('token', token)
-                    this.props.dispatch(setUser(token))
-                    this.setState(() => ({
-                        email: '',
-                        password: '',
-                        redirectList: true
+                    if (!response.data.error) {
+                        const { token } = response.data
 
-                    }))
-                }
+                        localStorage.setItem('token', token)
+                        this.props.dispatch(setUser(token))
+                        this.setState(() => ({
+                            email: '',
+                            password: '',
+                            redirectList: true
+
+                        }))
+                    }
                 })
                 .catch((err) => {
-                   // console.log(err)
-                    this.setState({ loginFail : true})
+                    // console.log(err)
+                    this.setState({ loginFail: true })
                 })
 
         }
@@ -151,25 +151,24 @@ class SignIn extends React.Component {
 
     }
 
-    handleShowPassword=(e)=>{
-         if(e.target.checked){
-             this.setState({ passwordType : "text",loginFail:false})
-         }else
-             {
-                this.setState({ passwordType : "password",loginFail:false})
-                            
-             }
+    handleShowPassword = (e) => {
+        if (e.target.checked) {
+            this.setState({ passwordType: "text", loginFail: false })
+        } else {
+            this.setState({ passwordType: "password", loginFail: false })
+
+        }
     }
 
     render() {
         if (this.state.redirectList) {
-            return <Redirect to="/" />
+            return <Redirect to="/user/dashboard" />
         }
         const { classes } = this.props;
 
         return (
             <main className={classes.main}>
-                <CustomizedSnackbars status={this.state.loginFail}/>
+                <CustomizedSnackbars status={this.state.loginFail} />
                 <Paper className={classes.paper}>
                     <Avatar className={classes.avatar}>
                         <LockOutlinedIcon />
@@ -190,7 +189,7 @@ class SignIn extends React.Component {
                             <FormLabel className={classes.formlabel} margin="normal" error={true} >{this.state.passwordError}</FormLabel>
                         </FormControl>
                         <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" onClick={this.handleShowPassword}/>}
+                            control={<Checkbox value="remember" color="primary" onClick={this.handleShowPassword} />}
                             label="Show Password"
                         />
                         <Button
@@ -205,7 +204,7 @@ class SignIn extends React.Component {
           </Button>
                     </form>
                 </Paper>
-                
+
             </main>
         )
     }

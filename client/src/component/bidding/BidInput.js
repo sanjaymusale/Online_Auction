@@ -9,9 +9,14 @@ import TextField from '@material-ui/core/TextField';
 import FormLabel from '@material-ui/core/FormLabel';
 
 const styles = theme => ({
-    button:{
-        marginTop:10,
+    button: {
+        marginTop: 10,
 
+    },
+    error: {
+        color: "red",
+        fontSize: "14px",
+        marginTop: "5px"
     }
 })
 
@@ -56,7 +61,7 @@ class BidInput extends React.Component {
     highestBid = () => {
 
         const max = this.props.bidHistory.reduce((prev, current) => (prev.amount > current.amount) ? prev : current)
-         return max
+        return max
     }
 
     validate = () => {
@@ -130,17 +135,17 @@ class BidInput extends React.Component {
                 {/* <CountDown time={this.state.time} /> */}
 
                 <form>
-                 <TextField
-                    id="bid"
-                    name="bid"
-                    value={this.state.bidPrice}
-                    onChange={this.BidChange}
-                    autoFocus
-                /><br/>
+                    <TextField
+                        id="bid"
+                        name="bid"
+                        value={this.state.bidPrice}
+                        onChange={this.BidChange}
+                        autoFocus
+                    /><br />
 
 
                     <Button onClick={this.handleSubmit} className={classes.button} variant="contained" color="primary" disabled={this.state.buttonDisable} >BID</Button><br />
-                    <p>{this.state.bidPriceError && 'Bid Amount Should be greater'}{this.state.bidPriceEmpty}</p>
+                    <FormLabel className={classes.error}>{this.state.bidPriceError && 'Bid Amount Should be greater'}{this.state.bidPriceEmpty}</FormLabel>
 
                 </form>
 

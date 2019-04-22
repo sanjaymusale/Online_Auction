@@ -22,7 +22,7 @@ import moment from 'moment'
 import { isEmpty } from 'lodash'
 import CircularSpinner from '../Progress/CircularSpinner'
 import AlertDialog from '../product/alert'
-
+import {SERVER_URL} from '../config/config'
 const styles = theme => ({
 
     heroContent: {
@@ -87,7 +87,7 @@ class CurrentProduct extends React.Component {
             isLoaded: false,
             time: ''
         }
-
+        
     }
 
     currentBid = () => {
@@ -104,7 +104,7 @@ class CurrentProduct extends React.Component {
             }
         })
 
-        console.log(BiddingProducts)
+      //  console.log(BiddingProducts)
 
         this.setState(() => ({ currentProducts: BiddingProducts }))
     }
