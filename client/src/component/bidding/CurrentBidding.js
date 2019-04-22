@@ -13,10 +13,10 @@ import { connect } from 'react-redux'
 import BidInput from './BidInput';
 import EndTime from './EndTime';
 import DisplayBid from './DisplayBid';
-import {SERVER_URL} from '../config/config'
+import { SERVER_URL } from '../config/config'
 
-const SocketURL = 'http://localhost:3001/'
-console.log('SERVER_URL',SERVER_URL)
+//const SocketURL = 'http://localhost:3001/'
+
 const io = require('socket.io-client');
 const socket = io(`${SERVER_URL}`);
 
@@ -28,17 +28,17 @@ const styles = theme => ({
         marginRight: theme.spacing.unit * 2,
 
         [theme.breakpoints.down(600 + theme.spacing.unit * 2 * 2)]: {
-            width:"80%",
+            width: "80%",
             marginLeft: 'auto',
             marginRight: 'auto',
         },
         [theme.breakpoints.up(1200 + theme.spacing.unit * 2 * 2)]: {
-            width:"80%",
+            width: "80%",
             marginLeft: 'auto',
             marginRight: 'auto',
         },
         [theme.breakpoints.up(300 + theme.spacing.unit * 2 * 2)]: {
-            width:"80%",
+            width: "80%",
             marginLeft: 'auto',
             marginRight: 'auto',
         },
@@ -248,7 +248,7 @@ class MyProduct extends React.Component {
                     }
                     else {
                         this.setState({
-                            bidHistory: response.data.participant, fullData: response.data, highBidUser:"--------"
+                            bidHistory: response.data.participant, fullData: response.data, highBidUser: "--------"
                         })
                         this.setUser(response.data.participant)
                     }
@@ -324,10 +324,10 @@ class MyProduct extends React.Component {
                                 <Grid container wrap="nowrap" spacing={8}>
                                     <Grid item xs={4} sm={4}>
                                         <Paper className={classes.titlepaper}>
-                                            <FormLabel className={classes.titleLabel} >{this.state.fullData.product.name.toUpperCase()}</FormLabel>
+                                            <FormLabel className={classes.titleLabel} >{this.state.fullData.product.name.toUpperCase()},Min &#8377; {this.state.fullData.product.minPrice} </FormLabel>
                                         </Paper>
                                     </Grid>
-                                    <Grid item xs={4} sm={4}sss>
+                                    <Grid item xs={4} sm={4} sss>
                                         <Paper className={classes.titlepaper}>
                                             <EndTime fullData={this.state.fullData} timeLeft={this.timeLeft} />
                                         </Paper>

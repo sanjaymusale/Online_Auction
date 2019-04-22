@@ -164,7 +164,7 @@ class UserProduct extends React.Component {
         }
         axios.put(`/products/${id}`, data, { headers: { 'x-auth': localStorage.getItem('token') } })
             .then((response) => {
-                console.log(response.data)
+                //console.log(response.data)
                 this.setState(() => ({ status: response.data.status }))
             })
             .catch((err) => {

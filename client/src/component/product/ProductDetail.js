@@ -196,7 +196,7 @@ class UserProduct extends React.Component {
                         <Grid container spacing={16}>
                             <Grid item>
                                 <ButtonBase className={classes.image}>
-                                    <img className={classes.img} alt="Click here" src={product.imageUrl[0]} onClick={() => this.setState({ isOpen: true })} />
+                                 {/* <img className={classes.img} alt="Click here" src={product.imageUrl[0]} onClick={() => this.setState({ isOpen: true })} /> */}
                                 </ButtonBase>
                             </Grid>
                             <Grid item xs={12} sm container>

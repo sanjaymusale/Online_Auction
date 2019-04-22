@@ -6,7 +6,7 @@ const { Session } = require('../models/session')
 const { authenticateUser } = require('../middlewares/authenticate')
 const { upload } = require('../middlewares/fileUpload')
 
-const link = '/'
+const link = 'http://localhost:3001'
 
 
 router.get('/', authenticateUser, (req, res) => {
