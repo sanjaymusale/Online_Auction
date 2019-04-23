@@ -1,5 +1,5 @@
 # Online Auction
-![image](s3://my-auction/auction.jpg)
+![image](https://s3.us-east-2.amazonaws.com/my-auction/auction.jpg)
 # Overview
 Online Auction is a Live Bidding platform built on ReactJS, ExpressJs and Node, where users can bid for any Products. This provides user to add his product along with the images , Once the Product get Approval from Admin , user can provide Date and Time for the Bidding Event to occur, User can bid live on other Products available for Bidding, The code in this repository covers front end and back end of this project.
 
